@@ -25,7 +25,7 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = "^3.7.2"
-delfino = {extras = ["verify-all"], version = "^0.20.3"}
+delfino = {extras = ["verify-all"], version = "^0.21.0"}
 
 # https://python-poetry.org/docs/pyproject/#plugins
 [tool.poetry.plugins]
@@ -37,6 +37,7 @@ delfino = {extras = ["verify-all"], version = "^0.20.3"}
 [tool.poetry.group.dev.dependencies]
 types-toml = "^0.10.8.1"
 psutil = "^5.9.4"
+types-psutil = "^5.9.5.5"
 
 [tool.isort]
 # Setting compatible with black. See https://black.readthedocs.io/en/stable/compatible_configs.html
