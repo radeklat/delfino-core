@@ -9,7 +9,9 @@ import toml
 from _pytest.fixtures import fixture
 from click.testing import CliRunner
 from delfino.constants import PYPROJECT_TOML_FILENAME
-from delfino.models.pyproject_toml import PyprojectToml
+from delfino.contexts import AppContext
+from delfino.models.pyproject_toml import PluginConfig, PyprojectToml
+from delfino.utils import get_package_manager
 
 
 @fixture(scope="session")
@@ -31,6 +33,16 @@ def pyproject_toml(project_root):
 def poetry(pyproject_toml):
     assert pyproject_toml.tool.poetry
     return pyproject_toml.tool.poetry
+
+
+@pytest.fixture()
+def context_obj(project_root, pyproject_toml):
+    return AppContext(
+        project_root=project_root,
+        pyproject_toml=pyproject_toml,
+        package_manager=get_package_manager(project_root, pyproject_toml),
+        plugin_config=PluginConfig.empty(),
+    )
 
 
 @pytest.fixture(scope="session")

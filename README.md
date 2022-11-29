@@ -41,3 +41,18 @@ Delfino doesn't load any plugins by default. To enable this plugin, add the foll
 # Usage
 
 Run `delfino --help`.
+
+# Development
+
+To develop against editable `delfino` sources:
+
+1. Make sure `delfino` sources are next to this plugin:
+    ```shell
+    cd ..
+    git clone https://github.com/radeklat/delfino.git
+    ```
+2. Install `delfino` as editable package:
+    ```shell
+    pip install -e ../delfino
+    ```
+   Note that poetry will reset this to the released package when you install/update anything.
