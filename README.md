@@ -29,6 +29,24 @@
 - Poetry: `poetry add -D delfino-core`
 - Pipenv: `pipenv install -d delfino-core`
 
+## Optional dependencies
+
+Each project may use different sub-set of commands. Therefore, dependencies of all commands are optional and checked only when the command is executed.
+
+Using `[all]` installs all the [optional dependencies](https://setuptools.pypa.io/en/latest/userguide/dependency_management.html#optional-dependencies) used by all the commands. If you want only a sub-set of those dependencies, there are finer-grained groups available:
+
+- For individual commands (matches the command names):
+  - `upload_to_pypi`
+  - `build_docker`
+  - `typecheck`
+  - `format`
+- For groups of commands:
+  - `test` - for testing and coverage commands
+  - `lint` - for all the linting commands
+- For groups of groups:
+  - `verify_all` - same as `[typecheck,format,test,lint]`
+  - `all` - all optional packages
+
 ## Configuration
 
 Delfino doesn't load any plugins by default. To enable this plugin, add the following config into `pyproject.toml`:
