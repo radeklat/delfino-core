@@ -22,7 +22,7 @@ class TestPyprojectTomlFile:
     def should_have_the_plugin_entry_point_matching_the_project_name(poetry):
         assert poetry.plugins
         entry_point: str = poetry.plugins[CommandRegistry.TYPE_OF_PLUGIN][poetry.name]
-        assert poetry.name.replace("-", "_") == entry_point
+        assert poetry.name.replace("-", "_") == entry_point.split(".")[0]
 
     @staticmethod
     def should_have_the_plugin_entry_point_matching_pointed_to_existing_folder(poetry, project_root):
