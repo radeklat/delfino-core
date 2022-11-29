@@ -940,7 +940,7 @@ verify-all = ["black", "isort", "pre-commit", "pytest", "coverage", "pytest-cov"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7.2"
-content-hash = "78233c0c69f61c9969291fe8b08d1728cddd8659ffb0314c9d89bf9e5cb30f3f"
+content-hash = "aa40b042a5382c193fbf2c12ff85f8da4f1158e5a0ad828c3578e2c58d5884e7"
 
 [metadata.files]
 astroid = [
