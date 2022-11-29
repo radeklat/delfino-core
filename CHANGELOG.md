@@ -12,6 +12,12 @@ Types of changes are:
 
 ## [Unreleased]
 
+## [1.2.0] - 2022-11-29
+
+### Features
+
+- Moved in optional dependencies from `delfino`.
+
 ## [1.1.0] - 2022-11-29
 
 ### Features
@@ -24,6 +30,7 @@ Types of changes are:
 
 - Initial source code
 
-[Unreleased]: https://github.com/radeklat/settings-doc/compare/1.1.0...HEAD
+[Unreleased]: https://github.com/radeklat/settings-doc/compare/1.2.0...HEAD
+[1.2.0]: https://github.com/radeklat/settings-doc/compare/1.1.0...1.2.0
 [1.1.0]: https://github.com/radeklat/settings-doc/compare/1.0.0...1.1.0
 [1.0.0]: https://github.com/radeklat/settings-doc/compare/initial...1.0.0
