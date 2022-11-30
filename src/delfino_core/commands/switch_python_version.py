@@ -3,18 +3,18 @@ from subprocess import PIPE
 
 import click
 from delfino.constants import PackageManager
-from delfino.contexts import AppContext
 from delfino.execution import OnError, run
+from delfino.models import AppContext
 from delfino.terminal_output import print_header
 from delfino.validation import assert_package_manager_is_known, pip_package_installed
 
-from delfino_core.config import pass_plugin_app_context
+from delfino_core.config import CorePluginConfig, pass_plugin_app_context
 
 
 @click.command()
 @click.argument("version", type=str)
 @pass_plugin_app_context
-def switch_python_version(app_context: AppContext, version: str):
+def switch_python_version(app_context: AppContext[CorePluginConfig], version: str):
     """Switches Python venv to a different Python version.
 
     - VERSION: Desired Python version. You can use only MAJOR.MINOR (for example 3.6).

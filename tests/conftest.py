@@ -9,8 +9,7 @@ import toml
 from _pytest.fixtures import fixture
 from click.testing import CliRunner
 from delfino.constants import PYPROJECT_TOML_FILENAME
-from delfino.contexts import AppContext
-from delfino.models.pyproject_toml import PluginConfig, PyprojectToml
+from delfino.models import AppContext, PluginConfig, PyprojectToml
 from delfino.utils import get_package_manager
 
 

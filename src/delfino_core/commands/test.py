@@ -8,16 +8,16 @@ from subprocess import PIPE
 from typing import List, Optional
 
 import click
-from delfino.contexts import AppContext
 from delfino.execution import OnError, run
+from delfino.models import AppContext
 from delfino.terminal_output import print_header, run_command_example
 from delfino.validation import assert_pip_package_installed
 
-from delfino_core.config import pass_plugin_app_context
+from delfino_core.config import CorePluginConfig, pass_plugin_app_context
 from delfino_core.utils import ensure_reports_dir
 
 
-def _run_tests(app_context: AppContext, name: str, maxfail: int, debug: bool) -> None:
+def _run_tests(app_context: AppContext[CorePluginConfig], name: str, maxfail: int, debug: bool) -> None:
     """Execute the tests for a given test type."""
     assert_pip_package_installed("pytest")
     assert_pip_package_installed("pytest-cov")
@@ -54,7 +54,7 @@ def _run_tests(app_context: AppContext, name: str, maxfail: int, debug: bool) ->
 @click.option("--maxfail", type=int, default=0)
 @click.option("--debug", is_flag=True, help="Disables capture, allowing debuggers like `pdb` to be used.")
 @pass_plugin_app_context
-def test_unit(app_context: AppContext, maxfail: int, debug: bool):
+def test_unit(app_context: AppContext[CorePluginConfig], maxfail: int, debug: bool):
     _run_tests(app_context, "unit", maxfail=maxfail, debug=debug)
 
 
@@ -62,7 +62,7 @@ def test_unit(app_context: AppContext, maxfail: int, debug: bool):
 @click.option("--maxfail", type=int, default=0)
 @click.option("--debug", is_flag=True, help="Disables capture, allowing debuggers like `pdb` to be used.")
 @pass_plugin_app_context
-def test_integration(app_context: AppContext, maxfail: int, debug: bool):
+def test_integration(app_context: AppContext[CorePluginConfig], maxfail: int, debug: bool):
     # TODO(Radek): Replace with alias?
     _run_tests(app_context, "integration", maxfail=maxfail, debug=debug)
 
@@ -80,7 +80,7 @@ def _get_total_coverage(coverage_dat: Path) -> str:
 
 @click.command()
 @pass_plugin_app_context
-def coverage_report(app_context: AppContext):
+def coverage_report(app_context: AppContext[CorePluginConfig]):
     """Analyse coverage and generate a term/HTML report.
 
     Combines all test types.
@@ -133,7 +133,7 @@ def test_all(click_context: click.Context):
 
 @click.command(help="Open coverage results in default browser.")
 @pass_plugin_app_context
-def coverage_open(app_context: AppContext):
+def coverage_open(app_context: AppContext[CorePluginConfig]):
     report_index = app_context.plugin_config.reports_directory / "coverage-report" / "index.html"
     if not report_index.exists():
         click.secho(

@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import List, Optional, Tuple
 
-from delfino.contexts import pass_app_context
+from delfino.decorators import pass_app_context
 from delfino.models.pyproject_toml import PluginConfig
 from pydantic import BaseModel, Field
 

@@ -8,17 +8,17 @@ from typing import List
 
 import click
 from delfino.click_utils.command import command_names
-from delfino.contexts import AppContext
 from delfino.execution import OnError, run
+from delfino.models import AppContext
 from delfino.terminal_output import print_header, print_no_issues_found
 from delfino.validation import assert_pip_package_installed, pip_package_installed
 
-from delfino_core.config import pass_plugin_app_context
+from delfino_core.config import CorePluginConfig, pass_plugin_app_context
 
 
 @click.command()
 @pass_plugin_app_context
-def lint_pydocstyle(app_context: AppContext):
+def lint_pydocstyle(app_context: AppContext[CorePluginConfig]):
     """Run docstring linting on source code.
 
     Docstring linting is done via pydocstyle. The pydocstyle config can be found in the
@@ -37,7 +37,7 @@ def lint_pydocstyle(app_context: AppContext):
 
 @click.command()
 @pass_plugin_app_context
-def lint_pycodestyle(app_context: AppContext):
+def lint_pycodestyle(app_context: AppContext[CorePluginConfig]):
     """Run PEP8 checking on code.
 
     PEP8 checking is done via pycodestyle.
@@ -114,7 +114,7 @@ def cpu_count():
 
 @click.command()
 @pass_plugin_app_context
-def lint_pylint(app_context: AppContext):
+def lint_pylint(app_context: AppContext[CorePluginConfig]):
     """Run pylint on code.
 
     The bulk of our code conventions are enforced via pylint. The pylint config can be
