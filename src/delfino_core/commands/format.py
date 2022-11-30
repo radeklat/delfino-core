@@ -1,22 +1,22 @@
 from subprocess import PIPE, CompletedProcess
 
 import click
-from delfino.contexts import AppContext
 from delfino.execution import OnError, run
+from delfino.models import AppContext
 from delfino.terminal_output import print_header, run_command_example
 from delfino.validation import assert_pip_package_installed
 
-from delfino_core.config import pass_plugin_app_context
+from delfino_core.config import CorePluginConfig, pass_plugin_app_context
 
 
-def _check_result(app_context: AppContext, result: CompletedProcess, check: bool, msg: str):
+def _check_result(app_context: AppContext[CorePluginConfig], result: CompletedProcess, check: bool, msg: str):
     if result.returncode == 1 and check:
 
         msg_lines = [
             f"{msg} before commit. Try following:",
             f" * Run formatter manually with `{run_command_example(run_format, app_context)}` before committing code.",
         ]
-        if not app_context.pyproject_toml.tool.delfino.disable_pre_commit:
+        if not app_context.plugin_config.disable_pre_commit:
             msg_lines.insert(1, " * Enable pre-commit hook by running `pre-commit install` in the repository.")
 
         click.secho(
@@ -34,7 +34,7 @@ def _check_result(app_context: AppContext, result: CompletedProcess, check: bool
 @click.option("--check", is_flag=True, help="Only check formatting, don't reformat the code.")
 @click.option("--quiet", is_flag=True, help="Don't show progress. Only errors.")
 @pass_plugin_app_context
-def run_format(app_context: AppContext, check: bool, quiet: bool):
+def run_format(app_context: AppContext[CorePluginConfig], check: bool, quiet: bool):
     """Runs black code formatter and isort on source code."""
     plugin_config = app_context.plugin_config
 

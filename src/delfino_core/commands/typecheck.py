@@ -5,14 +5,14 @@ from pathlib import Path
 from typing import List, Tuple
 
 import click
-from delfino.click_utils.filepaths import filepaths_argument
-from delfino.contexts import AppContext
+from delfino.decorators import files_folders_option
 from delfino.execution import OnError, run
+from delfino.models import AppContext
 from delfino.terminal_output import print_header
 from delfino.utils import ArgsList
 from delfino.validation import assert_pip_package_installed
 
-from delfino_core.config import pass_plugin_app_context
+from delfino_core.config import CorePluginConfig, pass_plugin_app_context
 from delfino_core.utils import ensure_reports_dir
 
 
@@ -55,9 +55,9 @@ def is_path_relative_to_paths(path: Path, paths: List[Path]) -> bool:
 
 @click.command()
 @click.option("--summary-only", is_flag=True, help="Suppress error messages and show only summary error count.")
-@filepaths_argument
+@files_folders_option
 @pass_plugin_app_context
-def typecheck(app_context: AppContext, summary_only: bool, filepaths: Tuple[str]):
+def typecheck(app_context: AppContext[CorePluginConfig], summary_only: bool, files_folders: Tuple[str, ...]):
     """Run type checking on source code.
 
     A non-zero return code from this task indicates invalid types were discovered.
@@ -69,9 +69,8 @@ def typecheck(app_context: AppContext, summary_only: bool, filepaths: Tuple[str]
     plugin_config = app_context.plugin_config
     ensure_reports_dir(plugin_config)
 
-    target_paths: List[Path] = []
-    if filepaths:
-        target_paths = [Path(path) for path in filepaths]
+    if files_folders:
+        target_paths = [Path(path) for path in files_folders]
     else:
         target_paths = [plugin_config.sources_directory, plugin_config.tests_directory]
         if app_context.pyproject_toml.tool.delfino.local_commands_directory.exists():

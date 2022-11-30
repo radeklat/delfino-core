@@ -5,13 +5,13 @@ from typing import List
 
 import click
 from delfino.constants import PackageManager
-from delfino.contexts import AppContext
 from delfino.execution import OnError, run
+from delfino.models import AppContext
 from delfino.terminal_output import print_header
 from delfino.utils import ArgsList
 from delfino.validation import assert_package_manager_is_known, assert_pip_package_installed, pyproject_toml_key_missing
 
-from delfino_core.config import Dockerhub, pass_plugin_app_context
+from delfino_core.config import CorePluginConfig, Dockerhub, pass_plugin_app_context
 
 try:
     from packaging.version import Version
@@ -74,7 +74,7 @@ def _docker_build(
 )
 @click.option("--serialized", is_flag=True, help="Do not build multiple platforms concurrently.")
 @pass_plugin_app_context
-def build_docker(app_context: AppContext, push: bool, serialized: bool):
+def build_docker(app_context: AppContext[CorePluginConfig], push: bool, serialized: bool):
     """Build and push a docker image."""
     plugin_config = app_context.plugin_config
     dockerfile = Path("Dockerfile")
