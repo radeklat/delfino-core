@@ -1,6 +1,6 @@
 [tool.poetry]
 name="delfino-core"
-version="1.2.1"
+version="1.2.2"
 authors = ["Radek Lát <radek.lat@gmail.com>"]
 description="Delfino core plugin"
 license = "MIT License"
@@ -44,7 +44,7 @@ shellingham = {version = "*", optional = true}
 [tool.poetry.plugins]
 
 [tool.poetry.plugins."delfino.plugin"]
-"delfino-core" = "delfino_core"
+"delfino-core" = "delfino_core.commands"
 
 [tool.poetry.group.dev.dependencies]
 black = "^22.6"
