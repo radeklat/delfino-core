@@ -23,6 +23,26 @@
     </a>
 </p>
 
+# Commands
+  
+| Command               | Description                                         |
+|-----------------------|-----------------------------------------------------|
+| build-docker          | Build and push a docker image.                      |
+| coverage-open         | Open coverage results in default browser.           |
+| coverage-report       | Analyse coverage and generate a term/HTML report.   |
+| format                | Runs black code formatter and isort on source code. |
+| lint                  | Run linting on the entire code base.                |
+| lint-pycodestyle      | Run PEP8 checking on code.                          |
+| lint-pydocstyle       | Run docstring linting on source code.               |
+| lint-pylint           | Run pylint on code.                                 |
+| switch-python-version | Switches Python venv to a different Python version. |
+| test-all              | Run all tests, and generate coverage report.        |
+| test-integration      | Run integration tests.                              |
+| test-unit             | Run unit tests.                                     |
+| typecheck             | Run type checking on source code.                   |
+| upload-to-pypi        | Upload package to a public Pypi repository.         |
+| verify-all            | Runs all verification commands.                     |
+
 # Installation
 
 - pip: `pip install delfino-core`
@@ -31,7 +51,7 @@
 
 ## Optional dependencies
 
-Each project may use different sub-set of commands. Therefore, dependencies of all commands are optional and checked only when the command is executed.
+Each project may use different sub-set of [commands](#commands). Therefore, dependencies of all commands are optional and checked only when the command is executed.
 
 Using `[all]` installs all the [optional dependencies](https://setuptools.pypa.io/en/latest/userguide/dependency_management.html#optional-dependencies) used by all the commands. If you want only a sub-set of those dependencies, there are finer-grained groups available:
 
@@ -47,7 +67,7 @@ Using `[all]` installs all the [optional dependencies](https://setuptools.pypa.i
   - `verify_all` - same as `[typecheck,format,test,lint]`
   - `all` - all optional packages
 
-## Configuration
+# Configuration
 
 Delfino doesn't load any plugins by default. To enable this plugin, add the following config into `pyproject.toml`:
 
