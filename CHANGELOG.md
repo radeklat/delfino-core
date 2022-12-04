@@ -12,19 +12,25 @@ Types of changes are:
 
 ## [Unreleased]
 
-### [2.0.0] - 2022-11-30
+## [2.0.1] - 2022-12-04
+
+### Fix
+
+- Workaround for `build-docker` of `cargo` on ARMv7 in emulator.
+
+## [2.0.0] - 2022-11-30
 
 ### Breaking changes
 
 - `typecheck` no longer accepts an arbitrary list of arguments interpreted as list of files to use. Use `-f`/`--file`/`--folder` instead. This option must be repeated for multiple files/folders.
 
-### [1.2.2] - 2022-11-30
+## [1.2.2] - 2022-11-30
 
 ### Fixes
 
 - Plugin entry point to the module with commands.
 
-### [1.2.1] - 2022-11-29
+## [1.2.1] - 2022-11-29
 
 ### Fixes
 
@@ -48,7 +54,8 @@ Types of changes are:
 
 - Initial source code
 
-[Unreleased]: https://github.com/radeklat/settings-doc/compare/2.0.0...HEAD
+[Unreleased]: https://github.com/radeklat/settings-doc/compare/2.0.1...HEAD
+[2.0.1]: https://github.com/radeklat/settings-doc/compare/2.0.0...2.0.1
 [2.0.0]: https://github.com/radeklat/settings-doc/compare/1.2.2...2.0.0
 [1.2.2]: https://github.com/radeklat/settings-doc/compare/1.2.1...1.2.2
 [1.2.1]: https://github.com/radeklat/settings-doc/compare/1.2.0...1.2.1
