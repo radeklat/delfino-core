@@ -35,6 +35,14 @@ def _install_emulators(build_for_platforms: List[str]) -> None:
         )
 
 
+def _set_swap_space():
+    # https://github.com/rust-lang/cargo/issues/8719
+    print_header("Workaround for buidling 'linux/arm/v7'", level=2)
+    run("sudo mkdir -p /var/lib/docker", on_error=OnError.EXIT)
+    run("sudo mount -t tmpfs -o size=10G none /var/lib/docker", on_error=OnError.EXIT)
+    run("sudo systemctl restart docker", on_error=OnError.EXIT)
+
+
 def _docker_build(
     project_name: str,
     dockerhub: Dockerhub,
@@ -117,6 +125,9 @@ def build_docker(app_context: AppContext[CorePluginConfig], push: bool, serializ
     else:
         build_platforms = [joined_build_platforms]
         _install_emulators(dockerhub.build_for_platforms)
+
+    if "linux/arm/v7" in build_platforms:
+        _set_swap_space()
 
     # If serialized build is selected, run build individually. Results are cached so the second
     # build below will only push and not build again.
