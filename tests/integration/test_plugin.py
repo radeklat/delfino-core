@@ -4,14 +4,15 @@ import pytest
 from delfino.click_utils.command import CommandRegistry
 from delfino.models.pyproject_toml import PluginConfig
 
-from commands.build_docker import build_docker
-from commands.format import run_format
-from commands.lint import lint, lint_pycodestyle, lint_pydocstyle, lint_pylint
-from commands.switch_python_version import switch_python_version
-from commands.test import coverage_open, coverage_report, test_all, test_integration, test_unit
-from commands.typecheck import typecheck
-from commands.upload_to_pypi import upload_to_pypi
-from commands.verify_all import verify_all
+from delfino_core.commands.build_docker import build_docker
+from delfino_core.commands.dependencies_update import dependencies_update
+from delfino_core.commands.format import run_format
+from delfino_core.commands.lint import lint, lint_pycodestyle, lint_pydocstyle, lint_pylint
+from delfino_core.commands.switch_python_version import switch_python_version
+from delfino_core.commands.test import coverage_open, coverage_report, test_all, test_integration, test_unit
+from delfino_core.commands.typecheck import typecheck
+from delfino_core.commands.upload_to_pypi import upload_to_pypi
+from delfino_core.commands.verify_all import verify_all
 
 
 @pytest.fixture(scope="session")
@@ -40,17 +41,18 @@ class TestPlugin:
     def should_be_visible_in_delfino(plugin_config):
         commands = [
             build_docker,
-            run_format,
-            lint_pydocstyle,
-            lint_pycodestyle,
-            lint_pylint,
-            lint,
-            switch_python_version,
-            test_unit,
-            test_integration,
-            coverage_report,
-            test_all,
             coverage_open,
+            coverage_report,
+            dependencies_update,
+            lint,
+            lint_pycodestyle,
+            lint_pydocstyle,
+            lint_pylint,
+            run_format,
+            switch_python_version,
+            test_all,
+            test_integration,
+            test_unit,
             typecheck,
             upload_to_pypi,
             verify_all,

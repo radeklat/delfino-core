@@ -134,10 +134,10 @@ const-rgx=(([A-Z_][A-Z0-9_]*)|(__.*__))$
 inlinevar-rgx=[A-Za-z_][A-Za-z0-9_]*$
 
 # Regular expression matching correct method names
-method-rgx=[a-z_][a-z0-9_]{2,40}$
+method-rgx=[a-z_][a-z0-9_]{2,50}$
 
 # Regular expression matching correct function names
-function-rgx=[a-z_][a-z0-9_]{2,40}$
+function-rgx=[a-z_][a-z0-9_]{2,50}$
 
 # Regular expression matching correct attribute names
 attr-rgx=[A-Za-z_][A-Za-z0-9_]{2,45}$
