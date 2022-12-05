@@ -30,6 +30,7 @@
 | build-docker          | Build and push a docker image.                      |
 | coverage-open         | Open coverage results in default browser.           |
 | coverage-report       | Analyse coverage and generate a term/HTML report.   |
+| dependencies-update   | Manages the process of updating dependencies.       |
 | format                | Runs black code formatter and isort on source code. |
 | lint                  | Run linting on the entire code base.                |
 | lint-pycodestyle      | Run PEP8 checking on code.                          |
@@ -60,6 +61,7 @@ Using `[all]` installs all the [optional dependencies](https://setuptools.pypa.i
   - `build_docker`
   - `typecheck`
   - `format`
+  - `dependencie_update`
 - For groups of commands:
   - `test` - for testing and coverage commands
   - `lint` - for all the linting commands

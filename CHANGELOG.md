@@ -12,9 +12,15 @@ Types of changes are:
 
 ## [Unreleased]
 
+## [2.1.0] - 2022-12-05
+
+### Features
+
+- New command `dependencies-update` and optional dependency group `dependencies_update`.
+
 ## [2.0.1] - 2022-12-04
 
-### Fix
+### Fixes
 
 - Workaround for `build-docker` of `cargo` on ARMv7 in emulator.
 
@@ -54,11 +60,12 @@ Types of changes are:
 
 - Initial source code
 
-[Unreleased]: https://github.com/radeklat/settings-doc/compare/2.0.1...HEAD
-[2.0.1]: https://github.com/radeklat/settings-doc/compare/2.0.0...2.0.1
-[2.0.0]: https://github.com/radeklat/settings-doc/compare/1.2.2...2.0.0
-[1.2.2]: https://github.com/radeklat/settings-doc/compare/1.2.1...1.2.2
-[1.2.1]: https://github.com/radeklat/settings-doc/compare/1.2.0...1.2.1
-[1.2.0]: https://github.com/radeklat/settings-doc/compare/1.1.0...1.2.0
-[1.1.0]: https://github.com/radeklat/settings-doc/compare/1.0.0...1.1.0
-[1.0.0]: https://github.com/radeklat/settings-doc/compare/initial...1.0.0
+[Unreleased]: https://github.com/radeklat/delfino-core/compare/2.1.0...HEAD
+[2.1.0]: https://github.com/radeklat/delfino-core/compare/2.0.1...2.1.0
+[2.0.1]: https://github.com/radeklat/delfino-core/compare/2.0.0...2.0.1
+[2.0.0]: https://github.com/radeklat/delfino-core/compare/1.2.2...2.0.0
+[1.2.2]: https://github.com/radeklat/delfino-core/compare/1.2.1...1.2.2
+[1.2.1]: https://github.com/radeklat/delfino-core/compare/1.2.0...1.2.1
+[1.2.0]: https://github.com/radeklat/delfino-core/compare/1.1.0...1.2.0
+[1.1.0]: https://github.com/radeklat/delfino-core/compare/1.0.0...1.1.0
+[1.0.0]: https://github.com/radeklat/delfino-core/compare/initial...1.0.0
