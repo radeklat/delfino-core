@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import List, Tuple
 
 import click
-from delfino.decorators import files_folders_option
+from delfino.decorators import files_folders_option, pass_args
 from delfino.execution import OnError, run
 from delfino.models import AppContext
 from delfino.terminal_output import print_header
@@ -16,7 +16,9 @@ from delfino_core.config import CorePluginConfig, pass_plugin_app_context
 from delfino_core.utils import ensure_reports_dir
 
 
-def _run_typecheck(paths: List[Path], strict: bool, reports_file: Path, summary_only: bool, mypypath: Path):
+def _run_typecheck(
+    paths: List[Path], strict: bool, reports_file: Path, summary_only: bool, mypypath: Path, passed_args: List[str]
+):
     args: ArgsList = [
         "mypy",
         "--show-column-numbers",
@@ -30,6 +32,7 @@ def _run_typecheck(paths: List[Path], strict: bool, reports_file: Path, summary_
         "silent",
         "--junit-xml",
         reports_file,
+        *passed_args,
     ]
 
     if strict:
@@ -56,8 +59,14 @@ def is_path_relative_to_paths(path: Path, paths: List[Path]) -> bool:
 @click.command()
 @click.option("--summary-only", is_flag=True, help="Suppress error messages and show only summary error count.")
 @files_folders_option
+@pass_args
 @pass_plugin_app_context
-def typecheck(app_context: AppContext[CorePluginConfig], summary_only: bool, files_folders: Tuple[str, ...]):
+def typecheck(
+    app_context: AppContext[CorePluginConfig],
+    passed_args: List[str],
+    summary_only: bool,
+    files_folders: Tuple[str, ...],
+):
     """Run type checking on source code.
 
     A non-zero return code from this task indicates invalid types were discovered.
@@ -83,4 +92,6 @@ def typecheck(app_context: AppContext[CorePluginConfig], summary_only: bool, fil
         report_filepath = (
             plugin_config.reports_directory / "typecheck" / f"junit-{'strict' if force_typing else 'nonstrict'}.xml"
         )
-        _run_typecheck(list(group), force_typing, report_filepath, summary_only, plugin_config.sources_directory)
+        _run_typecheck(
+            list(group), force_typing, report_filepath, summary_only, plugin_config.sources_directory, passed_args
+        )

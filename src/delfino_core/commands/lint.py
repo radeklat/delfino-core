@@ -8,6 +8,7 @@ from typing import List
 
 import click
 from delfino.click_utils.command import command_names
+from delfino.decorators import pass_args
 from delfino.execution import OnError, run
 from delfino.models import AppContext
 from delfino.terminal_output import print_header, print_no_issues_found
@@ -17,8 +18,9 @@ from delfino_core.config import CorePluginConfig, pass_plugin_app_context
 
 
 @click.command()
+@pass_args
 @pass_plugin_app_context
-def lint_pydocstyle(app_context: AppContext[CorePluginConfig]):
+def lint_pydocstyle(app_context: AppContext[CorePluginConfig], passed_args: List[str]):
     """Run docstring linting on source code.
 
     Docstring linting is done via pydocstyle. The pydocstyle config can be found in the
@@ -30,14 +32,15 @@ def lint_pydocstyle(app_context: AppContext[CorePluginConfig]):
 
     print_header("documentation style", level=2)
 
-    run(["pydocstyle", app_context.plugin_config.sources_directory], stdout=PIPE, on_error=OnError.ABORT)
+    run(["pydocstyle", *passed_args, app_context.plugin_config.sources_directory], stdout=PIPE, on_error=OnError.ABORT)
 
     print_no_issues_found()
 
 
 @click.command()
+@pass_args
 @pass_plugin_app_context
-def lint_pycodestyle(app_context: AppContext[CorePluginConfig]):
+def lint_pycodestyle(app_context: AppContext[CorePluginConfig], passed_args: List[str]):
     """Run PEP8 checking on code.
 
     PEP8 checking is done via pycodestyle.
@@ -65,6 +68,7 @@ def lint_pycodestyle(app_context: AppContext[CorePluginConfig]):
         "E501,W503,E231,E203,E402",
         "--exclude",
         ".svn,CVS,.bzr,.hg,.git,__pycache__,.tox,*_config_parser.py",
+        *passed_args,
         *dirs,
     ]
     run(args, stdout=PIPE, on_error=OnError.ABORT)
@@ -77,11 +81,11 @@ def lint_pycodestyle(app_context: AppContext[CorePluginConfig]):
     print_no_issues_found()
 
 
-def run_pylint(source_dirs: List[Path], pylintrc_folder: Path):
+def run_pylint(source_dirs: List[Path], pylintrc_folder: Path, passed_args: List[str]):
     print_header(", ".join(map(str, source_dirs)), level=3)
 
     run(
-        ["pylint", "-j", str(cpu_count()), "--rcfile", pylintrc_folder / ".pylintrc", *source_dirs],
+        ["pylint", "-j", str(cpu_count()), "--rcfile", pylintrc_folder / ".pylintrc", *passed_args, *source_dirs],
         stdout=PIPE,
         on_error=OnError.ABORT,
     )
@@ -113,8 +117,9 @@ def cpu_count():
 
 
 @click.command()
+@pass_args
 @pass_plugin_app_context
-def lint_pylint(app_context: AppContext[CorePluginConfig]):
+def lint_pylint(app_context: AppContext[CorePluginConfig], passed_args: List[str]):
     """Run pylint on code.
 
     The bulk of our code conventions are enforced via pylint. The pylint config can be
@@ -125,10 +130,10 @@ def lint_pylint(app_context: AppContext[CorePluginConfig]):
     print_header("pylint", level=2)
     plugin_config = app_context.plugin_config
 
-    run_pylint([plugin_config.sources_directory], app_context.project_root)
+    run_pylint([plugin_config.sources_directory], app_context.project_root, passed_args)
 
     if plugin_config.tests_directory:
-        run_pylint([plugin_config.tests_directory], plugin_config.tests_directory)
+        run_pylint([plugin_config.tests_directory], plugin_config.tests_directory, passed_args)
 
 
 _COMMANDS = [lint_pylint, lint_pycodestyle, lint_pydocstyle]
