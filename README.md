@@ -61,7 +61,7 @@ Using `[all]` installs all the [optional dependencies](https://setuptools.pypa.i
   - `build_docker`
   - `typecheck`
   - `format`
-  - `dependencie_update`
+  - `dependencies_update`
 - For groups of commands:
   - `test` - for testing and coverage commands
   - `lint` - for all the linting commands
