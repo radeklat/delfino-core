@@ -8,6 +8,7 @@ from subprocess import PIPE
 from typing import List, Optional
 
 import click
+from delfino.decorators import pass_args
 from delfino.execution import OnError, run
 from delfino.models import AppContext
 from delfino.terminal_output import print_header, run_command_example
@@ -17,7 +18,9 @@ from delfino_core.config import CorePluginConfig, pass_plugin_app_context
 from delfino_core.utils import ensure_reports_dir
 
 
-def _run_tests(app_context: AppContext[CorePluginConfig], name: str, maxfail: int, debug: bool) -> None:
+def _run_tests(
+    app_context: AppContext[CorePluginConfig], name: str, passed_args: List[str], maxfail: int, debug: bool
+) -> None:
     """Execute the tests for a given test type."""
     assert_pip_package_installed("pytest")
     assert_pip_package_installed("pytest-cov")
@@ -41,6 +44,7 @@ def _run_tests(app_context: AppContext[CorePluginConfig], name: str, maxfail: in
         "--maxfail",
         str(maxfail),
         "-s" if debug else "",
+        *passed_args,
         plugin_config.tests_directory / name,
     ]
     run(
@@ -53,18 +57,20 @@ def _run_tests(app_context: AppContext[CorePluginConfig], name: str, maxfail: in
 @click.command(help="Run unit tests.")
 @click.option("--maxfail", type=int, default=0)
 @click.option("--debug", is_flag=True, help="Disables capture, allowing debuggers like `pdb` to be used.")
+@pass_args
 @pass_plugin_app_context
-def test_unit(app_context: AppContext[CorePluginConfig], maxfail: int, debug: bool):
-    _run_tests(app_context, "unit", maxfail=maxfail, debug=debug)
+def test_unit(app_context: AppContext[CorePluginConfig], passed_args: List[str], maxfail: int, debug: bool):
+    _run_tests(app_context, "unit", passed_args, maxfail=maxfail, debug=debug)
 
 
 @click.command(help="Run integration tests.")
 @click.option("--maxfail", type=int, default=0)
 @click.option("--debug", is_flag=True, help="Disables capture, allowing debuggers like `pdb` to be used.")
+@pass_args
 @pass_plugin_app_context
-def test_integration(app_context: AppContext[CorePluginConfig], maxfail: int, debug: bool):
+def test_integration(app_context: AppContext[CorePluginConfig], passed_args: List[str], maxfail: int, debug: bool):
     # TODO(Radek): Replace with alias?
-    _run_tests(app_context, "integration", maxfail=maxfail, debug=debug)
+    _run_tests(app_context, "integration", passed_args, maxfail=maxfail, debug=debug)
 
 
 def _get_total_coverage(coverage_dat: Path) -> str:

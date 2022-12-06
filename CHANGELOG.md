@@ -12,6 +12,18 @@ Types of changes are:
 
 ## [Unreleased]
 
+## [2.2.0] - 2022-12-07
+
+### Features
+
+- The following commands now take arbitrary arguments after `--`, which are then passed to the underlying tool:
+  - `lint-pycodestyle`
+  - `lint-pydocstyle`
+  - `lint-pylint`
+  - `test-integration`
+  - `test-unit`
+  - `typecheck`
+
 ## [2.1.1] - 2022-12-05
 
 ### Fixes
@@ -66,7 +78,8 @@ Types of changes are:
 
 - Initial source code
 
-[Unreleased]: https://github.com/radeklat/delfino-core/compare/2.1.1...HEAD
+[Unreleased]: https://github.com/radeklat/delfino-core/compare/2.2.0...HEAD
+[2.2.0]: https://github.com/radeklat/delfino-core/compare/2.1.1...2.2.0
 [2.1.1]: https://github.com/radeklat/delfino-core/compare/2.1.0...2.1.1
 [2.1.0]: https://github.com/radeklat/delfino-core/compare/2.0.1...2.1.0
 [2.0.1]: https://github.com/radeklat/delfino-core/compare/2.0.0...2.0.1
