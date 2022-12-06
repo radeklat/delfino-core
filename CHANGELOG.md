@@ -12,6 +12,12 @@ Types of changes are:
 
 ## [Unreleased]
 
+## [2.1.1] - 2022-12-05
+
+### Fixes
+
+- Add missing optional dependencies.
+
 ## [2.1.0] - 2022-12-05
 
 ### Features
@@ -60,7 +66,8 @@ Types of changes are:
 
 - Initial source code
 
-[Unreleased]: https://github.com/radeklat/delfino-core/compare/2.1.0...HEAD
+[Unreleased]: https://github.com/radeklat/delfino-core/compare/2.1.1...HEAD
+[2.1.1]: https://github.com/radeklat/delfino-core/compare/2.1.0...2.1.1
 [2.1.0]: https://github.com/radeklat/delfino-core/compare/2.0.1...2.1.0
 [2.0.1]: https://github.com/radeklat/delfino-core/compare/2.0.0...2.0.1
 [2.0.0]: https://github.com/radeklat/delfino-core/compare/1.2.2...2.0.0

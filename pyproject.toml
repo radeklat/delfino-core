@@ -1,6 +1,6 @@
 [tool.poetry]
 name="delfino-core"
-version="2.1.0"
+version="2.1.1"
 authors = ["Radek Lát <radek.lat@gmail.com>"]
 description="Delfino core plugin"
 license = "MIT License"
@@ -40,6 +40,8 @@ pydocstyle = {version = "*", optional = true}
 twine = {version = "*", optional = true}
 gitpython = {version = "*", optional = true}
 shellingham = {version = "*", optional = true}
+packaging = {version = "*", optional = true}
+psutil = {version = "*", optional = true}
 
 # https://python-poetry.org/docs/pyproject/#plugins
 [tool.poetry.plugins]
