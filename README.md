@@ -57,16 +57,16 @@ Each project may use different sub-set of [commands](#commands). Therefore, depe
 Using `[all]` installs all the [optional dependencies](https://setuptools.pypa.io/en/latest/userguide/dependency_management.html#optional-dependencies) used by all the commands. If you want only a sub-set of those dependencies, there are finer-grained groups available:
 
 - For individual commands (matches the command names):
-  - `upload_to_pypi`
-  - `build_docker`
+  - `upload-to-pypi`
+  - `build-docker`
   - `typecheck`
   - `format`
-  - `dependencies_update`
+  - `dependencies-update`
 - For groups of commands:
   - `test` - for testing and coverage commands
   - `lint` - for all the linting commands
 - For groups of groups:
-  - `verify_all` - same as `[typecheck,format,test,lint]`
+  - `verify-all` - same as `[typecheck,format,test,lint]`
   - `all` - all optional packages
 
 # Configuration
