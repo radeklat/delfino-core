@@ -1,26 +1,29 @@
 """Linting checks on source code."""
 import logging
 from functools import lru_cache
-from os import getenv
+from itertools import groupby
+from os import environ, getenv, pathsep
 from pathlib import Path
 from subprocess import PIPE
-from typing import List
+from typing import List, Optional, Tuple
 
 import click
 from delfino.click_utils.command import command_names
-from delfino.decorators import pass_args
+from delfino.decorators import files_folders_option, pass_args
 from delfino.execution import OnError, run
 from delfino.models import AppContext
 from delfino.terminal_output import print_header, print_no_issues_found
 from delfino.validation import assert_pip_package_installed, pip_package_installed
 
+from delfino_core.backports import path_is_relative_to
 from delfino_core.config import CorePluginConfig, pass_plugin_app_context
 
 
 @click.command()
 @pass_args
+@files_folders_option
 @pass_plugin_app_context
-def lint_pydocstyle(app_context: AppContext[CorePluginConfig], passed_args: List[str]):
+def lint_pydocstyle(app_context: AppContext[CorePluginConfig], passed_args: List[str], files_folders: Tuple[str]):
     """Run docstring linting on source code.
 
     Docstring linting is done via pydocstyle. The pydocstyle config can be found in the
@@ -31,16 +34,18 @@ def lint_pydocstyle(app_context: AppContext[CorePluginConfig], passed_args: List
     assert_pip_package_installed("pydocstyle")
 
     print_header("documentation style", level=2)
+    dirs = build_target_paths(app_context, files_folders, False, False)
 
-    run(["pydocstyle", *passed_args, app_context.plugin_config.sources_directory], stdout=PIPE, on_error=OnError.ABORT)
+    run(["pydocstyle", *passed_args, *dirs], stdout=PIPE, on_error=OnError.ABORT)
 
     print_no_issues_found()
 
 
 @click.command()
 @pass_args
+@files_folders_option
 @pass_plugin_app_context
-def lint_pycodestyle(app_context: AppContext[CorePluginConfig], passed_args: List[str]):
+def lint_pycodestyle(app_context: AppContext[CorePluginConfig], passed_args: List[str], files_folders: Tuple[str]):
     """Run PEP8 checking on code.
 
     PEP8 checking is done via pycodestyle.
@@ -50,12 +55,9 @@ def lint_pycodestyle(app_context: AppContext[CorePluginConfig], passed_args: Lis
     """
     assert_pip_package_installed("pycodestyle")
 
-    plugin_config = app_context.plugin_config
     print_header("code style (PEP8)", level=2)
 
-    dirs = [plugin_config.sources_directory, plugin_config.tests_directory]
-    if app_context.pyproject_toml.tool.delfino.local_commands_directory.exists():
-        dirs.append(app_context.pyproject_toml.tool.delfino.local_commands_directory)
+    dirs = build_target_paths(app_context, files_folders)
 
     # TODO(Radek): Implement unofficial config support in pyproject.toml by parsing it
     #  and outputting the result into a supported format?
@@ -116,10 +118,30 @@ def cpu_count():
     return 1
 
 
+def build_target_paths(
+    app_context: AppContext[CorePluginConfig],
+    files_folders: Optional[Tuple[str]] = None,
+    include_tests: bool = True,
+    include_commands: bool = True,
+) -> List[Path]:
+    if files_folders:
+        return [Path(path) for path in files_folders]
+    local_commands_directory = app_context.pyproject_toml.tool.delfino.local_commands_directory
+    plugin_config = app_context.plugin_config
+    target_paths: List[Path] = [plugin_config.sources_directory]
+
+    if include_tests and plugin_config.tests_directory.exists():
+        target_paths.append(plugin_config.tests_directory)
+    if include_commands and local_commands_directory.exists():
+        target_paths.append(local_commands_directory)
+    return target_paths
+
+
 @click.command()
+@files_folders_option
 @pass_args
 @pass_plugin_app_context
-def lint_pylint(app_context: AppContext[CorePluginConfig], passed_args: List[str]):
+def lint_pylint(app_context: AppContext[CorePluginConfig], passed_args: List[str], files_folders: Tuple[str]):
     """Run pylint on code.
 
     The bulk of our code conventions are enforced via pylint. The pylint config can be
@@ -130,18 +152,34 @@ def lint_pylint(app_context: AppContext[CorePluginConfig], passed_args: List[str
     print_header("pylint", level=2)
     plugin_config = app_context.plugin_config
 
-    run_pylint([plugin_config.sources_directory], app_context.project_root, passed_args)
+    def get_pylintrc_folder(path: Path) -> Path:
+        if plugin_config.tests_directory.exists() and path_is_relative_to(path, plugin_config.tests_directory):
+            return plugin_config.tests_directory
+        return app_context.project_root
 
-    if plugin_config.tests_directory:
-        run_pylint([plugin_config.tests_directory], plugin_config.tests_directory, passed_args)
+    target_paths = build_target_paths(app_context, files_folders)
+    grouped_paths = groupby(target_paths, get_pylintrc_folder)
+    for pylintrc_folder, paths in grouped_paths:
+        run_pylint(list(paths), pylintrc_folder, passed_args)
 
 
 _COMMANDS = [lint_pylint, lint_pycodestyle, lint_pydocstyle]
 
 
 @click.command(help=f"Run linting on the entire code base.\n\n" f"Alias for the {command_names(_COMMANDS)} commands.")
+@files_folders_option
+@pass_plugin_app_context
 @click.pass_context
-def lint(click_context: click.Context):
+def lint(click_context: click.Context, app_context: AppContext[CorePluginConfig], files_folders: Tuple[str]):
     print_header("Linting", icon="🔎")
-    for command in _COMMANDS:
-        click_context.forward(command)
+
+    src_dir = str(app_context.plugin_config.sources_directory)
+    original_pythonpath = environ.get("PYTHONPATH", "")
+
+    environ["PYTHONPATH"] = pathsep.join([original_pythonpath, src_dir]) if original_pythonpath else src_dir
+
+    try:
+        for command in _COMMANDS:
+            click_context.forward(command, files_folders=files_folders)
+    finally:
+        environ["PYTHONPATH"] = original_pythonpath
