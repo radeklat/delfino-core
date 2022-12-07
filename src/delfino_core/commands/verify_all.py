@@ -14,9 +14,9 @@ _COMMANDS = [run_format, lint, typecheck, test_all]
 
 
 @click.command(help="Runs all verification commands. Configured by the ``verify_commands`` setting.")
-@click.pass_context
 @pass_plugin_app_context
-def verify_all(app_context: AppContext[CorePluginConfig], click_context: click.Context):
+@click.pass_context
+def verify_all(click_context: click.Context, app_context: AppContext[CorePluginConfig]):
     plugin_config = app_context.plugin_config
 
     root = get_root_command(click_context)

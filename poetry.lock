@@ -172,7 +172,7 @@ test = ["hypothesis (>=1.11.4,!=3.79.2)", "iso8601", "pretend", "pytest (>=6.2.0
 
 [[package]]
 name = "delfino"
-version = "0.23.1"
+version = "0.24.0"
 description = "A collection of command line helper scripts wrapping tools used during Python development."
 category = "main"
 optional = false
@@ -468,7 +468,7 @@ testing = ["pytest", "pytest-cov"]
 
 [[package]]
 name = "platformdirs"
-version = "2.5.4"
+version = "2.6.0"
 description = "A small Python package for determining appropriate platform-specific dirs, e.g. a \"user data dir\"."
 category = "main"
 optional = false
@@ -962,7 +962,7 @@ verify-all = ["black", "isort", "pre-commit", "pytest", "coverage", "pytest-cov"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7.2"
-content-hash = "fdebceda9c180de76699e8a3369dda5203fbba01d27e4842594e4c348c597031"
+content-hash = "51734a62f024f84355647d0b62379a34bcd67b7f9176d6f24c30a3e79ea2fe92"
 
 [metadata.files]
 astroid = [
@@ -1171,8 +1171,8 @@ cryptography = [
     {file = "cryptography-38.0.4.tar.gz", hash = "sha256:175c1a818b87c9ac80bb7377f5520b7f31b3ef2a0004e2420319beadedb67290"},
 ]
 delfino = [
-    {file = "delfino-0.23.1-py3-none-any.whl", hash = "sha256:11eb86f8e21b78e3dbd2ecb08714403da38b95fdeb9269f35929b6650972902a"},
-    {file = "delfino-0.23.1.tar.gz", hash = "sha256:02947d0656b2b8b5dacfeb91489e34f7f0e340483ef2513f112da527d0bb7016"},
+    {file = "delfino-0.24.0-py3-none-any.whl", hash = "sha256:630778fa713b87a53f7621ce2e33e437ac5a5ca037e725b39b16f6f0853f9646"},
+    {file = "delfino-0.24.0.tar.gz", hash = "sha256:7ae5d45dace0f7f0e65e6192183f6895b9d2d105a75a9470539805d03d47901d"},
 ]
 deprecation = [
     {file = "deprecation-2.1.0-py2.py3-none-any.whl", hash = "sha256:a10811591210e1fb0e768a8c25517cabeabcba6f0bf96564f8ff45189f90b14a"},
@@ -1320,8 +1320,8 @@ pkginfo = [
     {file = "pkginfo-1.9.2.tar.gz", hash = "sha256:ac03e37e4d601aaee40f8087f63fc4a2a6c9814dda2c8fa6aab1b1829653bdfa"},
 ]
 platformdirs = [
-    {file = "platformdirs-2.5.4-py3-none-any.whl", hash = "sha256:af0276409f9a02373d540bf8480021a048711d572745aef4b7842dad245eba10"},
-    {file = "platformdirs-2.5.4.tar.gz", hash = "sha256:1006647646d80f16130f052404c6b901e80ee4ed6bef6792e1f238a8969106f7"},
+    {file = "platformdirs-2.6.0-py3-none-any.whl", hash = "sha256:1a89a12377800c81983db6be069ec068eee989748799b946cce2a6e80dcc54ca"},
+    {file = "platformdirs-2.6.0.tar.gz", hash = "sha256:b46ffafa316e6b83b47489d240ce17173f123a9b9c83282141c3daf26ad9ac2e"},
 ]
 pluggy = [
     {file = "pluggy-1.0.0-py2.py3-none-any.whl", hash = "sha256:74134bbf457f031a36d68416e1509f34bd5ccc019f0bcc952c7b909d06b37bd3"},

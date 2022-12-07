@@ -4,7 +4,7 @@ import shlex
 import subprocess
 from datetime import datetime, timedelta
 from functools import lru_cache
-from typing import Iterable, Optional
+from typing import Optional
 
 import click
 from click import secho
@@ -16,6 +16,7 @@ from delfino.terminal_output import print_header
 from delfino.utils import ArgsType
 from delfino.validation import assert_package_manager_is_known, assert_pip_package_installed
 
+from delfino_core.backports import shlex_join
 from delfino_core.commands.verify_all import verify_all
 from delfino_core.config import CorePluginConfig
 
@@ -41,18 +42,10 @@ def _git_root():
     )
 
 
-def _shlex_join(split_command: Iterable[str]) -> str:
-    """Return a shell-escaped string from *split_command*.
-
-    Backport of ``shlex.join`` for Python 3.7
-    """
-    return " ".join(shlex.quote(arg) for arg in split_command)
-
-
 def _trace(args: str) -> subprocess.CompletedProcess:
     """Print the command before execution."""
     _args: ArgsType = shlex.split(args)
-    print(_shlex_join(_args))
+    print(shlex_join(_args))
     return run(_args, on_error=OnError.EXIT, capture_output=True)
 
 

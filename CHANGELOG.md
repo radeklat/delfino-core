@@ -12,6 +12,12 @@ Types of changes are:
 
 ## [Unreleased]
 
+## [2.3.0] - 2022-12-07
+
+### Features
+
+- `lint`, `lint-pylint`, `lint-pydocstyle` and `lint-pycodestyle` commands takes a list of one or more files/folders to use with the `-f`/`--file`/`--folder` option.
+
 ## [2.2.0] - 2022-12-07
 
 ### Features
@@ -78,7 +84,8 @@ Types of changes are:
 
 - Initial source code
 
-[Unreleased]: https://github.com/radeklat/delfino-core/compare/2.2.0...HEAD
+[Unreleased]: https://github.com/radeklat/delfino-core/compare/2.3.0...HEAD
+[2.3.0]: https://github.com/radeklat/delfino-core/compare/2.2.0...2.3.0
 [2.2.0]: https://github.com/radeklat/delfino-core/compare/2.1.1...2.2.0
 [2.1.1]: https://github.com/radeklat/delfino-core/compare/2.1.0...2.1.1
 [2.1.0]: https://github.com/radeklat/delfino-core/compare/2.0.1...2.1.0
