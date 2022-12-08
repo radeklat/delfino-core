@@ -3,12 +3,13 @@
 import re
 import shutil
 import webbrowser
+from contextlib import suppress
 from pathlib import Path
 from subprocess import PIPE
-from typing import List, Optional
+from typing import List, Optional, Tuple
 
 import click
-from delfino.decorators import pass_args
+from delfino.decorators import files_folders_option, pass_args
 from delfino.execution import OnError, run
 from delfino.models import AppContext
 from delfino.terminal_output import print_header, run_command_example
@@ -18,8 +19,17 @@ from delfino_core.config import CorePluginConfig, pass_plugin_app_context
 from delfino_core.utils import ensure_reports_dir
 
 
+def _delete_coverage_dat_files(reports_directory: Path, test_types: List[str]):
+    for test_type in [f"-{_}" for _ in test_types] + [""]:
+        with suppress(FileNotFoundError):  # Use `missing_ok=True` from Python 3.8
+            (reports_directory / f"coverage{test_type}.dat").unlink()
+
+
 def _run_tests(
-    app_context: AppContext[CorePluginConfig], name: str, passed_args: List[str], maxfail: int, debug: bool
+    app_context: AppContext[CorePluginConfig],
+    passed_args: Tuple[str, ...],
+    files_folders: Tuple[str, ...],
+    name: str = "",
 ) -> None:
     """Execute the tests for a given test type."""
     assert_pip_package_installed("pytest")
@@ -28,49 +38,53 @@ def _run_tests(
 
     plugin_config = app_context.plugin_config
 
-    if name not in plugin_config.test_types or not plugin_config.tests_directory:
+    if not files_folders:
+        files_folders = (plugin_config.tests_directory / name,)
+    elif name and (name not in plugin_config.test_types or not plugin_config.tests_directory):
         return
 
-    print_header(f"️Running {name} tests️", icon="🔎🐛")
+    header_name = f"{name} " if name else ""
+    coverage_name = f"-{name}" if name else ""
+
+    print_header(f"️Running {header_name}tests", icon="🔎🐛")
     ensure_reports_dir(plugin_config)
     args: List[Optional[str]] = [
         "pytest",
         "--cov",
         plugin_config.sources_directory,
         "--cov-report",
-        f"xml:{plugin_config.reports_directory / f'coverage-{name}.xml'}",
+        f"xml:{plugin_config.reports_directory / f'coverage{coverage_name}.xml'}",
         "--cov-branch",
         "-vv",
-        "--maxfail",
-        str(maxfail),
-        "-s" if debug else "",
         *passed_args,
-        plugin_config.tests_directory / name,
+        *files_folders,
     ]
     run(
         list(filter(None, args)),
-        env_update={"COVERAGE_FILE": plugin_config.reports_directory / f"coverage-{name}.dat"},
+        env_update={"COVERAGE_FILE": plugin_config.reports_directory / f"coverage{coverage_name}.dat"},
         on_error=OnError.ABORT,
     )
 
 
 @click.command(help="Run unit tests.")
-@click.option("--maxfail", type=int, default=0)
-@click.option("--debug", is_flag=True, help="Disables capture, allowing debuggers like `pdb` to be used.")
+@files_folders_option
 @pass_args
 @pass_plugin_app_context
-def test_unit(app_context: AppContext[CorePluginConfig], passed_args: List[str], maxfail: int, debug: bool):
-    _run_tests(app_context, "unit", passed_args, maxfail=maxfail, debug=debug)
+def test_unit(app_context: AppContext[CorePluginConfig], passed_args: Tuple[str, ...], files_folders: Tuple[str, ...]):
+    _delete_coverage_dat_files(app_context.plugin_config.reports_directory, app_context.plugin_config.test_types)
+    _run_tests(app_context, passed_args, files_folders, "unit")
 
 
 @click.command(help="Run integration tests.")
-@click.option("--maxfail", type=int, default=0)
-@click.option("--debug", is_flag=True, help="Disables capture, allowing debuggers like `pdb` to be used.")
+@files_folders_option
 @pass_args
 @pass_plugin_app_context
-def test_integration(app_context: AppContext[CorePluginConfig], passed_args: List[str], maxfail: int, debug: bool):
+def test_integration(
+    app_context: AppContext[CorePluginConfig], passed_args: Tuple[str, ...], files_folders: Tuple[str, ...]
+):
     # TODO(Radek): Replace with alias?
-    _run_tests(app_context, "integration", passed_args, maxfail=maxfail, debug=debug)
+    _delete_coverage_dat_files(app_context.plugin_config.reports_directory, app_context.plugin_config.test_types)
+    _run_tests(app_context, passed_args, files_folders, "integration")
 
 
 def _get_total_coverage(coverage_dat: Path) -> str:
@@ -84,25 +98,13 @@ def _get_total_coverage(coverage_dat: Path) -> str:
     return match.group(1)
 
 
-@click.command()
-@pass_plugin_app_context
-def coverage_report(app_context: AppContext[CorePluginConfig]):
-    """Analyse coverage and generate a term/HTML report.
+def _combined_coverage_reports(reports_directory: Path, test_types: List[str]) -> Path:
+    coverage_dat_combined = reports_directory / "coverage.dat"
 
-    Combines all test types.
-    """
-    assert_pip_package_installed("coverage")
-
-    print_header("Generating coverage report", icon="📃")
-    plugin_config = app_context.plugin_config
-    ensure_reports_dir(plugin_config)
-
-    coverage_dat_combined = plugin_config.reports_directory / "coverage.dat"
-    coverage_html = plugin_config.reports_directory / "coverage-report/"
     coverage_files = []  # we'll make a copy because `combine` will erase them
 
-    for test_type in plugin_config.test_types:
-        coverage_dat = plugin_config.reports_directory / f"coverage-{test_type}.dat"
+    for test_type in test_types:
+        coverage_dat = reports_directory / f"coverage-{test_type}.dat"
 
         if not coverage_dat.exists():
             click.secho(
@@ -116,9 +118,46 @@ def coverage_report(app_context: AppContext[CorePluginConfig]):
             shutil.copy(coverage_dat, temp_copy)
             coverage_files.append(temp_copy)
 
-    env = {"COVERAGE_FILE": coverage_dat_combined}
-    run(["coverage", "combine", *coverage_files], env_update=env, stdout=PIPE, on_error=OnError.EXIT)
-    run(["coverage", "html", "-d", coverage_html], env_update=env, stdout=PIPE, on_error=OnError.EXIT)
+    if not coverage_files and coverage_dat_combined.exists():
+        click.secho(
+            "Could not find coverage dat files for individual tests but combined file exists. Using this file only.",
+            fg="yellow",
+        )
+        return coverage_dat_combined
+
+    run(
+        ["coverage", "combine", *coverage_files],
+        env_update={"COVERAGE_FILE": coverage_dat_combined},
+        stdout=PIPE,
+        on_error=OnError.EXIT,
+    )
+
+    return coverage_dat_combined
+
+
+@click.command()
+@pass_plugin_app_context
+def coverage_report(app_context: AppContext[CorePluginConfig], **kwargs):
+    """Analyse coverage and generate a term/HTML report.
+
+    Combines all test types.
+    """
+    del kwargs  # additional unused arguments passed via `click.invoke` from other commands
+    assert_pip_package_installed("coverage")
+
+    print_header("Generating coverage report", icon="📃")
+    plugin_config = app_context.plugin_config
+    ensure_reports_dir(plugin_config)
+
+    coverage_dat_combined = _combined_coverage_reports(plugin_config.reports_directory, plugin_config.test_types)
+    coverage_html = plugin_config.reports_directory / "coverage-report/"
+
+    run(
+        ["coverage", "html", "-d", coverage_html],
+        env_update={"COVERAGE_FILE": coverage_dat_combined},
+        stdout=PIPE,
+        on_error=OnError.EXIT,
+    )
 
     print(f"Total coverage: {_get_total_coverage(coverage_dat_combined)}\n")
     print(
@@ -129,11 +168,19 @@ def coverage_report(app_context: AppContext[CorePluginConfig]):
 
 
 @click.command(help="Run all tests, and generate coverage report.")
+@files_folders_option
+@pass_plugin_app_context
+@pass_args
 @click.pass_context
-def test_all(click_context: click.Context):
-    print_header("Run all tests, and generate coverage report.", icon="🔎🐛📃")
-    click_context.forward(test_unit)
-    click_context.forward(test_integration)
+def test_all(
+    click_context: click.Context,
+    app_context: AppContext[CorePluginConfig],
+    passed_args: Tuple[str, ...],
+    files_folders: Tuple[str, ...],
+):
+    _delete_coverage_dat_files(app_context.plugin_config.reports_directory, app_context.plugin_config.test_types)
+    for name in [""] if files_folders else app_context.plugin_config.test_types:
+        _run_tests(app_context, passed_args, files_folders, name)
     click_context.forward(coverage_report)
 
 

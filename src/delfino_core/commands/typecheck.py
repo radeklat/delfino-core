@@ -17,7 +17,12 @@ from delfino_core.utils import ensure_reports_dir
 
 
 def _run_typecheck(
-    paths: List[Path], strict: bool, reports_file: Path, summary_only: bool, mypypath: Path, passed_args: List[str]
+    paths: List[Path],
+    strict: bool,
+    reports_file: Path,
+    summary_only: bool,
+    mypypath: Path,
+    passed_args: Tuple[str, ...],
 ):
     args: ArgsList = [
         "mypy",
@@ -63,7 +68,7 @@ def is_path_relative_to_paths(path: Path, paths: List[Path]) -> bool:
 @pass_plugin_app_context
 def typecheck(
     app_context: AppContext[CorePluginConfig],
-    passed_args: List[str],
+    passed_args: Tuple[str, ...],
     summary_only: bool,
     files_folders: Tuple[str, ...],
 ):

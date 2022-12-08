@@ -12,6 +12,20 @@ Types of changes are:
 
 ## [Unreleased]
 
+## [3.0.0] - 2022-12-08
+
+### Breaking changes
+
+- `test-unit` and `test-integration` no longer support the `--maxfail` and `--debug` flags. Use the passthrough option (any argument after `--`) to pass these flags to pytest directly with `--maxfail` and `-s` respectively.
+
+### Features
+
+- `test-all` command takes a list of one or more files/folders to use with the `-f`/`--file`/`--folder` option.
+
+### Fixes
+
+- Fix type annotations for `passed_args`.
+
 ## [2.3.0] - 2022-12-07
 
 ### Features
@@ -84,7 +98,8 @@ Types of changes are:
 
 - Initial source code
 
-[Unreleased]: https://github.com/radeklat/delfino-core/compare/2.3.0...HEAD
+[Unreleased]: https://github.com/radeklat/delfino-core/compare/3.0.0...HEAD
+[3.0.0]: https://github.com/radeklat/delfino-core/compare/2.3.0...3.0.0
 [2.3.0]: https://github.com/radeklat/delfino-core/compare/2.2.0...2.3.0
 [2.2.0]: https://github.com/radeklat/delfino-core/compare/2.1.1...2.2.0
 [2.1.1]: https://github.com/radeklat/delfino-core/compare/2.1.0...2.1.1

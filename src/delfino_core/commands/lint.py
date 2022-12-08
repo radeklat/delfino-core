@@ -23,7 +23,7 @@ from delfino_core.config import CorePluginConfig, pass_plugin_app_context
 @pass_args
 @files_folders_option
 @pass_plugin_app_context
-def lint_pydocstyle(app_context: AppContext[CorePluginConfig], passed_args: List[str], files_folders: Tuple[str]):
+def lint_pydocstyle(app_context: AppContext[CorePluginConfig], passed_args: Tuple[str, ...], files_folders: Tuple[str]):
     """Run docstring linting on source code.
 
     Docstring linting is done via pydocstyle. The pydocstyle config can be found in the
@@ -45,7 +45,9 @@ def lint_pydocstyle(app_context: AppContext[CorePluginConfig], passed_args: List
 @pass_args
 @files_folders_option
 @pass_plugin_app_context
-def lint_pycodestyle(app_context: AppContext[CorePluginConfig], passed_args: List[str], files_folders: Tuple[str]):
+def lint_pycodestyle(
+    app_context: AppContext[CorePluginConfig], passed_args: Tuple[str, ...], files_folders: Tuple[str]
+):
     """Run PEP8 checking on code.
 
     PEP8 checking is done via pycodestyle.
@@ -83,7 +85,11 @@ def lint_pycodestyle(app_context: AppContext[CorePluginConfig], passed_args: Lis
     print_no_issues_found()
 
 
-def run_pylint(source_dirs: List[Path], pylintrc_folder: Path, passed_args: List[str]):
+def run_pylint(
+    source_dirs: List[Path],
+    pylintrc_folder: Path,
+    passed_args: Tuple[str, ...],
+):
     print_header(", ".join(map(str, source_dirs)), level=3)
 
     run(
@@ -141,7 +147,7 @@ def build_target_paths(
 @files_folders_option
 @pass_args
 @pass_plugin_app_context
-def lint_pylint(app_context: AppContext[CorePluginConfig], passed_args: List[str], files_folders: Tuple[str]):
+def lint_pylint(app_context: AppContext[CorePluginConfig], passed_args: Tuple[str, ...], files_folders: Tuple[str]):
     """Run pylint on code.
 
     The bulk of our code conventions are enforced via pylint. The pylint config can be
