@@ -9,7 +9,7 @@ from delfino_core.commands.dependencies_update import dependencies_update
 from delfino_core.commands.format import run_format
 from delfino_core.commands.lint import lint, lint_pycodestyle, lint_pydocstyle, lint_pylint
 from delfino_core.commands.switch_python_version import switch_python_version
-from delfino_core.commands.test import coverage_open, coverage_report, test_all, test_integration, test_unit
+from delfino_core.commands.test import coverage_open, coverage_report, test, test_all, test_integration, test_unit
 from delfino_core.commands.typecheck import typecheck
 from delfino_core.commands.upload_to_pypi import upload_to_pypi
 from delfino_core.commands.verify_all import verify_all
@@ -50,6 +50,7 @@ class TestPlugin:
             lint_pylint,
             run_format,
             switch_python_version,
+            test,
             test_all,
             test_integration,
             test_unit,

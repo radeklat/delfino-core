@@ -12,7 +12,15 @@ Types of changes are:
 
 ## [Unreleased]
 
+## [3.2.0] - 2022-12-09
+
+### Features
+
+- New command `test`, which is the same as `test-all` but without coverage.
+
 ## [3.1.0] - 2022-12-09
+
+### Features
 
 - `typecheck` will print additional headings if any folders are in a strict mode.
 
@@ -108,7 +116,8 @@ Types of changes are:
 
 - Initial source code
 
-[Unreleased]: https://github.com/radeklat/delfino-core/compare/3.1.0...HEAD
+[Unreleased]: https://github.com/radeklat/delfino-core/compare/3.2.0...HEAD
+[3.2.0]: https://github.com/radeklat/delfino-core/compare/3.1.0...3.2.0
 [3.1.0]: https://github.com/radeklat/delfino-core/compare/3.0.1...3.1.0
 [3.0.1]: https://github.com/radeklat/delfino-core/compare/3.0.0...3.0.1
 [3.0.0]: https://github.com/radeklat/delfino-core/compare/2.3.0...3.0.0
