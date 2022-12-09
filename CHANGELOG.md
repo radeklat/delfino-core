@@ -12,6 +12,10 @@ Types of changes are:
 
 ## [Unreleased]
 
+## [3.1.0] - 2022-12-09
+
+- `typecheck` will print additional headings if any folders are in a strict mode.
+
 ## [3.0.1] - 2022-12-09
 
 ### Fixes
@@ -104,7 +108,8 @@ Types of changes are:
 
 - Initial source code
 
-[Unreleased]: https://github.com/radeklat/delfino-core/compare/3.0.1...HEAD
+[Unreleased]: https://github.com/radeklat/delfino-core/compare/3.1.0...HEAD
+[3.1.0]: https://github.com/radeklat/delfino-core/compare/3.0.1...3.1.0
 [3.0.1]: https://github.com/radeklat/delfino-core/compare/3.0.0...3.0.1
 [3.0.0]: https://github.com/radeklat/delfino-core/compare/2.3.0...3.0.0
 [2.3.0]: https://github.com/radeklat/delfino-core/compare/2.2.0...2.3.0

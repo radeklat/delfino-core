@@ -22,6 +22,7 @@ def _run_typecheck(
     reports_file: Path,
     summary_only: bool,
     mypypath: Path,
+    print_second_level_headers: bool,
     passed_args: Tuple[str, ...],
 ):
     args: ArgsList = [
@@ -47,6 +48,9 @@ def _run_typecheck(
 
     if summary_only:
         args.extend(["|", "tail", "-n", "1"])
+
+    if print_second_level_headers:
+        print_header(f"{'Strict' if strict else 'Optional'} types", level=2, icon="⚠️" if strict else "ℹ️")
 
     run(args, env_update_path={"MYPYPATH": mypypath}, on_error=OnError.ABORT)
 
@@ -98,5 +102,11 @@ def typecheck(
             plugin_config.reports_directory / "typecheck" / f"junit-{'strict' if force_typing else 'nonstrict'}.xml"
         )
         _run_typecheck(
-            list(group), force_typing, report_filepath, summary_only, plugin_config.sources_directory, passed_args
+            list(group),
+            force_typing,
+            report_filepath,
+            summary_only,
+            plugin_config.sources_directory,
+            bool(strict_paths),
+            passed_args,
         )
