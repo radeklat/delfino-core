@@ -61,8 +61,9 @@ def _run_tests(
     ]
     run(
         list(filter(None, args)),
-        env_update={"COVERAGE_FILE": plugin_config.reports_directory / f"coverage{coverage_name}.dat"},
         on_error=OnError.ABORT,
+        env_update={"COVERAGE_FILE": plugin_config.reports_directory / f"coverage{coverage_name}.dat"},
+        env_update_path={"PYTHONPATH": app_context.plugin_config.sources_directory},
     )
 
 

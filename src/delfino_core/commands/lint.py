@@ -2,7 +2,7 @@
 import logging
 from functools import lru_cache
 from itertools import groupby
-from os import environ, getenv, pathsep
+from os import getenv
 from pathlib import Path
 from subprocess import PIPE
 from typing import List, Optional, Tuple
@@ -36,7 +36,12 @@ def lint_pydocstyle(app_context: AppContext[CorePluginConfig], passed_args: Tupl
     print_header("documentation style", level=2)
     dirs = build_target_paths(app_context, files_folders, False, False)
 
-    run(["pydocstyle", *passed_args, *dirs], stdout=PIPE, on_error=OnError.ABORT)
+    run(
+        ["pydocstyle", *passed_args, *dirs],
+        stdout=PIPE,
+        on_error=OnError.ABORT,
+        env_update_path={"PYTHONPATH": app_context.plugin_config.sources_directory},
+    )
 
     print_no_issues_found()
 
@@ -75,7 +80,12 @@ def lint_pycodestyle(
         *passed_args,
         *dirs,
     ]
-    run(args, stdout=PIPE, on_error=OnError.ABORT)
+    run(
+        args,
+        stdout=PIPE,
+        on_error=OnError.ABORT,
+        env_update_path={"PYTHONPATH": app_context.plugin_config.sources_directory},
+    )
     # Ignores explained:
     # - E501: Line length is checked by PyLint
     # - W503: Disable checking of "Line break before binary operator". PEP8 recently (~2019) switched to
@@ -86,16 +96,18 @@ def lint_pycodestyle(
 
 
 def run_pylint(
-    source_dirs: List[Path],
+    sources_dir: Path,
+    checked_dirs: List[Path],
     pylintrc_folder: Path,
     passed_args: Tuple[str, ...],
 ):
-    print_header(", ".join(map(str, source_dirs)), level=3)
+    print_header(", ".join(map(str, checked_dirs)), level=3)
 
     run(
-        ["pylint", "-j", str(cpu_count()), "--rcfile", pylintrc_folder / ".pylintrc", *passed_args, *source_dirs],
+        ["pylint", "-j", str(cpu_count()), "--rcfile", pylintrc_folder / ".pylintrc", *passed_args, *checked_dirs],
         stdout=PIPE,
         on_error=OnError.ABORT,
+        env_update_path={"PYTHONPATH": sources_dir},
     )
 
     print_no_issues_found()
@@ -166,7 +178,7 @@ def lint_pylint(app_context: AppContext[CorePluginConfig], passed_args: Tuple[st
     target_paths = build_target_paths(app_context, files_folders)
     grouped_paths = groupby(target_paths, get_pylintrc_folder)
     for pylintrc_folder, paths in grouped_paths:
-        run_pylint(list(paths), pylintrc_folder, passed_args)
+        run_pylint(app_context.plugin_config.sources_directory, list(paths), pylintrc_folder, passed_args)
 
 
 _COMMANDS = [lint_pylint, lint_pycodestyle, lint_pydocstyle]
@@ -177,15 +189,8 @@ _COMMANDS = [lint_pylint, lint_pycodestyle, lint_pydocstyle]
 @pass_plugin_app_context
 @click.pass_context
 def lint(click_context: click.Context, app_context: AppContext[CorePluginConfig], files_folders: Tuple[str]):
+    del app_context  # passed via `forward`
     print_header("Linting", icon="🔎")
 
-    src_dir = str(app_context.plugin_config.sources_directory)
-    original_pythonpath = environ.get("PYTHONPATH", "")
-
-    environ["PYTHONPATH"] = pathsep.join([original_pythonpath, src_dir]) if original_pythonpath else src_dir
-
-    try:
-        for command in _COMMANDS:
-            click_context.forward(command, files_folders=files_folders)
-    finally:
-        environ["PYTHONPATH"] = original_pythonpath
+    for command in _COMMANDS:
+        click_context.forward(command, files_folders=files_folders)
