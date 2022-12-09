@@ -167,6 +167,16 @@ def coverage_report(app_context: AppContext[CorePluginConfig], **kwargs):
     )
 
 
+@click.command(help="Run all tests.")
+@files_folders_option
+@pass_plugin_app_context
+@pass_args
+def test(app_context: AppContext[CorePluginConfig], passed_args: Tuple[str, ...], files_folders: Tuple[str, ...]):
+    _delete_coverage_dat_files(app_context.plugin_config.reports_directory, app_context.plugin_config.test_types)
+    for name in [""] if files_folders else app_context.plugin_config.test_types:
+        _run_tests(app_context, passed_args, files_folders, name)
+
+
 @click.command(help="Run all tests, and generate coverage report.")
 @files_folders_option
 @pass_plugin_app_context
@@ -178,9 +188,8 @@ def test_all(
     passed_args: Tuple[str, ...],
     files_folders: Tuple[str, ...],
 ):
-    _delete_coverage_dat_files(app_context.plugin_config.reports_directory, app_context.plugin_config.test_types)
-    for name in [""] if files_folders else app_context.plugin_config.test_types:
-        _run_tests(app_context, passed_args, files_folders, name)
+    del app_context, passed_args, files_folders  # passed to `test`
+    click_context.forward(test)
     click_context.forward(coverage_report)
 
 
