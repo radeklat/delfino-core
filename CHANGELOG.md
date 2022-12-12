@@ -12,6 +12,12 @@ Types of changes are:
 
 ## [Unreleased]
 
+## [3.3.0] - 2022-12-12
+
+### Features
+
+- Commands in the `lint` command group can be overriden with `tool.delfino.plugins.delfino-core.lint_commands` option in the `pyproject.toml` file.
+
 ## [3.2.1] - 2022-12-09
 
 ### Fixes
@@ -122,7 +128,8 @@ Types of changes are:
 
 - Initial source code
 
-[Unreleased]: https://github.com/radeklat/delfino-core/compare/3.2.1...HEAD
+[Unreleased]: https://github.com/radeklat/delfino-core/compare/3.3.0...HEAD
+[3.3.0]: https://github.com/radeklat/delfino-core/compare/3.2.2...3.3.0
 [3.2.1]: https://github.com/radeklat/delfino-core/compare/3.2.1...3.2.1
 [3.2.0]: https://github.com/radeklat/delfino-core/compare/3.1.0...3.2.0
 [3.1.0]: https://github.com/radeklat/delfino-core/compare/3.0.1...3.1.0

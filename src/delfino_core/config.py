@@ -21,6 +21,7 @@ class CorePluginConfig(PluginConfig):
     reports_directory: Path = Path("reports")
     test_types: List[str] = ["unit", "integration"]
     verify_commands: Tuple[str, ...] = ("format", "lint", "typecheck", "test-all")
+    lint_commands: Tuple[str, ...] = ("lint-pylint", "lint-pycodestyle", "lint-pydocstyle")
     disable_pre_commit: bool = False
     dockerhub: Optional[Dockerhub] = None
     typecheck: Typecheck = Field(default_factory=Typecheck)
