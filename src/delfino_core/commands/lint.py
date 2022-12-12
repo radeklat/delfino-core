@@ -8,7 +8,6 @@ from subprocess import PIPE
 from typing import List, Optional, Tuple
 
 import click
-from delfino.click_utils.command import command_names
 from delfino.decorators import files_folders_option, pass_args
 from delfino.execution import OnError, run
 from delfino.models import AppContext
@@ -17,6 +16,7 @@ from delfino.validation import assert_pip_package_installed, pip_package_install
 
 from delfino_core.backports import path_is_relative_to
 from delfino_core.config import CorePluginConfig, pass_plugin_app_context
+from delfino_core.utils import execute_commands_group
 
 
 @click.command()
@@ -181,16 +181,9 @@ def lint_pylint(app_context: AppContext[CorePluginConfig], passed_args: Tuple[st
         run_pylint(app_context.plugin_config.sources_directory, list(paths), pylintrc_folder, passed_args)
 
 
-_COMMANDS = [lint_pylint, lint_pycodestyle, lint_pydocstyle]
-
-
-@click.command(help=f"Run linting on the entire code base.\n\n" f"Alias for the {command_names(_COMMANDS)} commands.")
+@click.command(help="Runs all linting commands. Configured by the ``lint_commands`` setting.")
 @files_folders_option
 @pass_plugin_app_context
 @click.pass_context
 def lint(click_context: click.Context, app_context: AppContext[CorePluginConfig], files_folders: Tuple[str]):
-    del app_context  # passed via `forward`
-    print_header("Linting", icon="🔎")
-
-    for command in _COMMANDS:
-        click_context.forward(command, files_folders=files_folders)
+    execute_commands_group("lint", click_context, app_context.plugin_config, files_folders=files_folders)
