@@ -12,6 +12,12 @@ Types of changes are:
 
 ## [Unreleased]
 
+## [3.4.1] - 2022-12-13
+
+### Fixes
+
+- Wrapping `pytest` with extra modules via the `tool.delfino.plugins.delfino-core.pytest_modules` config.
+
 ## [3.4.0] - 2022-12-13
 
 ### Features
@@ -138,7 +144,8 @@ Types of changes are:
 
 - Initial source code
 
-[Unreleased]: https://github.com/radeklat/delfino-core/compare/3.4.0...HEAD
+[Unreleased]: https://github.com/radeklat/delfino-core/compare/3.4.1...HEAD
+[3.4.1]: https://github.com/radeklat/delfino-core/compare/3.4.1...3.4.1
 [3.4.0]: https://github.com/radeklat/delfino-core/compare/3.3.0...3.4.0
 [3.3.0]: https://github.com/radeklat/delfino-core/compare/3.2.2...3.3.0
 [3.2.1]: https://github.com/radeklat/delfino-core/compare/3.2.1...3.2.1

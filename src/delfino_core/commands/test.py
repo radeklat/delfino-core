@@ -49,6 +49,7 @@ def _run_tests(
 
     print_header(f"️Running {header_name}tests", icon="🔎🐛")
     ensure_reports_dir(plugin_config)
+
     args: List[Optional[str]] = [
         "pytest",
         "--cov",
@@ -62,7 +63,12 @@ def _run_tests(
     ]
 
     if plugin_config.pytest_modules:
-        args = ["python"] + list(chain.from_iterable(("-m", module) for module in plugin_config.pytest_modules)) + args
+        args = (
+            ["python"]
+            + list(chain.from_iterable(("-m", module) for module in plugin_config.pytest_modules))
+            + ["--module"]
+            + args
+        )
 
     run(
         list(filter(None, args)),
