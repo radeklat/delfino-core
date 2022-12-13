@@ -96,6 +96,9 @@ reports_directory = "reports"
 # Types of tests you have nested under the `tests_directory`. Will be executed in given order.
 test_types = ["unit", "integration"]
 
+# One or more module to wrap `pytest` in, executing it as `python -m <MODULE> pytest ...`
+pytest_modules = []
+
 # Commands to run as a quality gate in given order.
 verify_commands = ["format", "lint", "typecheck", "test-all"]
 
