@@ -4,6 +4,7 @@ import re
 import shutil
 import webbrowser
 from contextlib import suppress
+from itertools import chain
 from pathlib import Path
 from subprocess import PIPE
 from typing import List, Optional, Tuple
@@ -59,6 +60,10 @@ def _run_tests(
         *passed_args,
         *files_folders,
     ]
+
+    if plugin_config.pytest_modules:
+        args = ["python"] + list(chain.from_iterable(("-m", module) for module in plugin_config.pytest_modules)) + args
+
     run(
         list(filter(None, args)),
         on_error=OnError.ABORT,

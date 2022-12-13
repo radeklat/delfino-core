@@ -18,6 +18,7 @@ class Typecheck(BaseModel):
 class CorePluginConfig(PluginConfig):
     sources_directory: Path = Path("src")
     tests_directory: Path = Path("tests")
+    pytest_modules: List[str] = Field(default_factory=list)
     reports_directory: Path = Path("reports")
     test_types: List[str] = ["unit", "integration"]
     verify_commands: Tuple[str, ...] = ("format", "lint", "typecheck", "test-all")

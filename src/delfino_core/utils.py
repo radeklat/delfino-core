@@ -1,9 +1,12 @@
+from logging import getLogger
 from typing import Dict, cast
 
 import click
 from delfino.click_utils.command import get_root_command
 
 from delfino_core.config import CorePluginConfig
+
+_LOG = getLogger(__name__)
 
 
 def ensure_reports_dir(config: CorePluginConfig) -> None:
@@ -13,16 +16,19 @@ def ensure_reports_dir(config: CorePluginConfig) -> None:
 
 def execute_commands_group(name: str, click_context: click.Context, plugin_config: CorePluginConfig, **kwargs):
     root = get_root_command(click_context)
+    option_name = f"{name}_commands"
+
     commands: Dict[str, click.Command] = {
         command: cast(click.Command, root.get_command(click_context, command))
         for command in root.list_commands(click_context)
     }
 
-    target_commands = [
-        commands[target_name]
-        for target_name in getattr(plugin_config, f"{name}_commands")
-        if target_name in commands and target_name not in plugin_config.disable_commands
-    ]
+    for target_name in getattr(plugin_config, option_name):
+        if target_name not in commands:
+            _LOG.warning(
+                f"Command '{target_name}' used as part of the '{option_name}' option does not exist. Skipping."
+            )
+            continue
 
-    for command in target_commands:
-        click_context.forward(command, **kwargs)
+        if target_name not in plugin_config.disable_commands:
+            click_context.forward(commands[target_name], **kwargs)
