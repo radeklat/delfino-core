@@ -184,6 +184,12 @@ def lint_pylint(app_context: AppContext[CorePluginConfig], passed_args: Tuple[st
 @click.command(help="Runs all linting commands. Configured by the ``lint_commands`` setting.")
 @files_folders_option
 @pass_plugin_app_context
+@pass_args
 @click.pass_context
-def lint(click_context: click.Context, app_context: AppContext[CorePluginConfig], files_folders: Tuple[str]):
-    execute_commands_group("lint", click_context, app_context.plugin_config, files_folders=files_folders)
+def lint(
+    click_context: click.Context,
+    app_context: AppContext[CorePluginConfig],
+    **kwargs,
+):
+    del kwargs  # handled by execute_commands_group or passed to downstream commands
+    execute_commands_group("lint", click_context, app_context.plugin_config)
