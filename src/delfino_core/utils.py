@@ -17,6 +17,7 @@ def ensure_reports_dir(config: CorePluginConfig) -> None:
 def execute_commands_group(name: str, click_context: click.Context, plugin_config: CorePluginConfig, **kwargs):
     root = get_root_command(click_context)
     option_name = f"{name}_commands"
+    passed_args = click_context.params.pop("passed_args", {})
 
     commands: Dict[str, click.Command] = {
         command: cast(click.Command, root.get_command(click_context, command))
@@ -30,5 +31,11 @@ def execute_commands_group(name: str, click_context: click.Context, plugin_confi
             )
             continue
 
-        if target_name not in plugin_config.disable_commands:
-            click_context.forward(commands[target_name], **kwargs)
+        if target_name in plugin_config.disable_commands:
+            _LOG.debug(f"Skipping disabled command '{target_name}'.")
+            continue
+
+        if target_name in passed_args:
+            click_context.params["passed_args"] = passed_args[target_name]
+
+        click_context.forward(commands[target_name], **kwargs)
