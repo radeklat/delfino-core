@@ -44,6 +44,8 @@ class Updater:
         )
 
     def __init__(self):
+        assert_pip_package_installed("gitpython")
+
         self._repo = Repo(self._git_root())
         now = datetime.utcnow()
         self._start_of_week = now - timedelta(now.isoweekday() - 1)
@@ -226,7 +228,6 @@ def dependencies_update(click_context: click.Context, app_context: AppContext, r
         raise AssertionError(
             f"The '{app_context.package_manager.value}' package manager is not supported by this command."
         )
-    assert_pip_package_installed("gitpython")
 
     updater.update(retry)
 
