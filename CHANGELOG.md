@@ -12,7 +12,17 @@ Types of changes are:
 
 ## [Unreleased]
 
-## [3.6.0] - 2022-12-14
+## [3.7.0] - 2022-12-15
+
+### Features
+
+- Add support for `poetry` in the `dependencies-update` command.
+
+### Fixes
+
+- Point to correct file to edit in `dependencies-update` for `pipenv`.
+
+## [3.6.0] - 2022-12-15
 
 ### Features
 
@@ -161,7 +171,8 @@ Types of changes are:
 
 - Initial source code
 
-[Unreleased]: https://github.com/radeklat/delfino-core/compare/3.6.0...HEAD
+[Unreleased]: https://github.com/radeklat/delfino-core/compare/3.7.0...HEAD
+[3.7.0]: https://github.com/radeklat/delfino-core/compare/3.6.0...3.7.0
 [3.6.0]: https://github.com/radeklat/delfino-core/compare/3.5.0...3.6.0
 [3.5.0]: https://github.com/radeklat/delfino-core/compare/3.4.1...3.5.0
 [3.4.1]: https://github.com/radeklat/delfino-core/compare/3.4.0...3.4.1
