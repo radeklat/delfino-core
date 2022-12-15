@@ -1,5 +1,4 @@
 import click
-from delfino.decorators import pass_args
 from delfino.models import AppContext
 
 from delfino_core.commands.format import run_format
@@ -14,8 +13,6 @@ _COMMANDS = [run_format, lint, typecheck, test_all]
 
 @click.command(help="Runs all verification commands. Configured by the ``verify_commands`` setting.")
 @pass_plugin_app_context
-@pass_args
 @click.pass_context
-def verify_all(click_context: click.Context, app_context: AppContext[CorePluginConfig], **kwargs):
-    del kwargs  # handled by execute_commands_group
+def verify_all(click_context: click.Context, app_context: AppContext[CorePluginConfig]):
     execute_commands_group("verify", click_context, app_context.plugin_config)

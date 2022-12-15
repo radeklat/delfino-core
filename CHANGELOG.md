@@ -12,16 +12,21 @@ Types of changes are:
 
 ## [Unreleased]
 
+## [3.6.0] - 2022-12-14
+
+### Features
+
+- Commands executed via `utils.execute_commands_group` will receive passed arguments as `passed_args` from config, if they use the `delfino.decorators.pass_args` decorator. Example:
+  ```toml
+  [tool.delfino.plugins.delfino-core.lint-pylint]
+  pass_args = "--fail-under 0.9"
+  ```
+  will pass `--fail-under 0.9` to `pylint` executed by `lint-pylint`, which is in `lint` group, which itself is in `verify-all` group.
+
 ## [3.5.0] - 2022-12-14
 
 ### Features
 
-- Commands using `utils.execute_commands_group` can be decorated with `decorators.pass_args`. Unlike regular passed arguments, this is expected to be a mapping from command name to passed arguments, allowing passing these arguments only to specific commands in the group. Example:
-  ```toml
-  [tool.delfino.plugins.delfino-core.verify-all.pass_args]
-  test-all = "-m 'not slow'"
-  ```
-  will pass `-m 'not slow'` to `pytest` executed by `test-all`, which is in `verify-all` group.
 - `utils.execute_commands_group` logs a debug message when a command is not executed because it is disabled.
 
 ## [3.4.1] - 2022-12-13
@@ -156,7 +161,8 @@ Types of changes are:
 
 - Initial source code
 
-[Unreleased]: https://github.com/radeklat/delfino-core/compare/3.5.0...HEAD
+[Unreleased]: https://github.com/radeklat/delfino-core/compare/3.6.0...HEAD
+[3.6.0]: https://github.com/radeklat/delfino-core/compare/3.5.0...3.6.0
 [3.5.0]: https://github.com/radeklat/delfino-core/compare/3.4.1...3.5.0
 [3.4.1]: https://github.com/radeklat/delfino-core/compare/3.4.0...3.4.1
 [3.4.0]: https://github.com/radeklat/delfino-core/compare/3.3.0...3.4.0

@@ -3,6 +3,7 @@ from typing import Dict, cast
 
 import click
 from delfino.click_utils.command import get_root_command
+from delfino.decorators.pass_args import set_passed_args_from_config_in_group
 
 from delfino_core.config import CorePluginConfig
 
@@ -17,7 +18,6 @@ def ensure_reports_dir(config: CorePluginConfig) -> None:
 def execute_commands_group(name: str, click_context: click.Context, plugin_config: CorePluginConfig, **kwargs):
     root = get_root_command(click_context)
     option_name = f"{name}_commands"
-    passed_args = click_context.params.pop("passed_args", {})
 
     commands: Dict[str, click.Command] = {
         command: cast(click.Command, root.get_command(click_context, command))
@@ -35,7 +35,8 @@ def execute_commands_group(name: str, click_context: click.Context, plugin_confi
             _LOG.debug(f"Skipping disabled command '{target_name}'.")
             continue
 
-        if target_name in passed_args:
-            click_context.params["passed_args"] = passed_args[target_name]
+        command = commands[target_name]
 
-        click_context.forward(commands[target_name], **kwargs)
+        set_passed_args_from_config_in_group(click_context, command)
+
+        click_context.forward(command, **kwargs)

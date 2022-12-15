@@ -1,6 +1,6 @@
 [tool.poetry]
 name="delfino-core"
-version="3.5.0"
+version="3.6.0"
 authors = ["Radek Lát <radek.lat@gmail.com>"]
 description="Delfino core plugin"
 license = "MIT License"
@@ -25,7 +25,7 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = "^3.7.2"
-delfino = ">=0.24.0"
+delfino = ">=0.27.0"
 
 black = {version = "*", optional = true}
 isort = {version = "*", optional = true}
@@ -148,3 +148,6 @@ add-ignore = [
     "D401",  # "First line should be in imperative mood"
     "D413",  # "Missing blank line after last section"
 ]
+
+[tool.delfino.plugins.local_commands_directory.test-all]
+pass_args = "--dfhfadshf"
