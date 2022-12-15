@@ -1,6 +1,6 @@
 [tool.poetry]
 name="delfino-core"
-version="3.6.0"
+version="3.7.0"
 authors = ["Radek Lát <radek.lat@gmail.com>"]
 description="Delfino core plugin"
 license = "MIT License"
@@ -54,7 +54,7 @@ black = "^22.6"
 isort = "^5.9.3"
 coverage = "^6.0"
 pylint = "^2.11"
-mypy = "^0.990"
+mypy = "^0.991"
 pytest = "^7.1"
 pytest-cov = "^4.0"
 pytest-mock = "^3.6"
@@ -148,6 +148,3 @@ add-ignore = [
     "D401",  # "First line should be in imperative mood"
     "D413",  # "Missing blank line after last section"
 ]
-
-[tool.delfino.plugins.local_commands_directory.test-all]
-pass_args = "--dfhfadshf"
