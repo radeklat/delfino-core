@@ -194,13 +194,8 @@ def test(app_context: AppContext[CorePluginConfig], passed_args: Tuple[str, ...]
 @pass_plugin_app_context
 @pass_args
 @click.pass_context
-def test_all(
-    click_context: click.Context,
-    app_context: AppContext[CorePluginConfig],
-    passed_args: Tuple[str, ...],
-    files_folders: Tuple[str, ...],
-):
-    del app_context, passed_args, files_folders  # passed to `test`
+def test_all(click_context: click.Context, **kwargs):
+    del kwargs  # passed to `test`
     click_context.forward(test)
     click_context.forward(coverage_report)
 
