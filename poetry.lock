@@ -172,7 +172,7 @@ test = ["hypothesis (>=1.11.4,!=3.79.2)", "iso8601", "pretend", "pytest (>=6.2.0
 
 [[package]]
 name = "delfino"
-version = "0.29.0"
+version = "0.30.0"
 description = "A collection of command line helper scripts wrapping tools used during Python development."
 category = "main"
 optional = false
@@ -1148,8 +1148,8 @@ cryptography = [
     {file = "cryptography-38.0.4.tar.gz", hash = "sha256:175c1a818b87c9ac80bb7377f5520b7f31b3ef2a0004e2420319beadedb67290"},
 ]
 delfino = [
-    {file = "delfino-0.29.0-py3-none-any.whl", hash = "sha256:3ee96f18ac8a36f3bbdcb89dbb0c323e571129388841294cc8d0e4a02a6c962a"},
-    {file = "delfino-0.29.0.tar.gz", hash = "sha256:1b2f4b04474735db649fee53f63843e439f7630b4768b3962c8664114b8e2530"},
+    {file = "delfino-0.30.0-py3-none-any.whl", hash = "sha256:70ecf7bfafbc5575ef87a5a07ed59922c043c56de17a8275b02679f14b96e44f"},
+    {file = "delfino-0.30.0.tar.gz", hash = "sha256:87c9a19d1817a1a8462f692d8c4674ad4a321b7e03bfb4f2bde951a8acfbbec0"},
 ]
 deprecation = [
     {file = "deprecation-2.1.0-py2.py3-none-any.whl", hash = "sha256:a10811591210e1fb0e768a8c25517cabeabcba6f0bf96564f8ff45189f90b14a"},
