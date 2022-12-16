@@ -1,6 +1,9 @@
+from pathlib import Path
 from subprocess import PIPE, CompletedProcess
+from typing import Tuple
 
 import click
+from delfino.decorators import files_folders_option
 from delfino.execution import OnError, run
 from delfino.models import AppContext
 from delfino.terminal_output import print_header, run_command_example
@@ -33,8 +36,9 @@ def _check_result(app_context: AppContext[CorePluginConfig], result: CompletedPr
 @click.command("format")
 @click.option("--check", is_flag=True, help="Only check formatting, don't reformat the code.")
 @click.option("--quiet", is_flag=True, help="Don't show progress. Only errors.")
+@files_folders_option
 @pass_plugin_app_context
-def run_format(app_context: AppContext[CorePluginConfig], check: bool, quiet: bool):
+def run_format(app_context: AppContext[CorePluginConfig], files_folders: Tuple[Path, ...], check: bool, quiet: bool):
     """Runs black code formatter and isort on source code."""
     plugin_config = app_context.plugin_config
 
@@ -46,9 +50,10 @@ def run_format(app_context: AppContext[CorePluginConfig], check: bool, quiet: bo
         # ensure pre-commit is installed
         run("pre-commit install", stdout=PIPE, on_error=OnError.EXIT)
 
-    dirs = [plugin_config.sources_directory, plugin_config.tests_directory]
-    if app_context.pyproject_toml.tool.delfino.local_commands_directory.exists():
-        dirs.append(app_context.pyproject_toml.tool.delfino.local_commands_directory)
+    if not files_folders:
+        files_folders = (plugin_config.sources_directory, plugin_config.tests_directory)
+        if app_context.pyproject_toml.tool.delfino.local_commands_directory.exists():
+            files_folders += (app_context.pyproject_toml.tool.delfino.local_commands_directory,)
 
     flags = []
 
@@ -57,11 +62,15 @@ def run_format(app_context: AppContext[CorePluginConfig], check: bool, quiet: bo
 
     print_header("Sorting imports", icon="ℹ")
 
-    _check_result(app_context, run(["isort", *dirs, *flags], on_error=OnError.PASS), check, "Import were not sorted")
+    _check_result(
+        app_context, run(["isort", *files_folders, *flags], on_error=OnError.PASS), check, "Import were not sorted"
+    )
 
     print_header("Formatting code", icon="🖤")
 
     if quiet:
         flags.append("--quiet")
 
-    _check_result(app_context, run(["black", *dirs, *flags], on_error=OnError.PASS), check, "Code was not formatted")
+    _check_result(
+        app_context, run(["black", *files_folders, *flags], on_error=OnError.PASS), check, "Code was not formatted"
+    )

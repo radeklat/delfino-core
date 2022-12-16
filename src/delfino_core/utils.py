@@ -3,7 +3,8 @@ from typing import Dict, cast
 
 import click
 from delfino.click_utils.command import get_root_command
-from delfino.decorators.pass_args import set_passed_args_from_config_in_group
+from delfino.decorators.files_folders import FILES_FOLDERS_OPTION_CALLBACK
+from delfino.decorators.pass_args import PASS_ARGS_CALLBACK
 
 from delfino_core.config import CorePluginConfig
 
@@ -37,6 +38,7 @@ def execute_commands_group(name: str, click_context: click.Context, plugin_confi
 
         command = commands[target_name]
 
-        set_passed_args_from_config_in_group(click_context, command)
+        for callback in [PASS_ARGS_CALLBACK, FILES_FOLDERS_OPTION_CALLBACK]:
+            callback.set_parameter_from_config_in_group(click_context, command)
 
         click_context.forward(command, **kwargs)

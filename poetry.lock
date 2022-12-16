@@ -172,7 +172,7 @@ test = ["hypothesis (>=1.11.4,!=3.79.2)", "iso8601", "pretend", "pytest (>=6.2.0
 
 [[package]]
 name = "delfino"
-version = "0.27.0"
+version = "0.28.0"
 description = "A collection of command line helper scripts wrapping tools used during Python development."
 category = "main"
 optional = false
@@ -271,7 +271,7 @@ typing-extensions = {version = ">=3.7.4.3", markers = "python_version < \"3.8\""
 
 [[package]]
 name = "identify"
-version = "2.5.9"
+version = "2.5.10"
 description = "File identification library for Python"
 category = "main"
 optional = false
@@ -948,7 +948,7 @@ verify-all = ["black", "isort", "pre-commit", "pytest", "coverage", "pytest-cov"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7.2"
-content-hash = "6bbf20340f58927e8d520f4f7708ce42ee82816ba6068af963612b2d72833362"
+content-hash = "52c25365d0ef18212cf768fb4e4dc88f71f95cead1743d44c32120abab261b6e"
 
 [metadata.files]
 astroid = [
@@ -1148,8 +1148,8 @@ cryptography = [
     {file = "cryptography-38.0.4.tar.gz", hash = "sha256:175c1a818b87c9ac80bb7377f5520b7f31b3ef2a0004e2420319beadedb67290"},
 ]
 delfino = [
-    {file = "delfino-0.27.0-py3-none-any.whl", hash = "sha256:0d90379964f8096ea9fc321295c6a7985a7b23f4a91f8b3a2ef5caa0f3e7d396"},
-    {file = "delfino-0.27.0.tar.gz", hash = "sha256:64be52f7d1ef0dc7a86c7d888d896f70bee9752707da11f174186e64e5ded372"},
+    {file = "delfino-0.28.0-py3-none-any.whl", hash = "sha256:85df8b349ec2e504fc04c2d4214a996a527e81ed28991f83db89982e97df8fac"},
+    {file = "delfino-0.28.0.tar.gz", hash = "sha256:8eddfe34f032c91badb79fa9c92aab05eb14248c47ebd3743e3a166e8ed864ca"},
 ]
 deprecation = [
     {file = "deprecation-2.1.0-py2.py3-none-any.whl", hash = "sha256:a10811591210e1fb0e768a8c25517cabeabcba6f0bf96564f8ff45189f90b14a"},
@@ -1184,8 +1184,8 @@ gitpython = [
     {file = "GitPython-3.1.29.tar.gz", hash = "sha256:cc36bfc4a3f913e66805a28e84703e419d9c264c1077e537b54f0e1af85dbefd"},
 ]
 identify = [
-    {file = "identify-2.5.9-py2.py3-none-any.whl", hash = "sha256:a390fb696e164dbddb047a0db26e57972ae52fbd037ae68797e5ae2f4492485d"},
-    {file = "identify-2.5.9.tar.gz", hash = "sha256:906036344ca769539610436e40a684e170c3648b552194980bb7b617a8daeb9f"},
+    {file = "identify-2.5.10-py2.py3-none-any.whl", hash = "sha256:fb7c2feaeca6976a3ffa31ec3236a6911fbc51aec9acc111de2aed99f244ade2"},
+    {file = "identify-2.5.10.tar.gz", hash = "sha256:dce9e31fee7dbc45fea36a9e855c316b8fbf807e65a862f160840bb5a2bf5dfd"},
 ]
 idna = [
     {file = "idna-3.4-py3-none-any.whl", hash = "sha256:90b77e79eaa3eba6de819a0c442c0b4ceefc341a7a2ab77d7562bf49f425c5c2"},

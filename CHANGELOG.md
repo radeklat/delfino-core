@@ -12,6 +12,12 @@ Types of changes are:
 
 ## [Unreleased]
 
+## [3.8.0] - 2022-12-16
+
+### Features
+
+- `format` command takes a list of one or more files/folders to use with the `-f`/`--file`/`--folder` option.
+
 ## [3.7.1] - 2022-12-15
 
 ### Fixes
@@ -177,7 +183,8 @@ Types of changes are:
 
 - Initial source code
 
-[Unreleased]: https://github.com/radeklat/delfino-core/compare/3.7.1...HEAD
+[Unreleased]: https://github.com/radeklat/delfino-core/compare/3.8.0...HEAD
+[3.8.0]: https://github.com/radeklat/delfino-core/compare/3.7.1...3.8.0
 [3.7.1]: https://github.com/radeklat/delfino-core/compare/3.7.0...3.7.1
 [3.7.0]: https://github.com/radeklat/delfino-core/compare/3.6.0...3.7.0
 [3.6.0]: https://github.com/radeklat/delfino-core/compare/3.5.0...3.6.0
