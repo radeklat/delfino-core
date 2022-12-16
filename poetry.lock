@@ -172,7 +172,7 @@ test = ["hypothesis (>=1.11.4,!=3.79.2)", "iso8601", "pretend", "pytest (>=6.2.0
 
 [[package]]
 name = "delfino"
-version = "0.28.1"
+version = "0.29.0"
 description = "A collection of command line helper scripts wrapping tools used during Python development."
 category = "main"
 optional = false
@@ -948,7 +948,7 @@ verify-all = ["black", "isort", "pre-commit", "pytest", "coverage", "pytest-cov"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7.2"
-content-hash = "e222dbf8330fec1db85d873d44895a00f1e502b82bb78abe8a53fd8345724585"
+content-hash = "6c14c68e58c1f125ca11c663db39b22413266907acde924fbe096db9983239e0"
 
 [metadata.files]
 astroid = [
@@ -1148,8 +1148,8 @@ cryptography = [
     {file = "cryptography-38.0.4.tar.gz", hash = "sha256:175c1a818b87c9ac80bb7377f5520b7f31b3ef2a0004e2420319beadedb67290"},
 ]
 delfino = [
-    {file = "delfino-0.28.1-py3-none-any.whl", hash = "sha256:7654135f7e58a2a4dab94f4aa2d6a2e38d8a0d572ae2a7df44758a89309b599e"},
-    {file = "delfino-0.28.1.tar.gz", hash = "sha256:d5a8e97818211569d730bde582bffc297a2ebdd68f97fee5f8d802f7be6b3014"},
+    {file = "delfino-0.29.0-py3-none-any.whl", hash = "sha256:3ee96f18ac8a36f3bbdcb89dbb0c323e571129388841294cc8d0e4a02a6c962a"},
+    {file = "delfino-0.29.0.tar.gz", hash = "sha256:1b2f4b04474735db649fee53f63843e439f7630b4768b3962c8664114b8e2530"},
 ]
 deprecation = [
     {file = "deprecation-2.1.0-py2.py3-none-any.whl", hash = "sha256:a10811591210e1fb0e768a8c25517cabeabcba6f0bf96564f8ff45189f90b14a"},

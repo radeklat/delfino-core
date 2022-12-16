@@ -1,3 +1,4 @@
+from collections import ChainMap
 from logging import getLogger
 from typing import Dict, cast
 
@@ -38,7 +39,11 @@ def execute_commands_group(name: str, click_context: click.Context, plugin_confi
 
         command = commands[target_name]
 
-        for callback in [PASS_ARGS_CALLBACK, FILES_FOLDERS_OPTION_CALLBACK]:
-            callback.set_parameter_from_config_in_group(click_context, command)
+        parameter_from_config = ChainMap(
+            *(
+                callback.parameter_from_config_in_group(click_context, command)
+                for callback in [PASS_ARGS_CALLBACK, FILES_FOLDERS_OPTION_CALLBACK]
+            )
+        )
 
-        click_context.forward(command, **kwargs)
+        click_context.forward(command, **kwargs, **parameter_from_config)

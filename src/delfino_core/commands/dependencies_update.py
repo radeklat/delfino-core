@@ -1,6 +1,5 @@
 import os
 import re
-import shlex
 import subprocess
 from datetime import datetime, timedelta
 from typing import Optional
@@ -12,10 +11,8 @@ from delfino.decorators import pass_app_context
 from delfino.execution import OnError, run
 from delfino.models import AppContext
 from delfino.terminal_output import print_header
-from delfino.utils import ArgsType
 from delfino.validation import assert_package_manager_is_known, assert_pip_package_installed
 
-from delfino_core.backports import shlex_join
 from delfino_core.commands.verify_all import verify_all
 from delfino_core.config import CorePluginConfig
 
@@ -25,11 +22,9 @@ except ImportError:
     pass
 
 
-def _trace(args: str) -> subprocess.CompletedProcess:
+def _run(args: str) -> subprocess.CompletedProcess:
     """Print the command before execution."""
-    _args: ArgsType = shlex.split(args)
-    secho(shlex_join(_args), fg="white")
-    return run(_args, on_error=OnError.EXIT, capture_output=True)
+    return run(args, on_error=OnError.EXIT, capture_output=True)
 
 
 class Updater:
@@ -57,17 +52,17 @@ class Updater:
         if input("\033[1;33mDo you want to commit changes now? [Y/n]: \033[0m").lower() == "y":
             if can_update:  # update existing commit
                 if self._repo.is_dirty():
-                    _trace("git pull")
-                _trace("git commit -a --amend -C HEAD")
+                    _run("git pull")
+                _run("git commit -a --amend -C HEAD")
             else:
-                _trace("git add .")
-                _trace(f"git commit -a -m '{commit_message}'")
+                _run("git add .")
+                _run(f"git commit -a -m '{commit_message}'")
 
         if input("\033[1;33mDo you want to push changes now? [Y/n]: \033[0m").lower() == "y":
             if can_update:
-                _trace("git push --force-with-lease")
+                _run("git push --force-with-lease")
             else:
-                _trace("git push -u origin HEAD")
+                _run("git push -u origin HEAD")
 
             url = self._link_to_open_a_pull_request()
             if url:
@@ -118,13 +113,13 @@ class Updater:
             secho(f"Branch '{branch}' already exists and active.", fg="green")
         elif branch in self._repo.branches:  # type: ignore[operator]
             secho(f"Branch '{branch}' already exists.", fg="yellow")
-            _trace(f"git checkout {branch}")
+            _run(f"git checkout {branch}")
         else:
-            _trace("git stash")
+            _run("git stash")
             if self._repo.active_branch != "main":
-                _trace("git checkout main")
-            _trace("git pull")
-            _trace(f"git checkout -b {branch}")
+                _run("git checkout main")
+            _run("git pull")
+            _run(f"git checkout -b {branch}")
             self._lock_and_sync()
 
     def update(self, retry: bool):
@@ -154,15 +149,15 @@ class PipenvUpdater(Updater):
 
     @classmethod
     def _lock_and_sync(cls):
-        _trace("pipenv lock")
-        _trace("pipenv sync -d")
+        _run("pipenv lock")
+        _run("pipenv sync -d")
 
     def print_outdated_packages_and_lock_if_changed(self) -> bool:
         secho("Updating packages based on version pinning. This will take a while ...", fg="yellow")
-        _trace("pipenv update -d")
+        _run("pipenv update -d")
 
         secho("Checking outdated packages. This will take a while ...", fg="yellow")
-        result = _trace("pipenv update --outdated")
+        result = _run("pipenv update --outdated")
 
         pipfile = self._read_dependency_file()
 
@@ -194,10 +189,10 @@ class PoetryUpdater(Updater):
 
     def print_outdated_packages_and_lock_if_changed(self) -> bool:
         secho("Updating packages based on version pinning. This will take a while ...", fg="yellow")
-        _trace("poetry update")
+        _run("poetry update")
 
         secho("Checking outdated packages. This will take a while ...", fg="yellow")
-        result = _trace("poetry show --outdated --why --ansi")
+        result = _run("poetry show --outdated --why --ansi")
 
         if not result.stdout:
             return False

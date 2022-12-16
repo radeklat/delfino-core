@@ -12,6 +12,16 @@ Types of changes are:
 
 ## [Unreleased]
 
+## [3.9.0] - 2022-12-16
+
+### Features
+
+- `dependencies-update` no longer prints out executed commands since `delfino>=0.29.0` logs all executed commands in debug level. Use `--log-level debug` to see them.
+
+### Fixes
+
+- Config options incorrectly passed to all commands in a group instead of only those they belonged to.
+
 ## [3.8.1] - 2022-12-16
 
 ### Fixes
@@ -189,7 +199,8 @@ Types of changes are:
 
 - Initial source code
 
-[Unreleased]: https://github.com/radeklat/delfino-core/compare/3.8.1...HEAD
+[Unreleased]: https://github.com/radeklat/delfino-core/compare/3.9.0...HEAD
+[3.9.0]: https://github.com/radeklat/delfino-core/compare/3.8.1...3.9.0
 [3.8.1]: https://github.com/radeklat/delfino-core/compare/3.8.0...3.8.1
 [3.8.0]: https://github.com/radeklat/delfino-core/compare/3.7.1...3.8.0
 [3.7.1]: https://github.com/radeklat/delfino-core/compare/3.7.0...3.7.1
