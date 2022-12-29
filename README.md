@@ -27,7 +27,6 @@
   
 | Command               | Description                                         |
 |-----------------------|-----------------------------------------------------|
-| build-docker          | Build and push a docker image.                      |
 | coverage-open         | Open coverage results in default browser.           |
 | coverage-report       | Analyse coverage and generate a term/HTML report.   |
 | dependencies-update   | Manages the process of updating dependencies.       |
@@ -41,7 +40,6 @@
 | test-integration      | Run integration tests.                              |
 | test-unit             | Run unit tests.                                     |
 | typecheck             | Run type checking on source code.                   |
-| upload-to-pypi        | Upload package to a public Pypi repository.         |
 | verify-all            | Runs all verification commands.                     |
 
 # Installation
@@ -57,8 +55,6 @@ Each project may use different sub-set of [commands](#commands). Therefore, depe
 Using `[all]` installs all the [optional dependencies](https://setuptools.pypa.io/en/latest/userguide/dependency_management.html#optional-dependencies) used by all the commands. If you want only a sub-set of those dependencies, there are finer-grained groups available:
 
 - For individual commands (matches the command names):
-  - `upload-to-pypi`
-  - `build-docker`
   - `typecheck`
   - `format`
   - `dependencies-update`
@@ -111,17 +107,6 @@ disable_pre_commit = false
 Several commands have their own configuration as well:
 
 ```toml
-[tool.delfino.plugins.delfino-core.dockerhub]
-# User name for logging in into dockerhub
-username = ""
-
-# Platforms to build with dockerx
-build_for_platforms = [
-    "linux/arm/v7",
-    "linux/arm64",
-    "linux/amd64",
-]
-
 [tool.delfino.plugins.delfino-core.typecheck]
 # One or more directories where type hint will be required. By default they are optional.
 strict_directories = []  

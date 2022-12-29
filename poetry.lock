@@ -173,7 +173,7 @@ test = ["hypothesis (>=1.11.4,!=3.79.2)", "iso8601", "pretend", "pytest (>=6.2.0
 
 [[package]]
 name = "delfino"
-version = "1.0.0"
+version = "1.1.0"
 description = "A collection of command line helper scripts wrapping tools used during Python development."
 category = "main"
 optional = false
@@ -958,20 +958,18 @@ docs = ["furo", "jaraco.packaging (>=9)", "jaraco.tidelift (>=1.4)", "rst.linker
 testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools", "more-itertools", "pytest (>=6)", "pytest-black (>=0.3.7)", "pytest-checkdocs (>=2.4)", "pytest-cov", "pytest-enabler (>=1.3)", "pytest-flake8", "pytest-mypy (>=0.9.1)"]
 
 [extras]
-all = ["black", "isort", "pre-commit", "pytest", "coverage", "pytest-cov", "mypy", "pylint", "pycodestyle", "pydocstyle", "twine", "packaging", "psutil", "gitpython"]
-build-docker = ["packaging"]
+all = ["black", "isort", "pre-commit", "pytest", "coverage", "pytest-cov", "mypy", "pylint", "pycodestyle", "pydocstyle", "psutil", "gitpython"]
 dependencies-update = ["gitpython"]
 format = ["black", "isort", "pre-commit"]
 lint = ["pylint", "pycodestyle", "pydocstyle", "psutil"]
 test = ["pytest", "coverage", "pytest-cov"]
 typecheck = ["mypy"]
-upload-to-pypi = ["twine"]
 verify-all = ["black", "isort", "pre-commit", "pytest", "coverage", "pytest-cov", "mypy", "pylint", "pycodestyle", "pydocstyle", "psutil"]
 
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7.2"
-content-hash = "43f9a83a1a280fe58d1ff6ffdef01e633aef2ae00706a47f222840e2d8bedd50"
+content-hash = "1f25c4f7803597ce046d19cd68fd8a31f80d2a430483324176d7c096dca0dabf"
 
 [metadata.files]
 astroid = [
@@ -1172,8 +1170,8 @@ cryptography = [
     {file = "cryptography-38.0.4.tar.gz", hash = "sha256:175c1a818b87c9ac80bb7377f5520b7f31b3ef2a0004e2420319beadedb67290"},
 ]
 delfino = [
-    {file = "delfino-1.0.0-py3-none-any.whl", hash = "sha256:7d5da0099d7bec10651353f1fd5f8795515ab6d36dd7bb5e256d221e32a85b62"},
-    {file = "delfino-1.0.0.tar.gz", hash = "sha256:ea53e774204c81a57d923683fd3d770e48e0cef7dfd9cbef8b54c49c7f664433"},
+    {file = "delfino-1.1.0-py3-none-any.whl", hash = "sha256:a408e9cf2014e56cfe017caf5f511ff2bf32be5a17f275a004ecd52dc51b2a3a"},
+    {file = "delfino-1.1.0.tar.gz", hash = "sha256:4f06146f3cde86bb488d49b6bf29fcc9f5938e34da417f68f299bd965b86a70d"},
 ]
 deprecation = [
     {file = "deprecation-2.1.0-py2.py3-none-any.whl", hash = "sha256:a10811591210e1fb0e768a8c25517cabeabcba6f0bf96564f8ff45189f90b14a"},

@@ -145,7 +145,6 @@ workflows:
     jobs:
       - test:
           name: Python << matrix.python_version >> tests
-          context: << pipeline.parameters.project_name >>
           matrix:
             parameters:
               python_version: *supported_python_versions
