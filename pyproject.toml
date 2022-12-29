@@ -1,6 +1,6 @@
 [tool.poetry]
 name="delfino-core"
-version="3.9.0"
+version="3.10.0"
 authors = ["Radek Lát <radek.lat@gmail.com>"]
 description="Delfino core plugin"
 license = "MIT License"
@@ -52,7 +52,7 @@ psutil = {version = "*", optional = true}
 [tool.poetry.group.dev.dependencies]
 black = "^22.6"
 isort = "^5.9.3"
-coverage = "^6.0"
+coverage = "^7.0"
 pylint = "^2.11"
 mypy = "^0.991"
 pytest = "^7.1"

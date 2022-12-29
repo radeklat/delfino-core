@@ -12,6 +12,18 @@ Types of changes are:
 
 ## [Unreleased]
 
+## [3.10.0] - 2022-12-29
+
+### Features
+
+- `dependencies-update` command:
+  - Logs git operations when the automatically created branch doesn't exist.
+  - Opens pull request link in a browser if chosen by the user.
+
+### Fixes
+
+- Dependencies update
+
 ## [3.9.0] - 2022-12-16
 
 ### Features
@@ -199,7 +211,8 @@ Types of changes are:
 
 - Initial source code
 
-[Unreleased]: https://github.com/radeklat/delfino-core/compare/3.9.0...HEAD
+[Unreleased]: https://github.com/radeklat/delfino-core/compare/3.10.0...HEAD
+[3.10.0]: https://github.com/radeklat/delfino-core/compare/3.9.0...3.10.0
 [3.9.0]: https://github.com/radeklat/delfino-core/compare/3.8.1...3.9.0
 [3.8.1]: https://github.com/radeklat/delfino-core/compare/3.8.0...3.8.1
 [3.8.0]: https://github.com/radeklat/delfino-core/compare/3.7.1...3.8.0

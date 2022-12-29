@@ -1,6 +1,7 @@
 import os
 import re
 import subprocess
+import webbrowser
 from datetime import datetime, timedelta
 from typing import Optional
 
@@ -27,6 +28,10 @@ def _run(args: str) -> subprocess.CompletedProcess:
     return run(args, on_error=OnError.EXIT, capture_output=True)
 
 
+def ask(question: str) -> bool:
+    return bool(input(f"\033[1;33m{question} [Y/n]: \033[0m").lower() == "y")
+
+
 class Updater:
     _FILENAME: str = ""
 
@@ -49,7 +54,7 @@ class Updater:
         commit_message = f"Dependencies rollup: {self._start_of_week.strftime('%Y-%m-%d')}"
         can_update = self._repo.commit("HEAD").message.strip() == commit_message
 
-        if input("\033[1;33mDo you want to commit changes now? [Y/n]: \033[0m").lower() == "y":
+        if ask("Do you want to commit changes now?"):
             if can_update:  # update existing commit
                 if self._repo.is_dirty():
                     _run("git pull")
@@ -58,7 +63,7 @@ class Updater:
                 _run("git add .")
                 _run(f"git commit -a -m '{commit_message}'")
 
-        if input("\033[1;33mDo you want to push changes now? [Y/n]: \033[0m").lower() == "y":
+        if ask("Do you want to push changes now?"):
             if can_update:
                 _run("git push --force-with-lease")
             else:
@@ -66,7 +71,10 @@ class Updater:
 
             url = self._link_to_open_a_pull_request()
             if url:
-                secho(f"\nOpen a new pull request by visiting:\n\n\t{url}\n", fg="green")
+                if ask("Do you want to open a new pull request now in a web browser?"):
+                    webbrowser.open(url)
+                else:
+                    secho(f"\nOpen a new pull request by visiting:\n\n\t{url}\n", fg="green")
 
     def _link_to_open_a_pull_request(self) -> Optional[str]:
         url = self._repo.remote().url
@@ -115,10 +123,17 @@ class Updater:
             secho(f"Branch '{branch}' already exists.", fg="yellow")
             _run(f"git checkout {branch}")
         else:
+            secho("Stashing existing changes.", fg="yellow")
             _run("git stash")
+
             if self._repo.active_branch != "main":
+                secho("Checking out 'main'.", fg="yellow")
                 _run("git checkout main")
+
+            secho("Pulling latest changes.", fg="yellow")
             _run("git pull")
+
+            secho(f"Creating a new branch '{branch}'.", fg="yellow")
             _run(f"git checkout -b {branch}")
             self._lock_and_sync()
 
