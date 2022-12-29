@@ -1,6 +1,6 @@
 [tool.poetry]
 name="delfino-core"
-version="3.10.0"
+version="4.0.0"
 authors = ["Radek Lát <radek.lat@gmail.com>"]
 description="Delfino core plugin"
 license = "MIT License"
@@ -69,14 +69,12 @@ types-psutil = "^5.9.5.5"
 gitpython = "^3.1.29"
 
 [tool.poetry.extras]
-all = ["black", "isort", "pre-commit", "pytest", "coverage", "pytest-cov", "mypy", "pylint", "pycodestyle", "pydocstyle", "twine", "packaging", "psutil", "gitpython"]
+all = ["black", "isort", "pre-commit", "pytest", "coverage", "pytest-cov", "mypy", "pylint", "pycodestyle", "pydocstyle", "psutil", "gitpython"]
 verify_all = ["black", "isort", "pre-commit", "pytest", "coverage", "pytest-cov", "mypy", "pylint", "pycodestyle", "pydocstyle", "psutil"]
 format = ["black", "isort", "pre-commit"]
 test = ["pytest", "coverage", "pytest-cov"]
 typecheck = ["mypy"]
 lint = ["pylint", "pycodestyle", "pydocstyle", "psutil"]
-upload_to_pypi = ["twine"]
-build_docker = ["packaging"]
 dependencies_update = ["gitpython"]
 
 [tool.isort]

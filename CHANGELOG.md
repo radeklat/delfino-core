@@ -12,6 +12,28 @@ Types of changes are:
 
 ## [Unreleased]
 
+## [4.0.0] - 2022-12-29
+
+### Breaking changes
+
+- Removed the `upload-to-pypi` command. No longer needed with Poetry and Packagecloud uses a different upload mechanism.
+- Moved the `build-docker` command into a new plugin [`delfino-docker`](https://github.com/radeklat/delfino-docker) as `docker-build`.
+
+#### Migration guide
+
+Have a look in the `pyproject.toml` file. If `upload-to-pypi` or `build-docker` are listed under `tool.delfino.plugins.delfino-core.disable_plugins`, remove them. You don't need to do anything else.
+
+If `tool.delfino.plugins.delfino-core.dockerhub` exists in the `pyproject.toml`:
+  - Install `delfino-docker`.
+  - In `pyproject.toml`, create a key `tool.delfino.plugins.delfino-docker.docker_build`.
+  - Move `tool.delfino.plugins.delfino-core.dockerhub` under this new key.
+  - Rename `username` to `dockerhub_username`.
+
+### Features
+
+- Removed `upload_to_pypi` and `build_docker` extra dependency groups. Missing groups will be simply ignored during installation, so this is not a breaking change.
+- Removed optional dependencies on `twine` and `packaging` in the `all` group.
+
 ## [3.10.0] - 2022-12-29
 
 ### Features
@@ -211,7 +233,8 @@ Types of changes are:
 
 - Initial source code
 
-[Unreleased]: https://github.com/radeklat/delfino-core/compare/3.10.0...HEAD
+[Unreleased]: https://github.com/radeklat/delfino-core/compare/4.0.0...HEAD
+[4.0.0]: https://github.com/radeklat/delfino-core/compare/3.10.0...4.0.0
 [3.10.0]: https://github.com/radeklat/delfino-core/compare/3.9.0...3.10.0
 [3.9.0]: https://github.com/radeklat/delfino-core/compare/3.8.1...3.9.0
 [3.8.1]: https://github.com/radeklat/delfino-core/compare/3.8.0...3.8.1

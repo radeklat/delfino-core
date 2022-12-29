@@ -4,14 +4,12 @@ import pytest
 from delfino.click_utils.command import CommandRegistry
 from delfino.models.pyproject_toml import PluginConfig
 
-from delfino_core.commands.build_docker import build_docker
 from delfino_core.commands.dependencies_update import dependencies_update
 from delfino_core.commands.format import run_format
 from delfino_core.commands.lint import lint, lint_pycodestyle, lint_pydocstyle, lint_pylint
 from delfino_core.commands.switch_python_version import switch_python_version
 from delfino_core.commands.test import coverage_open, coverage_report, test, test_all, test_integration, test_unit
 from delfino_core.commands.typecheck import typecheck
-from delfino_core.commands.upload_to_pypi import upload_to_pypi
 from delfino_core.commands.verify_all import verify_all
 
 
@@ -40,7 +38,6 @@ class TestPlugin:
     @staticmethod
     def should_be_visible_in_delfino(plugin_config):
         commands = [
-            build_docker,
             coverage_open,
             coverage_report,
             dependencies_update,
@@ -55,7 +52,6 @@ class TestPlugin:
             test_integration,
             test_unit,
             typecheck,
-            upload_to_pypi,
             verify_all,
         ]
         command_registry = CommandRegistry(plugin_config, CommandRegistry._discover_command_packages(plugin_config))

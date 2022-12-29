@@ -1,14 +1,9 @@
 from pathlib import Path
-from typing import List, Optional, Tuple
+from typing import List, Tuple
 
 from delfino.decorators import pass_app_context
 from delfino.models.pyproject_toml import PluginConfig
 from pydantic import BaseModel, Field
-
-
-class Dockerhub(BaseModel):
-    build_for_platforms: List[str] = Field(["linux/amd64", "linux/arm64", "linux/arm/v7"], min_items=1)
-    username: str
 
 
 class Typecheck(BaseModel):
@@ -24,7 +19,6 @@ class CorePluginConfig(PluginConfig):
     verify_commands: Tuple[str, ...] = ("format", "lint", "typecheck", "test-all")
     lint_commands: Tuple[str, ...] = ("lint-pylint", "lint-pycodestyle", "lint-pydocstyle")
     disable_pre_commit: bool = False
-    dockerhub: Optional[Dockerhub] = None
     typecheck: Typecheck = Field(default_factory=Typecheck)
 
 
