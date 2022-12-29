@@ -12,6 +12,12 @@ Types of changes are:
 
 ## [Unreleased]
 
+## [4.0.1] - 2022-12-29
+
+### Features
+
+- Removed optional dependencies `twine` and `packaging`.
+
 ## [4.0.0] - 2022-12-29
 
 ### Breaking changes
@@ -233,7 +239,8 @@ If `tool.delfino.plugins.delfino-core.dockerhub` exists in the `pyproject.toml`:
 
 - Initial source code
 
-[Unreleased]: https://github.com/radeklat/delfino-core/compare/4.0.0...HEAD
+[Unreleased]: https://github.com/radeklat/delfino-core/compare/4.0.1...HEAD
+[4.0.1]: https://github.com/radeklat/delfino-core/compare/4.0.0...4.0.1
 [4.0.0]: https://github.com/radeklat/delfino-core/compare/3.10.0...4.0.0
 [3.10.0]: https://github.com/radeklat/delfino-core/compare/3.9.0...3.10.0
 [3.9.0]: https://github.com/radeklat/delfino-core/compare/3.8.1...3.9.0
