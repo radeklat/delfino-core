@@ -78,8 +78,8 @@ class Updater:
 
     def _link_to_open_a_pull_request(self) -> Optional[str]:
         url = self._repo.remote().url
-        match = re.match("git@github.com:(.*)\\.git", url)
-        if not match:
+
+        if not (match := re.match("git@github.com:(.*)\\.git", url)):
             match = re.match("https://github.com/(.*)\\.git", url)
 
         return f"https://github.com/{match.group(1)}/pull/new/{self._repo.active_branch}" if match else None
@@ -179,8 +179,7 @@ class PipenvUpdater(Updater):
         available_updates = []
 
         for line in result.stdout.decode().split(os.linesep) + result.stderr.decode().split(os.linesep):
-            match = re.match(self._SKIP_PATTERN, line) or re.match(self._OUTDATED_PATTEN, line)
-            if not match:
+            if not (match := re.match(self._SKIP_PATTERN, line) or re.match(self._OUTDATED_PATTEN, line)):
                 continue
 
             package = match.group("package")
@@ -207,9 +206,8 @@ class PoetryUpdater(Updater):
         _run("poetry update")
 
         secho("Checking outdated packages. This will take a while ...", fg="yellow")
-        result = _run("poetry show --outdated --why --ansi")
 
-        if not result.stdout:
+        if not (result := _run("poetry show --outdated --why --ansi")).stdout:
             return False
 
         pyproject_toml = self._read_dependency_file()

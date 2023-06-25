@@ -23,7 +23,11 @@ from delfino_core.utils import execute_commands_group
 @pass_args
 @files_folders_option
 @pass_plugin_app_context
-def lint_pydocstyle(app_context: AppContext[CorePluginConfig], passed_args: Tuple[str, ...], files_folders: Tuple[str]):
+def lint_pydocstyle(
+    app_context: AppContext[CorePluginConfig],
+    passed_args: Tuple[str, ...],
+    files_folders: Tuple[str],
+):
     """Run docstring linting on source code.
 
     Docstring linting is done via pydocstyle. The pydocstyle config can be found in the
@@ -51,7 +55,9 @@ def lint_pydocstyle(app_context: AppContext[CorePluginConfig], passed_args: Tupl
 @files_folders_option
 @pass_plugin_app_context
 def lint_pycodestyle(
-    app_context: AppContext[CorePluginConfig], passed_args: Tuple[str, ...], files_folders: Tuple[str]
+    app_context: AppContext[CorePluginConfig],
+    passed_args: Tuple[str, ...],
+    files_folders: Tuple[str],
 ):
     """Run PEP8 checking on code.
 
@@ -104,7 +110,15 @@ def run_pylint(
     print_header(", ".join(map(str, checked_dirs)), level=3)
 
     run(
-        ["pylint", "-j", str(cpu_count()), "--rcfile", pylintrc_folder / ".pylintrc", *passed_args, *checked_dirs],
+        [
+            "pylint",
+            "-j",
+            str(cpu_count()),
+            "--rcfile",
+            pylintrc_folder / ".pylintrc",
+            *passed_args,
+            *checked_dirs,
+        ],
         stdout=PIPE,
         on_error=OnError.ABORT,
         env_update_path={"PYTHONPATH": sources_dir},
@@ -116,8 +130,7 @@ def run_pylint(
 @lru_cache(maxsize=1)
 def cpu_count():
     if getenv("CI", ""):
-        cpu_shares = Path("/sys/fs/cgroup/cpu/cpu.shares")
-        if cpu_shares.is_file():
+        if (cpu_shares := Path("/sys/fs/cgroup/cpu/cpu.shares")).is_file():
             return int(cpu_shares.read_text(encoding="utf-8").strip()) // 1024
 
     log = logging.getLogger("cpu_count")
@@ -126,8 +139,7 @@ def cpu_count():
     if pip_package_installed("psutil"):
         import psutil  # pylint: disable=import-outside-toplevel
 
-        count = psutil.cpu_count(logical=False)
-        if not count:
+        if not (count := psutil.cpu_count(logical=False)):
             log.warning(fallback_msg)
             return 1
         return count
@@ -144,14 +156,15 @@ def build_target_paths(
 ) -> List[Path]:
     if files_folders:
         return [Path(path) for path in files_folders]
-    local_commands_directory = app_context.pyproject_toml.tool.delfino.local_commands_directory
     plugin_config = app_context.plugin_config
     target_paths: List[Path] = [plugin_config.sources_directory]
 
     if include_tests and plugin_config.tests_directory.exists():
         target_paths.append(plugin_config.tests_directory)
-    if include_commands and local_commands_directory.exists():
-        target_paths.append(local_commands_directory)
+    if include_commands:
+        target_paths.extend(
+            folder for folder in app_context.pyproject_toml.tool.delfino.local_command_folders if folder.exists()
+        )
     return target_paths
 
 
@@ -159,7 +172,11 @@ def build_target_paths(
 @files_folders_option
 @pass_args
 @pass_plugin_app_context
-def lint_pylint(app_context: AppContext[CorePluginConfig], passed_args: Tuple[str, ...], files_folders: Tuple[str]):
+def lint_pylint(
+    app_context: AppContext[CorePluginConfig],
+    passed_args: Tuple[str, ...],
+    files_folders: Tuple[str],
+):
     """Run pylint on code.
 
     The bulk of our code conventions are enforced via pylint. The pylint config can be
@@ -178,7 +195,12 @@ def lint_pylint(app_context: AppContext[CorePluginConfig], passed_args: Tuple[st
     target_paths = build_target_paths(app_context, files_folders)
     grouped_paths = groupby(target_paths, get_pylintrc_folder)
     for pylintrc_folder, paths in grouped_paths:
-        run_pylint(app_context.plugin_config.sources_directory, list(paths), pylintrc_folder, passed_args)
+        run_pylint(
+            app_context.plugin_config.sources_directory,
+            list(paths),
+            pylintrc_folder,
+            passed_args,
+        )
 
 
 @click.command(help="Runs all linting commands. Configured by the ``lint_commands`` setting.")
