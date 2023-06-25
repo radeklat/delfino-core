@@ -12,11 +12,17 @@ Types of changes are:
 
 ## [Unreleased]
 
+## [5.1.0] - 2023-06-25
+
+### Features
+
+- Adds `pyupgrade` into the `format` command
+
 ## [5.0.0] - 2023-06-25
 
 ### Breaking changes
 
-- Drop Python 3.7 support.
+- Drops Python 3.7 support.
 
 ## [4.0.1] - 2022-12-29
 
@@ -245,7 +251,8 @@ If `tool.delfino.plugins.delfino-core.dockerhub` exists in the `pyproject.toml`:
 
 - Initial source code
 
-[Unreleased]: https://github.com/radeklat/delfino-core/compare/5.0.0...HEAD
+[Unreleased]: https://github.com/radeklat/delfino-core/compare/5.1.0...HEAD
+[5.1.0]: https://github.com/radeklat/delfino-core/compare/5.1.0...5.1.0
 [5.0.0]: https://github.com/radeklat/delfino-core/compare/4.0.1...5.0.0
 [4.0.1]: https://github.com/radeklat/delfino-core/compare/4.0.0...4.0.1
 [4.0.0]: https://github.com/radeklat/delfino-core/compare/3.10.0...4.0.0

@@ -1,6 +1,6 @@
 [tool.poetry]
 name="delfino-core"
-version="5.0.0"
+version="5.1.0"
 authors = ["Radek Lát <radek.lat@gmail.com>"]
 description="Delfino core plugin"
 license = "MIT License"
@@ -29,6 +29,7 @@ delfino = ">=0.29.0"
 
 black = {version = "*", optional = true}
 isort = {version = "*", optional = true}
+pyupgrade = {version = "*", optional = true}
 pre-commit = {version = "*", optional = true}
 pytest = {version = "*", optional = true}
 coverage = {version = "*", optional = true}
@@ -60,16 +61,17 @@ pre-commit = "^3.3"
 pycodestyle = "^2.8"
 pydocstyle = "^6.1"
 shellingham = "^1.4"
-psutil = "^5.9.4"
+psutil = "^5.9"
 types-termcolor = "*"
 types-toml = "^0.10.8.1"
-types-psutil = "^5.9.5.5"
-gitpython = "^3.1.29"
+types-psutil = "^5.9"
+gitpython = "^3.1"
+pyupgrade = "^3.7"
 
 [tool.poetry.extras]
-all = ["black", "isort", "pre-commit", "pytest", "coverage", "pytest-cov", "mypy", "pylint", "pycodestyle", "pydocstyle", "psutil", "gitpython"]
-verify_all = ["black", "isort", "pre-commit", "pytest", "coverage", "pytest-cov", "mypy", "pylint", "pycodestyle", "pydocstyle", "psutil"]
-format = ["black", "isort", "pre-commit"]
+all = ["black", "isort", "pyupgrade", "pre-commit", "pytest", "coverage", "pytest-cov", "mypy", "pylint", "pycodestyle", "pydocstyle", "psutil", "gitpython"]
+verify_all = ["black", "isort", "pyupgrade", "pre-commit", "pytest", "coverage", "pytest-cov", "mypy", "pylint", "pycodestyle", "pydocstyle", "psutil"]
+format = ["black", "isort", "pyupgrade", "pre-commit"]
 test = ["pytest", "coverage", "pytest-cov"]
 typecheck = ["mypy"]
 lint = ["pylint", "pycodestyle", "pydocstyle", "psutil"]
