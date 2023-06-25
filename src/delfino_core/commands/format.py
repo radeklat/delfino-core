@@ -14,7 +14,6 @@ from delfino_core.config import CorePluginConfig, pass_plugin_app_context
 
 def _check_result(app_context: AppContext[CorePluginConfig], result: CompletedProcess, check: bool, msg: str):
     if result.returncode == 1 and check:
-
         msg_lines = [
             f"{msg} before commit. Try following:",
             f" * Run formatter manually with `{run_command_example(run_format, app_context)}` before committing code.",
