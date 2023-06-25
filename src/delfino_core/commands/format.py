@@ -13,14 +13,22 @@ from packaging.specifiers import SpecifierSet
 from delfino_core.config import CorePluginConfig, pass_plugin_app_context
 
 
-def _check_result(app_context: AppContext[CorePluginConfig], result: CompletedProcess, check: bool, msg: str):
+def _check_result(
+    app_context: AppContext[CorePluginConfig],
+    result: CompletedProcess,
+    check: bool,
+    msg: str,
+):
     if result.returncode == 1 and check:
         msg_lines = [
             f"{msg} before commit. Try following:",
             f" * Run formatter manually with `{run_command_example(run_format, app_context)}` before committing code.",
         ]
         if not app_context.plugin_config.disable_pre_commit:
-            msg_lines.insert(1, " * Enable pre-commit hook by running `pre-commit install` in the repository.")
+            msg_lines.insert(
+                1,
+                " * Enable pre-commit hook by running `pre-commit install` in the repository.",
+            )
 
         click.secho(
             "\n".join(msg_lines),
@@ -62,7 +70,12 @@ def _all_python_files(files_folders: Tuple[Path, ...]) -> List[Path]:
 @click.option("--quiet", is_flag=True, help="Don't show progress. Only errors.")
 @files_folders_option
 @pass_plugin_app_context
-def run_format(app_context: AppContext[CorePluginConfig], files_folders: Tuple[Path, ...], check: bool, quiet: bool):
+def run_format(
+    app_context: AppContext[CorePluginConfig],
+    files_folders: Tuple[Path, ...],
+    check: bool,
+    quiet: bool,
+):
     """Runs black code formatter and isort on source code."""
     plugin_config = app_context.plugin_config
 
@@ -76,9 +89,11 @@ def run_format(app_context: AppContext[CorePluginConfig], files_folders: Tuple[P
         run("pre-commit install", stdout=PIPE, on_error=OnError.EXIT)
 
     if not files_folders:
-        files_folders = (plugin_config.sources_directory, plugin_config.tests_directory)
-        if app_context.pyproject_toml.tool.delfino.local_commands_directory.exists():
-            files_folders += (app_context.pyproject_toml.tool.delfino.local_commands_directory,)
+        files_folders = (
+            plugin_config.sources_directory,
+            plugin_config.tests_directory,
+            *[folder for folder in app_context.pyproject_toml.tool.delfino.local_command_folders if folder.exists()],
+        )
 
     python_version = app_context.pyproject_toml.tool.poetry.dependencies.get("python", "3")
     # see `pypgrade -h` for range of supported versions
@@ -87,11 +102,17 @@ def run_format(app_context: AppContext[CorePluginConfig], files_folders: Tuple[P
     if not check:
         flags.append("--exit-zero-even-if-changed")
 
-    print_header(f"Upgrading code to Python 3{'.' + min_python_version if min_python_version else ''}", icon="⬆️")
+    print_header(
+        f"Upgrading code to Python 3{'.' + min_python_version if min_python_version else ''}",
+        icon="⬆️",
+    )
 
     _check_result(
         app_context,
-        run(["pyupgrade", *_all_python_files(files_folders), *flags], on_error=OnError.PASS),
+        run(
+            ["pyupgrade", *_all_python_files(files_folders), *flags],
+            on_error=OnError.PASS,
+        ),
         check,
         "Code was not formatted",
     )
@@ -104,7 +125,10 @@ def run_format(app_context: AppContext[CorePluginConfig], files_folders: Tuple[P
     print_header("Sorting imports", icon="ℹ")
 
     _check_result(
-        app_context, run(["isort", *files_folders, *flags], on_error=OnError.PASS), check, "Import were not sorted"
+        app_context,
+        run(["isort", *files_folders, *flags], on_error=OnError.PASS),
+        check,
+        "Import were not sorted",
     )
 
     print_header("Formatting code", icon="🖤")
@@ -113,5 +137,8 @@ def run_format(app_context: AppContext[CorePluginConfig], files_folders: Tuple[P
         flags.append("--quiet")
 
     _check_result(
-        app_context, run(["black", *files_folders, *flags], on_error=OnError.PASS), check, "Code was not formatted"
+        app_context,
+        run(["black", *files_folders, *flags], on_error=OnError.PASS),
+        check,
+        "Code was not formatted",
     )

@@ -50,7 +50,11 @@ def _run_typecheck(
         args.extend(["|", "tail", "-n", "1"])
 
     if print_second_level_headers:
-        print_header(f"{'Strict' if strict else 'Optional'} types", level=2, icon="⚠️" if strict else "ℹ️")
+        print_header(
+            f"{'Strict' if strict else 'Optional'} types",
+            level=2,
+            icon="⚠️" if strict else "ℹ️",
+        )
 
     run(args, env_update_path={"MYPYPATH": mypypath}, on_error=OnError.ABORT)
 
@@ -66,7 +70,11 @@ def is_path_relative_to_paths(path: Path, paths: List[Path]) -> bool:
 
 
 @click.command()
-@click.option("--summary-only", is_flag=True, help="Suppress error messages and show only summary error count.")
+@click.option(
+    "--summary-only",
+    is_flag=True,
+    help="Suppress error messages and show only summary error count.",
+)
 @files_folders_option
 @pass_args
 @pass_plugin_app_context
@@ -91,11 +99,15 @@ def typecheck(
         target_paths = [Path(path) for path in files_folders]
     else:
         target_paths = [plugin_config.sources_directory, plugin_config.tests_directory]
-        if app_context.pyproject_toml.tool.delfino.local_commands_directory.exists():
-            target_paths.append(app_context.pyproject_toml.tool.delfino.local_commands_directory)
+        target_paths.extend(
+            folder for folder in app_context.pyproject_toml.tool.delfino.local_command_folders if folder.exists()
+        )
 
     strict_paths = plugin_config.typecheck.strict_directories
-    grouped_paths = groupby(target_paths, lambda current_path: is_path_relative_to_paths(current_path, strict_paths))
+    grouped_paths = groupby(
+        target_paths,
+        lambda current_path: is_path_relative_to_paths(current_path, strict_paths),
+    )
 
     for force_typing, group in grouped_paths:
         report_filepath = (

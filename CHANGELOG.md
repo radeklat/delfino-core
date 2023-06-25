@@ -12,6 +12,13 @@ Types of changes are:
 
 ## [Unreleased]
 
+## [5.1.1] - 2023-06-25
+
+### Fixes
+
+- Updates deprecated `local_commands_directory` from `delfino`.
+- Add walrus operator supported since Python 3.8.
+
 ## [5.1.0] - 2023-06-25
 
 ### Features
@@ -251,7 +258,8 @@ If `tool.delfino.plugins.delfino-core.dockerhub` exists in the `pyproject.toml`:
 
 - Initial source code
 
-[Unreleased]: https://github.com/radeklat/delfino-core/compare/5.1.0...HEAD
+[Unreleased]: https://github.com/radeklat/delfino-core/compare/5.1.1...HEAD
+[5.1.1]: https://github.com/radeklat/delfino-core/compare/5.1.0...5.1.1
 [5.1.0]: https://github.com/radeklat/delfino-core/compare/5.1.0...5.1.0
 [5.0.0]: https://github.com/radeklat/delfino-core/compare/4.0.1...5.0.0
 [4.0.1]: https://github.com/radeklat/delfino-core/compare/4.0.0...4.0.1

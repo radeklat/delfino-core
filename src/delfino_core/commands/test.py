@@ -104,8 +104,8 @@ def _get_total_coverage(coverage_dat: Path) -> str:
     output = run(
         "coverage report", stdout=PIPE, env_update={"COVERAGE_FILE": coverage_dat}, on_error=OnError.EXIT
     ).stdout.decode()
-    match = re.search(r"TOTAL.*?([\d.]+%)", output)
-    if match is None:
+
+    if (match := re.search(r"TOTAL.*?([\d.]+%)", output)) is None:
         raise RuntimeError(f"Regex failed on output: {output}")
     return match.group(1)
 
@@ -116,9 +116,7 @@ def _combined_coverage_reports(reports_directory: Path, test_types: List[str]) -
     coverage_files = []  # we'll make a copy because `combine` will erase them
 
     for test_type in test_types:
-        coverage_dat = reports_directory / f"coverage-{test_type}.dat"
-
-        if not coverage_dat.exists():
+        if not (coverage_dat := reports_directory / f"coverage-{test_type}.dat").exists():
             click.secho(
                 f"Could not find coverage dat file for {test_type} tests: {coverage_dat}",
                 fg="yellow",
