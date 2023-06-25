@@ -5,8 +5,8 @@ orbs:
 
 constants:
   - &project_name "delfino-core"
-  - &minimum_python_version "3.7"
-  - &supported_python_versions [ *minimum_python_version, "3.8", "3.9", "3.10", "3.11" ]
+  - &minimum_python_version "3.8"
+  - &supported_python_versions [ *minimum_python_version, "3.9", "3.10", "3.11" ]
 
 parameters:
   project_name:
@@ -17,7 +17,7 @@ parameters:
     default: *minimum_python_version
   cache_version:
     type: string
-    default: "3"
+    default: "4"
   git_trunk_branch:
     type: string
     default: "main"

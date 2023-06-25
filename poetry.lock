@@ -744,6 +744,20 @@ pytest = ">=5.0"
 dev = ["pre-commit", "pytest-asyncio", "tox"]
 
 [[package]]
+name = "pyupgrade"
+version = "3.7.0"
+description = "A tool to automatically upgrade syntax for newer versions."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "pyupgrade-3.7.0-py2.py3-none-any.whl", hash = "sha256:696c1e6ebec6697297d3e45ae511ecedb5b17d31e5212a20bc892ba51b1c0b6d"},
+    {file = "pyupgrade-3.7.0.tar.gz", hash = "sha256:94841f8550547349aec108ad03fcdb19b64e4ef68fd21f5d0038826eb6dbe5f3"},
+]
+
+[package.dependencies]
+tokenize-rt = ">=3.2.0"
+
+[[package]]
 name = "pyyaml"
 version = "6.0"
 description = "YAML parser and emitter for Python"
@@ -839,6 +853,17 @@ python-versions = "*"
 files = [
     {file = "snowballstemmer-2.2.0-py2.py3-none-any.whl", hash = "sha256:c8e1716e83cc398ae16824e5572ae04e0d9fc2c6b985fb0f900f5f0c96ecba1a"},
     {file = "snowballstemmer-2.2.0.tar.gz", hash = "sha256:09b16deb8547d3412ad7b590689584cd0fe25ec8db3be37788be3810cbf19cb1"},
+]
+
+[[package]]
+name = "tokenize-rt"
+version = "5.1.0"
+description = "A wrapper around the stdlib `tokenize` which roundtrips."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "tokenize_rt-5.1.0-py2.py3-none-any.whl", hash = "sha256:9b7bb843e77dd6ed0be5564bfaaba200083911e0497841cd3e9235a6a9794d74"},
+    {file = "tokenize_rt-5.1.0.tar.gz", hash = "sha256:08f0c2daa94c4052e53c2fcaa8e32585e6ae9bdfc800974092d031401694e002"},
 ]
 
 [[package]]
@@ -1038,15 +1063,15 @@ docs = ["furo", "jaraco.packaging (>=9)", "jaraco.tidelift (>=1.4)", "rst.linker
 testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more-itertools", "pytest (>=6)", "pytest-black (>=0.3.7)", "pytest-checkdocs (>=2.4)", "pytest-cov", "pytest-enabler (>=1.3)", "pytest-flake8", "pytest-mypy (>=0.9.1)"]
 
 [extras]
-all = ["black", "coverage", "gitpython", "isort", "mypy", "pre-commit", "psutil", "pycodestyle", "pydocstyle", "pylint", "pytest", "pytest-cov"]
+all = ["black", "coverage", "gitpython", "isort", "mypy", "pre-commit", "psutil", "pycodestyle", "pydocstyle", "pylint", "pytest", "pytest-cov", "pyupgrade"]
 dependencies-update = ["gitpython"]
-format = ["black", "isort", "pre-commit"]
+format = ["black", "isort", "pre-commit", "pyupgrade"]
 lint = ["psutil", "pycodestyle", "pydocstyle", "pylint"]
 test = ["coverage", "pytest", "pytest-cov"]
 typecheck = ["mypy"]
-verify-all = ["black", "coverage", "isort", "mypy", "pre-commit", "psutil", "pycodestyle", "pydocstyle", "pylint", "pytest", "pytest-cov"]
+verify-all = ["black", "coverage", "isort", "mypy", "pre-commit", "psutil", "pycodestyle", "pydocstyle", "pylint", "pytest", "pytest-cov", "pyupgrade"]
 
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "45867ef2263c5333cae4fd8813acb736252306d91ece717eaeeec335d0a31e1a"
+content-hash = "edcfe0a0e00d164c2549be69d985ac381f0eb6211c67b30e179d13c036aef33e"

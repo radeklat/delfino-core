@@ -1,6 +1,6 @@
 from pathlib import Path
 from subprocess import PIPE, CompletedProcess
-from typing import Tuple
+from typing import List, Optional, Tuple
 
 import click
 from delfino.decorators import files_folders_option
@@ -8,6 +8,7 @@ from delfino.execution import OnError, run
 from delfino.models import AppContext
 from delfino.terminal_output import print_header, run_command_example
 from delfino.validation import assert_pip_package_installed
+from packaging.specifiers import SpecifierSet
 
 from delfino_core.config import CorePluginConfig, pass_plugin_app_context
 
@@ -32,6 +33,30 @@ def _check_result(app_context: AppContext[CorePluginConfig], result: CompletedPr
         raise click.Abort()
 
 
+def _find_min_minor_version(version_spec: str, major: int, minor_min: int, minor_max: int) -> Optional[str]:
+    version_spec = version_spec.replace("^", ">=")
+
+    for minor in range(minor_min, minor_max + 1):
+        version = f"{major}.{minor}"
+        if SpecifierSet(version_spec).contains(version):
+            return str(minor)
+
+    return ""
+
+
+def _all_python_files(files_folders: Tuple[Path, ...]) -> List[Path]:
+    files = []
+
+    for file_folder in files_folders:
+        if file_folder.is_file() and file_folder.suffix == ".py":
+            files.append(file_folder)
+        elif file_folder.is_dir():
+            files.extend(list(file_folder.glob("**/*.py")))
+            files.extend(list(file_folder.glob("**/*.pyi")))
+
+    return files
+
+
 @click.command("format")
 @click.option("--check", is_flag=True, help="Only check formatting, don't reformat the code.")
 @click.option("--quiet", is_flag=True, help="Don't show progress. Only errors.")
@@ -43,6 +68,7 @@ def run_format(app_context: AppContext[CorePluginConfig], files_folders: Tuple[P
 
     assert_pip_package_installed("isort")
     assert_pip_package_installed("black")
+    assert_pip_package_installed("pyupgrade")
 
     if not plugin_config.disable_pre_commit:
         assert_pip_package_installed("pre-commit")
@@ -53,6 +79,22 @@ def run_format(app_context: AppContext[CorePluginConfig], files_folders: Tuple[P
         files_folders = (plugin_config.sources_directory, plugin_config.tests_directory)
         if app_context.pyproject_toml.tool.delfino.local_commands_directory.exists():
             files_folders += (app_context.pyproject_toml.tool.delfino.local_commands_directory,)
+
+    python_version = app_context.pyproject_toml.tool.poetry.dependencies.get("python", "3")
+    # see `pypgrade -h` for range of supported versions
+    min_python_version = _find_min_minor_version(python_version, 3, 6, 11)
+    flags = [f"--py3{min_python_version}-plus"]
+    if not check:
+        flags.append("--exit-zero-even-if-changed")
+
+    print_header(f"Upgrading code to Python 3{'.' + min_python_version if min_python_version else ''}", icon="⬆️")
+
+    _check_result(
+        app_context,
+        run(["pyupgrade", *_all_python_files(files_folders), *flags], on_error=OnError.PASS),
+        check,
+        "Code was not formatted",
+    )
 
     flags = []
 
