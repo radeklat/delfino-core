@@ -12,6 +12,12 @@ Types of changes are:
 
 ## [Unreleased]
 
+## [5.2.0] - 2023-07-03
+
+### Features
+
+- Add `--stash` (default) / `--no-stash` option to `dependencies-update` command to control whether to stash changes before updating dependencies.
+
 ## [5.1.1] - 2023-06-25
 
 ### Fixes
@@ -258,9 +264,9 @@ If `tool.delfino.plugins.delfino-core.dockerhub` exists in the `pyproject.toml`:
 
 - Initial source code
 
-[Unreleased]: https://github.com/radeklat/delfino-core/compare/5.1.1...HEAD
+[Unreleased]: https://github.com/radeklat/delfino-core/compare/5.2.0...HEAD
+[5.2.0]: https://github.com/radeklat/delfino-core/compare/5.1.1...5.2.0
 [5.1.1]: https://github.com/radeklat/delfino-core/compare/5.1.0...5.1.1
-[5.1.0]: https://github.com/radeklat/delfino-core/compare/5.1.0...5.1.0
 [5.0.0]: https://github.com/radeklat/delfino-core/compare/4.0.1...5.0.0
 [4.0.1]: https://github.com/radeklat/delfino-core/compare/4.0.0...4.0.1
 [4.0.0]: https://github.com/radeklat/delfino-core/compare/3.10.0...4.0.0
