@@ -43,10 +43,11 @@ class Updater:
             .strip()
         )
 
-    def __init__(self):
+    def __init__(self, stash: bool):
         assert_pip_package_installed("gitpython")
 
         self._repo = Repo(self._git_root())
+        self._stash = stash
         now = datetime.utcnow()
         self._start_of_week = now - timedelta(now.isoweekday() - 1)
 
@@ -123,8 +124,9 @@ class Updater:
             secho(f"Branch '{branch}' already exists.", fg="yellow")
             _run(f"git checkout {branch}")
         else:
-            secho("Stashing existing changes.", fg="yellow")
-            _run("git stash")
+            if self._stash:
+                secho("Stashing existing changes.", fg="yellow")
+                _run("git stash")
 
             if self._repo.active_branch != "main":
                 secho("Checking out 'main'.", fg="yellow")
@@ -218,10 +220,19 @@ class PoetryUpdater(Updater):
 
 
 @click.command()
-@click.option("--retry", default=False, show_default=True, is_flag=True, help=" Retry an update after failed tests.")
+@click.option("--retry", default=False, show_default=True, is_flag=True, help="Retry an update after failed tests.")
+@click.option(
+    "--stash/--no-stash",
+    default=True,
+    show_default=True,
+    help=(
+        "Don't stash existing changes. Useful when there are some existing manual changes "
+        "that should be also part of the upgrade."
+    ),
+)
 @pass_app_context(CorePluginConfig)
 @click.pass_context
-def dependencies_update(click_context: click.Context, app_context: AppContext, retry):
+def dependencies_update(click_context: click.Context, app_context: AppContext, retry: bool, stash: bool):
     """Manages the process of updating dependencies."""
     print_header("Updating dependencies", icon="🔄")
 
@@ -229,9 +240,9 @@ def dependencies_update(click_context: click.Context, app_context: AppContext, r
     updater: Updater
 
     if app_context.package_manager == PackageManager.PIPENV:
-        updater = PipenvUpdater()
+        updater = PipenvUpdater(stash)
     elif app_context.package_manager == PackageManager.POETRY:
-        updater = PoetryUpdater()
+        updater = PoetryUpdater(stash)
     else:
         raise AssertionError(
             f"The '{app_context.package_manager.value}' package manager is not supported by this command."
