@@ -55,7 +55,7 @@ class Updater:
         commit_message = f"Dependencies rollup: {self._start_of_week.strftime('%Y-%m-%d')}"
         can_update = self._repo.commit("HEAD").message.strip() == commit_message
 
-        if ask("Do you want to commit changes now?"):
+        if do_commit := ask("Do you want to commit changes now?"):
             if can_update:  # update existing commit
                 if self._repo.is_dirty():
                     _run("git pull")
@@ -64,7 +64,7 @@ class Updater:
                 _run("git add .")
                 _run(f"git commit -a -m '{commit_message}'")
 
-        if ask("Do you want to push changes now?"):
+        if do_commit and ask("Do you want to push changes now?"):
             if can_update:
                 _run("git push --force-with-lease")
             else:
