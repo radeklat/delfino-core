@@ -1043,4 +1043,4 @@ verify-all = ["black", "coverage", "isort", "mypy", "pre-commit", "psutil", "pyc
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8.1"
-content-hash = "ff1339d9cca0820f4c7fa506f094447e6987c62f1f9ba0e61f7cc4280614f80b"
+content-hash = "00dde434ca64f8a2822e76756fbb89b0d2da62b2ad1f8fd3b3533ac72044cc8c"
