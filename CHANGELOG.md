@@ -12,6 +12,12 @@ Types of changes are:
 
 ## [Unreleased]
 
+## [6.0.0] - 2023-10-12
+
+### Breaking changes
+
+- Upgrade to `delfino` version `3.x`, which requires `pydantic>=2.0`.
+
 ## [5.2.2] - 2023-10-12
 
 ### Fixes
@@ -278,7 +284,8 @@ If `tool.delfino.plugins.delfino-core.dockerhub` exists in the `pyproject.toml`:
 
 - Initial source code
 
-[Unreleased]: https://github.com/radeklat/delfino-core/compare/5.2.2...HEAD
+[Unreleased]: https://github.com/radeklat/delfino-core/compare/6.0.0...HEAD
+[6.0.0]: https://github.com/radeklat/delfino-core/compare/5.2.2...6.0.0
 [5.2.2]: https://github.com/radeklat/delfino-core/compare/5.2.1...5.2.2
 [5.2.1]: https://github.com/radeklat/delfino-core/compare/5.2.0...5.2.1
 [5.2.0]: https://github.com/radeklat/delfino-core/compare/5.1.1...5.2.0
