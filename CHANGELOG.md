@@ -12,6 +12,13 @@ Types of changes are:
 
 ## [Unreleased]
 
+## [5.2.2] - 2023-10-12
+
+### Fixes
+
+- `pyupgrade` incorrectly handling minor version number in `tool.poetry.dependencies.python` of `pyproject.toml` file.
+- dependencies update.
+
 ## [5.2.1] - 2023-09-15
 
 ### Fixes
@@ -271,7 +278,8 @@ If `tool.delfino.plugins.delfino-core.dockerhub` exists in the `pyproject.toml`:
 
 - Initial source code
 
-[Unreleased]: https://github.com/radeklat/delfino-core/compare/5.2.1...HEAD
+[Unreleased]: https://github.com/radeklat/delfino-core/compare/5.2.2...HEAD
+[5.2.2]: https://github.com/radeklat/delfino-core/compare/5.2.1...5.2.2
 [5.2.1]: https://github.com/radeklat/delfino-core/compare/5.2.0...5.2.1
 [5.2.0]: https://github.com/radeklat/delfino-core/compare/5.1.1...5.2.0
 [5.1.1]: https://github.com/radeklat/delfino-core/compare/5.1.0...5.1.1

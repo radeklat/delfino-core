@@ -41,8 +41,16 @@ def _check_result(
         raise click.Abort()
 
 
+def _major_minor_only(version_number: str) -> str:
+    return ".".join(version_number.split(".")[:2])
+
+
 def _find_min_minor_version(version_spec: str, major: int, minor_min: int, minor_max: int) -> Optional[str]:
     version_spec = version_spec.replace("^", ">=")
+
+    # Drop patch and lower version number parts because they are not relevant.
+    # For example, "3.8" does not fit "^3.8.1" and "3.9" would be mistakenly used.
+    version_spec = ",".join(_major_minor_only(spec_part) for spec_part in version_spec.split(","))
 
     for minor in range(minor_min, minor_max + 1):
         version = f"{major}.{minor}"
