@@ -35,6 +35,7 @@
 | lint-pycodestyle      | Run PEP8 checking on code.                          |
 | lint-pydocstyle       | Run docstring linting on source code.               |
 | lint-pylint           | Run pylint on code.                                 |
+| pre-commit            | Run all pre-commit stages in the current project.   |
 | switch-python-version | Switches Python venv to a different Python version. |
 | test-all              | Run all tests, and generate coverage report.        |
 | test-integration      | Run integration tests.                              |
@@ -58,6 +59,7 @@ Using `[all]` installs all the [optional dependencies](https://setuptools.pypa.i
   - `typecheck`
   - `format`
   - `dependencies-update`
+  - `pre-commit`
 - For groups of commands:
   - `test` - for testing and coverage commands
   - `lint` - for all the linting commands
