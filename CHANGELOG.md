@@ -12,6 +12,12 @@ Types of changes are:
 
 ## [Unreleased]
 
+## [6.1.0] - 2023-10-13
+
+### Features
+
+- New `pre-commit` command to run all stages of pre-commit or a single hook with the correct stage.
+
 ## [6.0.0] - 2023-10-12
 
 ### Breaking changes
@@ -284,7 +290,8 @@ If `tool.delfino.plugins.delfino-core.dockerhub` exists in the `pyproject.toml`:
 
 - Initial source code
 
-[Unreleased]: https://github.com/radeklat/delfino-core/compare/6.0.0...HEAD
+[Unreleased]: https://github.com/radeklat/delfino-core/compare/6.1.0...HEAD
+[6.1.0]: https://github.com/radeklat/delfino-core/compare/6.0.0...6.1.0
 [6.0.0]: https://github.com/radeklat/delfino-core/compare/5.2.2...6.0.0
 [5.2.2]: https://github.com/radeklat/delfino-core/compare/5.2.1...5.2.2
 [5.2.1]: https://github.com/radeklat/delfino-core/compare/5.2.0...5.2.1

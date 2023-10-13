@@ -964,6 +964,17 @@ files = [
 ]
 
 [[package]]
+name = "types-pyyaml"
+version = "6.0.12.12"
+description = "Typing stubs for PyYAML"
+optional = false
+python-versions = "*"
+files = [
+    {file = "types-PyYAML-6.0.12.12.tar.gz", hash = "sha256:334373d392fde0fdf95af5c3f1661885fa10c52167b14593eb856289e1855062"},
+    {file = "types_PyYAML-6.0.12.12-py3-none-any.whl", hash = "sha256:c05bc6c158facb0676674b7f11fe3960db4f389718e19e62bd2b84d6205cfd24"},
+]
+
+[[package]]
 name = "types-termcolor"
 version = "1.1.6.2"
 description = "Typing stubs for termcolor"
@@ -1043,4 +1054,4 @@ verify-all = ["black", "coverage", "isort", "mypy", "pre-commit", "psutil", "pyc
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8.1"
-content-hash = "00dde434ca64f8a2822e76756fbb89b0d2da62b2ad1f8fd3b3533ac72044cc8c"
+content-hash = "81df7e5f7c4e6bbe2dc572258018a95236e1c0a7505c0486bedf3b54b65ee961"

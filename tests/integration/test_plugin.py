@@ -7,6 +7,7 @@ from delfino.models.pyproject_toml import PluginConfig
 from delfino_core.commands.dependencies_update import dependencies_update
 from delfino_core.commands.format import run_format
 from delfino_core.commands.lint import lint, lint_pycodestyle, lint_pydocstyle, lint_pylint
+from delfino_core.commands.pre_commit import pre_commit
 from delfino_core.commands.switch_python_version import switch_python_version
 from delfino_core.commands.test import coverage_open, coverage_report, test, test_all, test_integration, test_unit
 from delfino_core.commands.typecheck import typecheck
@@ -45,6 +46,7 @@ class TestPlugin:
             lint_pycodestyle,
             lint_pydocstyle,
             lint_pylint,
+            pre_commit,
             run_format,
             switch_python_version,
             test,
