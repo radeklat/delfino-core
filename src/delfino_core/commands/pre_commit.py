@@ -9,7 +9,7 @@ from delfino.execution import OnError, run
 from delfino.terminal_output import print_header
 
 
-def _selected_stages_and_hook(passed_args: list[str]) -> Tuple[List[str], Optional[str]]:
+def _selected_stages_and_hook(passed_args: List[str]) -> Tuple[List[str], Optional[str]]:
     pre_commit_file = Path(".pre-commit-config.yaml")
     if not pre_commit_file.is_file():
         raise Abort(f"Pre-commit config file '{pre_commit_file}' not found.")
@@ -45,7 +45,7 @@ def _selected_stages_and_hook(passed_args: list[str]) -> Tuple[List[str], Option
     default=False,
     help="Stage all files before running pre-commit hooks.",
 )
-def pre_commit(stage_all_files: bool, files_folders: list[Path], passed_args: list[str]):
+def pre_commit(stage_all_files: bool, files_folders: List[Path], passed_args: List[str]):
     """Run all pre-commit stages in the current project (alias for `pre-commit run ...`).
 
     To run a single hook, add the name of the hook at the end, as if you were running
