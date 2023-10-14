@@ -11,10 +11,10 @@ from delfino.validation import assert_package_manager_is_known, pip_package_inst
 from delfino_core.config import CorePluginConfig, pass_plugin_app_context
 
 
-@click.command()
+@click.command("switch-python-version")
 @click.argument("version", type=str)
 @pass_plugin_app_context
-def switch_python_version(app_context: AppContext[CorePluginConfig], version: str):
+def run_switch_python_version(app_context: AppContext[CorePluginConfig], version: str):
     """Switches Python venv to a different Python version.
 
     - VERSION: Desired Python version. You can use only MAJOR.MINOR (for example 3.6).

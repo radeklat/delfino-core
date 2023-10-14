@@ -1,6 +1,6 @@
 [tool.poetry]
 name="delfino-core"
-version="6.1.0"
+version="7.0.0"
 authors = ["Radek Lát <radek.lat@gmail.com>"]
 description="Delfino core plugin"
 license = "MIT License"
@@ -72,10 +72,10 @@ types-pyyaml = "^6.0.12.12"
 
 [tool.poetry.extras]
 all = ["black", "isort", "pyupgrade", "pre-commit", "pytest", "coverage", "pytest-cov", "mypy", "pylint", "pycodestyle", "pydocstyle", "psutil", "gitpython", "PyYAML"]
-verify_all = ["black", "isort", "pyupgrade", "pre-commit", "pytest", "coverage", "pytest-cov", "mypy", "pylint", "pycodestyle", "pydocstyle", "psutil"]
+verify = ["black", "isort", "pyupgrade", "pre-commit", "pytest", "coverage", "pytest-cov", "mypy", "pylint", "pycodestyle", "pydocstyle", "psutil"]
 format = ["black", "isort", "pyupgrade", "pre-commit"]
 test = ["pytest", "coverage", "pytest-cov"]
-typecheck = ["mypy"]
+mypy = ["mypy"]
 lint = ["pylint", "pycodestyle", "pydocstyle", "psutil"]
 dependencies_update = ["gitpython"]
 pre_commit = ["PyYAML"]

@@ -27,21 +27,26 @@
   
 | Command               | Description                                         |
 |-----------------------|-----------------------------------------------------|
+| black                 | Runs black.                                         |
 | coverage-open         | Open coverage results in default browser.           |
 | coverage-report       | Analyse coverage and generate a term/HTML report.   |
 | dependencies-update   | Manages the process of updating dependencies.       |
-| format                | Runs black code formatter and isort on source code. |
-| lint                  | Run linting on the entire code base.                |
-| lint-pycodestyle      | Run PEP8 checking on code.                          |
-| lint-pydocstyle       | Run docstring linting on source code.               |
-| lint-pylint           | Run pylint on code.                                 |
+| ensure-pre-commit     | Ensures pre-commit is installed and enabled.        |
+| format                | Runs ensure-pre-commit, pyupgrade, isort, black.    |
+| isort                 | Runs isort.                                         |
+| lint                  | Runs pylint, pycodestyle, pydocstyle.               |
 | pre-commit            | Run all pre-commit stages in the current project.   |
+| pycodestyle           | Run PEP8 checking on code.                          |
+| pydocstyle            | Run docstring linting on source code.               |
+| pylint                | Run pylint on code.                                 |
+| pytest                | Runs pytest for individual test suites.             |
+| pytest-integration    | Run integration tests.                              |
+| pytest-unit           | Run unit tests.                                     |
+| pyupgrade             | Runs pyupgrade with automatic version discovery.    |
 | switch-python-version | Switches Python venv to a different Python version. |
-| test-all              | Run all tests, and generate coverage report.        |
-| test-integration      | Run integration tests.                              |
-| test-unit             | Run unit tests.                                     |
-| typecheck             | Run type checking on source code.                   |
-| verify-all            | Runs all verification commands.                     |
+| test                  | Runs pytest, coverage-report.                       |
+| mypy                  | Run type checking on source code.                   |
+| verify                | Runs format, lint, mypy, test-all.                  |
 
 # Installation
 
@@ -56,7 +61,7 @@ Each project may use different sub-set of [commands](#commands). Therefore, depe
 Using `[all]` installs all the [optional dependencies](https://setuptools.pypa.io/en/latest/userguide/dependency_management.html#optional-dependencies) used by all the commands. If you want only a sub-set of those dependencies, there are finer-grained groups available:
 
 - For individual commands (matches the command names):
-  - `typecheck`
+  - `mypy`
   - `format`
   - `dependencies-update`
   - `pre-commit`
@@ -64,7 +69,7 @@ Using `[all]` installs all the [optional dependencies](https://setuptools.pypa.i
   - `test` - for testing and coverage commands
   - `lint` - for all the linting commands
 - For groups of groups:
-  - `verify-all` - same as `[typecheck,format,test,lint]`
+  - `verify` - same as `[mypy,format,test,lint]`
   - `all` - all optional packages
 
 # Configuration
@@ -98,7 +103,7 @@ test_types = ["unit", "integration"]
 pytest_modules = []
 
 # Commands to run as a quality gate in given order.
-verify_commands = ["format", "lint", "typecheck", "test-all"]
+verify_commands = ["format", "lint", "mypy", "test-all"]
 
 # Do not install pre-commit if this is set to true.
 disable_pre_commit = false
@@ -109,7 +114,7 @@ disable_pre_commit = false
 Several commands have their own configuration as well:
 
 ```toml
-[tool.delfino.plugins.delfino-core.typecheck]
+[tool.delfino.plugins.delfino-core.mypy]
 # One or more directories where type hint will be required. By default they are optional.
 strict_directories = []  
 ```

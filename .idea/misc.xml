@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="Black">
+    <option name="sdkUUID" value="9fdb55e5-f97f-42da-a5f1-48553c856e47" />
+  </component>
   <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.11 (delfino-core)" project-jdk-type="Python SDK" />
   <component name="ThriftCompiler">
     <compilers />

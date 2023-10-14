@@ -4,14 +4,21 @@ import pytest
 from delfino.click_utils.command import CommandRegistry
 from delfino.models.pyproject_toml import PluginConfig
 
-from delfino_core.commands.dependencies_update import dependencies_update
-from delfino_core.commands.format import run_format
-from delfino_core.commands.lint import lint, lint_pycodestyle, lint_pydocstyle, lint_pylint
-from delfino_core.commands.pre_commit import pre_commit
-from delfino_core.commands.switch_python_version import switch_python_version
-from delfino_core.commands.test import coverage_open, coverage_report, test, test_all, test_integration, test_unit
-from delfino_core.commands.typecheck import typecheck
-from delfino_core.commands.verify_all import verify_all
+from delfino_core.commands.dependencies_update import run_dependencies_update
+from delfino_core.commands.format import run_black, run_ensure_pre_commit, run_group_format, run_isort, run_pyupgrade
+from delfino_core.commands.lint import run_group_lint, run_pycodestyle, run_pydocstyle, run_pylint
+from delfino_core.commands.pre_commit import run_pre_commit
+from delfino_core.commands.switch_python_version import run_switch_python_version
+from delfino_core.commands.test import (
+    run_coverage_open,
+    run_coverage_report,
+    run_group_test,
+    run_pytest,
+    run_pytest_integration,
+    run_pytest_unit,
+)
+from delfino_core.commands.typecheck import run_mypy
+from delfino_core.commands.verify import run_group_verify
 
 
 @pytest.fixture(scope="session")
@@ -39,22 +46,26 @@ class TestPlugin:
     @staticmethod
     def should_be_visible_in_delfino(plugin_config):
         commands = [
-            coverage_open,
-            coverage_report,
-            dependencies_update,
-            lint,
-            lint_pycodestyle,
-            lint_pydocstyle,
-            lint_pylint,
-            pre_commit,
-            run_format,
-            switch_python_version,
-            test,
-            test_all,
-            test_integration,
-            test_unit,
-            typecheck,
-            verify_all,
+            run_black,
+            run_coverage_open,
+            run_coverage_report,
+            run_dependencies_update,
+            run_ensure_pre_commit,
+            run_group_format,
+            run_isort,
+            run_group_lint,
+            run_mypy,
+            run_pre_commit,
+            run_pycodestyle,
+            run_pydocstyle,
+            run_pylint,
+            run_switch_python_version,
+            run_pytest,
+            run_group_test,
+            run_pytest_integration,
+            run_pytest_unit,
+            run_pyupgrade,
+            run_group_verify,
         ]
         command_registry = CommandRegistry(plugin_config, CommandRegistry._discover_command_packages(plugin_config))
         expected_command_names = {command.name for command in commands}

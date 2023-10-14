@@ -3,7 +3,7 @@ from subprocess import PIPE, CompletedProcess
 from typing import List, Optional, Tuple
 
 import click
-from delfino.decorators import files_folders_option
+from delfino.decorators import files_folders_option, pass_args
 from delfino.execution import OnError, run
 from delfino.models import AppContext
 from delfino.terminal_output import print_header, run_command_example
@@ -11,6 +11,7 @@ from delfino.validation import assert_pip_package_installed
 from packaging.specifiers import SpecifierSet
 
 from delfino_core.config import CorePluginConfig, pass_plugin_app_context
+from delfino_core.utils import commands_group_help, execute_commands_group
 
 
 def _check_result(
@@ -22,7 +23,8 @@ def _check_result(
     if result.returncode == 1 and check:
         msg_lines = [
             f"{msg} before commit. Try following:",
-            f" * Run formatter manually with `{run_command_example(run_format, app_context)}` before committing code.",
+            f" * Run formatter manually with `{run_command_example(run_group_format, app_context)}` "
+            f"before committing code.",
         ]
         if not app_context.plugin_config.disable_pre_commit:
             msg_lines.insert(
@@ -73,42 +75,35 @@ def _all_python_files(files_folders: Tuple[Path, ...]) -> List[Path]:
     return files
 
 
-@click.command("format")
-@click.option("--check", is_flag=True, help="Only check formatting, don't reformat the code.")
-@click.option("--quiet", is_flag=True, help="Don't show progress. Only errors.")
+def _default_files_folders(app_context: AppContext[CorePluginConfig]) -> Tuple[Path, ...]:
+    return (
+        app_context.plugin_config.sources_directory,
+        app_context.plugin_config.tests_directory,
+        *[folder for folder in app_context.pyproject_toml.tool.delfino.local_command_folders if folder.exists()],
+    )
+
+
+@click.command("pyupgrade")
 @files_folders_option
+@pass_args
 @pass_plugin_app_context
-def run_format(
-    app_context: AppContext[CorePluginConfig],
-    files_folders: Tuple[Path, ...],
-    check: bool,
-    quiet: bool,
+def run_pyupgrade(
+    app_context: AppContext[CorePluginConfig], passed_args: Tuple[str, ...], files_folders: Tuple[Path, ...], **kwargs
 ):
-    """Runs black code formatter and isort on source code."""
-    plugin_config = app_context.plugin_config
+    """Runs pyupgrade with automatic version discovery.
 
-    assert_pip_package_installed("isort")
-    assert_pip_package_installed("black")
+    The Python version comes from the `pyproject.toml` file.
+    """
     assert_pip_package_installed("pyupgrade")
+    args = list(passed_args)
 
-    if not plugin_config.disable_pre_commit:
-        assert_pip_package_installed("pre-commit")
-        # ensure pre-commit is installed
-        run("pre-commit install", stdout=PIPE, on_error=OnError.EXIT)
-
-    if not files_folders:
-        files_folders = (
-            plugin_config.sources_directory,
-            plugin_config.tests_directory,
-            *[folder for folder in app_context.pyproject_toml.tool.delfino.local_command_folders if folder.exists()],
-        )
+    if kwargs.get("check", False):
+        args.append("--exit-zero-even-if-changed")
 
     python_version = app_context.pyproject_toml.tool.poetry.dependencies.get("python", "3")
     # see `pypgrade -h` for range of supported versions
     min_python_version = _find_min_minor_version(python_version, 3, 6, 11)
-    flags = [f"--py3{min_python_version}-plus"]
-    if not check:
-        flags.append("--exit-zero-even-if-changed")
+    args.append(f"--py3{min_python_version}-plus")
 
     print_header(
         f"Upgrading code to Python 3{'.' + min_python_version if min_python_version else ''}",
@@ -118,35 +113,114 @@ def run_format(
     _check_result(
         app_context,
         run(
-            ["pyupgrade", *_all_python_files(files_folders), *flags],
+            [
+                "pyupgrade",
+                *_all_python_files(files_folders or _default_files_folders(app_context)),
+                *args,
+            ],
             on_error=OnError.PASS,
         ),
-        check,
+        bool("--exit-zero-even-if-changed" in args),
         "Code was not formatted",
     )
 
-    flags = []
 
-    if check:
-        flags.append("--check")
-
-    print_header("Sorting imports", icon="ℹ")
-
-    _check_result(
-        app_context,
-        run(["isort", *files_folders, *flags], on_error=OnError.PASS),
-        check,
-        "Import were not sorted",
-    )
+@click.command("black")
+@files_folders_option
+@pass_args
+@pass_plugin_app_context
+def run_black(
+    app_context: AppContext[CorePluginConfig], passed_args: Tuple[str, ...], files_folders: Tuple[Path, ...], **kwargs
+):
+    """Runs black."""
+    assert_pip_package_installed("black")
+    args = list(passed_args)
 
     print_header("Formatting code", icon="🖤")
 
-    if quiet:
-        flags.append("--quiet")
+    if kwargs.get("check", False):
+        args.append("--check")
+
+    if kwargs.get("quiet", False):
+        args.append("--quiet")
 
     _check_result(
         app_context,
-        run(["black", *files_folders, *flags], on_error=OnError.PASS),
-        check,
+        run(
+            [
+                "black",
+                *args,
+                *(files_folders or _default_files_folders(app_context)),
+            ],
+            on_error=OnError.PASS,
+        ),
+        bool("--check" in args),
         "Code was not formatted",
+    )
+
+
+@click.command("isort")
+@files_folders_option
+@pass_args
+@pass_plugin_app_context
+def run_isort(
+    app_context: AppContext[CorePluginConfig], passed_args: Tuple[str, ...], files_folders: Tuple[Path, ...], **kwargs
+):
+    """Runs isort."""
+    assert_pip_package_installed("isort")
+    args = list(passed_args)
+
+    print_header("Sorting imports", icon="ℹ")
+
+    if kwargs.get("check", False):
+        args.append("--check")
+
+    if kwargs.get("quiet", False):
+        args.append("--quiet")
+
+    _check_result(
+        app_context,
+        run(
+            [
+                "isort",
+                *args,
+                *(files_folders or _default_files_folders(app_context)),
+            ],
+            on_error=OnError.PASS,
+        ),
+        bool("--check" in args),
+        "Imports were not sorted",
+    )
+
+
+@click.command("ensure-pre-commit")
+@pass_plugin_app_context
+def run_ensure_pre_commit(app_context: AppContext[CorePluginConfig], **kwargs):
+    """Ensures pre-commit is installed and enabled."""
+    del kwargs  # not used, needed for extra kwargs from the command group
+    if not app_context.plugin_config.disable_pre_commit:
+        assert_pip_package_installed("pre-commit")
+        # ensure pre-commit is installed
+        run("pre-commit install", stdout=PIPE, on_error=OnError.EXIT)
+
+
+@click.command("format", help=commands_group_help("format"))
+@click.option("--check", is_flag=True, help="Only check formatting, don't reformat the code.")
+@click.option("--quiet", is_flag=True, help="Don't show progress. Only errors.")
+@files_folders_option
+@pass_plugin_app_context
+@click.pass_context
+def run_group_format(
+    click_context: click.Context,
+    app_context: AppContext[CorePluginConfig],
+    files_folders: Tuple[Path, ...],
+    check: bool,
+    quiet: bool,
+):
+    execute_commands_group(
+        click_context,
+        app_context.plugin_config,
+        files_folders=files_folders,
+        check=check,
+        quiet=quiet,
     )

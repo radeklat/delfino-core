@@ -34,7 +34,7 @@ def _selected_stages_and_hook(passed_args: List[str]) -> Tuple[List[str], Option
     return sorted(all_stages), None
 
 
-@click.command()
+@click.command("pre-commit")
 @pass_args
 @files_folders_option
 @click.option(
@@ -45,7 +45,7 @@ def _selected_stages_and_hook(passed_args: List[str]) -> Tuple[List[str], Option
     default=False,
     help="Stage all files before running pre-commit hooks.",
 )
-def pre_commit(stage_all_files: bool, files_folders: List[Path], passed_args: List[str]):
+def run_pre_commit(stage_all_files: bool, files_folders: List[Path], passed_args: List[str]):
     """Run all pre-commit stages in the current project (alias for `pre-commit run ...`).
 
     To run a single hook, add the name of the hook at the end, as if you were running
