@@ -69,7 +69,7 @@ def is_path_relative_to_paths(path: Path, paths: List[Path]) -> bool:
     return False
 
 
-@click.command()
+@click.command("mypy")
 @click.option(
     "--summary-only",
     is_flag=True,
@@ -78,7 +78,7 @@ def is_path_relative_to_paths(path: Path, paths: List[Path]) -> bool:
 @files_folders_option
 @pass_args
 @pass_plugin_app_context
-def typecheck(
+def run_mypy(
     app_context: AppContext[CorePluginConfig],
     passed_args: Tuple[str, ...],
     summary_only: bool,
@@ -111,7 +111,7 @@ def typecheck(
 
     for force_typing, group in grouped_paths:
         report_filepath = (
-            plugin_config.reports_directory / "typecheck" / f"junit-{'strict' if force_typing else 'nonstrict'}.xml"
+            plugin_config.reports_directory / "mypy" / f"junit-{'strict' if force_typing else 'nonstrict'}.xml"
         )
         _run_typecheck(
             list(group),

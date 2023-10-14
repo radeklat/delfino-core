@@ -14,7 +14,7 @@ from delfino.models import AppContext
 from delfino.terminal_output import print_header
 from delfino.validation import assert_package_manager_is_known, assert_pip_package_installed
 
-from delfino_core.commands.verify_all import verify_all
+from delfino_core.commands.verify import run_group_verify
 from delfino_core.config import CorePluginConfig
 
 try:
@@ -219,7 +219,7 @@ class PoetryUpdater(Updater):
         return self._read_dependency_file() != pyproject_toml
 
 
-@click.command()
+@click.command("dependencies-update")
 @click.option("--retry", default=False, show_default=True, is_flag=True, help="Retry an update after failed tests.")
 @click.option(
     "--stash/--no-stash",
@@ -232,7 +232,7 @@ class PoetryUpdater(Updater):
 )
 @pass_app_context(CorePluginConfig)
 @click.pass_context
-def dependencies_update(click_context: click.Context, app_context: AppContext, retry: bool, stash: bool):
+def run_dependencies_update(click_context: click.Context, app_context: AppContext, retry: bool, stash: bool):
     """Manages the process of updating dependencies."""
     print_header("Updating dependencies", icon="🔄")
 
@@ -251,7 +251,7 @@ def dependencies_update(click_context: click.Context, app_context: AppContext, r
     updater.update(retry)
 
     try:
-        click_context.invoke(verify_all)
+        click_context.invoke(run_group_verify)
     except Exception:
         secho(
             f"\nOne or more checks have failed. Fix any issues above and then run:\n\n\t"

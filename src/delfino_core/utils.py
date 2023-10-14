@@ -17,9 +17,22 @@ def ensure_reports_dir(config: CorePluginConfig) -> None:
     config.reports_directory.mkdir(parents=True, exist_ok=True)
 
 
-def execute_commands_group(name: str, click_context: click.Context, plugin_config: CorePluginConfig, **kwargs):
+def commands_group_help(name: str) -> str:
+    command_names = ", ".join(CorePluginConfig.model_fields[f"{name}_commands"].default)
+    return f"Runs {command_names}.\n\n" f"Configured by the ``{name}_commands`` settings option."
+
+
+def execute_commands_group(click_context: click.Context, plugin_config: CorePluginConfig, **kwargs):
+    """Executes a group of commands.
+
+    Group default commands are defined in `delfino_core.config.CorePluginConfig.<NAME>_commands`.
+    They can be overridden by `<NAME>_commands` option in the `pyproject.toml` config.
+    """
     root = get_root_command(click_context)
-    option_name = f"{name}_commands"
+    if (name := click_context.command.name) is None:
+        raise ValueError("group commands must have a name set")
+
+    option_name = f"{name.replace('-', '_')}_commands"
 
     commands: Dict[str, click.Command] = {
         command: cast(click.Command, root.get_command(click_context, command))

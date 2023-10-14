@@ -12,6 +12,89 @@ Types of changes are:
 
 ## [Unreleased]
 
+## [7.0.0] - 2023-10-14
+
+This version renames several commands and command groups to be more consistent and predictable. The intention is to name commands using the same name as the underlying tool. Several commands were also turned into command groups of individual commands, to allow more flexibility in configuration.
+
+### Breaking changes
+
+#### Renamed commands
+
+| Old name           | New name             |
+|--------------------|----------------------|
+| `lint-pylint`      | `pylint`             |
+| `lint-pydocstyle`  | `pydocstyle`         |
+| `lint-pycodestyle` | `pycodestyle`        |
+| `typecheck`        | `mypy`               |
+| `test`             | `pytest`             |
+| `test-unit`        | `pytest-unit`        |
+| `test-integration` | `pytest-integration` |
+
+#### Renamed command groups
+
+- The `verify-all` command group is now called `verify`, to match the existing `format` and `lint` command groups. However, the configration option to override the `verify` command group is still `tool.delfino.plugins.delfino-core.verify_commands` as it already matched the new name.
+
+#### Renamed installation extras
+
+Affects [optional dependencies](README.md#optional-dependencies) installed with `delfino-core`. Update your `pyproject.toml` file accordingly.
+
+| Old name    | New name |
+|-------------|----------|
+| `typecheck` | `mypy`   |
+| `verify_all`| `verify` |
+
+#### Renamed group commands options
+
+Affects list of commands visible in given command groups. Update `tool.delfino.plugins.delfino-core.<COMMAND_GROUP_NAME>_commans` in your `pyproject.toml` file accordingly.
+
+| Old name              | New name          |
+|-----------------------|-------------------|
+| `typecheck`           | `mypy`            |
+| `verify_all_commands` | `verify_commands` |
+
+#### Renamed command functions
+
+This is an implementation detail that should not be relied on, but it's listed here for completeness. Command and command group names were changed to match a pattern `run_<COMMAND_NAME>` and `run_group_<COMMAND_GROUP_NAME>`. This is to prevent clashes with the names of the underlying tools and easier discoverability.
+
+| Old name                | New name                    |
+|-------------------------|-----------------------------|
+| `coverage_open`         | `run_coverage_open`         |
+| `coverage_report`       | `run_coverage_report`       |
+| `dependencies_update`   | `run_dependencies_update`   |
+| `lint`                  | `run_group_lint`            |
+| `lint_pycodestyle`      | `run_pycodestyle`           |
+| `lint_pydocstyle`       | `run_pydocstyle`            |
+| `lint_pylint`           | `run_pylint`                |
+| `pre_commit`            | `run_pre_commit`            |
+| `run_format`            | `run_group_format`          |
+| `switch_python_version` | `run_switch_python_version` |
+| `test`                  | `run_group_test`            |
+| `test_all`              | `run_pytest`                |
+| `test_integration`      | `run_pytest_integration`    |
+| `test_unit`             | `run_pytest_unit`           |
+| `typecheck`             | `run_mypy`                  |
+| `verify_all`            | `run_group_verify`          |
+
+### Features
+
+- Help text for all command groups is now generated, preventing typos and stale information about commands.
+
+#### New commands
+
+- `ensure-pre-commit`
+- `pyupgrade`
+- `isort`
+- `black`
+
+#### New command groups
+
+- The `format` command has been turned into a command group of individual.
+  - Contains the following commands: `ensure-pre-commit`, `pyupgrade`, `isort` and `black`.
+  - Can be overriden with `tool.delfino.plugins.delfino-core.format_commands` option in the `pyproject.toml` file.
+- `test` has been formally changed to a command group (functionally, it was already a group).
+  - Contains the following commands: `pytest` and `coverage-report`.
+  - Can be overriden with `tool.delfino.plugins.delfino-core.test_commands` option in the `pyproject.toml` file.
+
 ## [6.1.0] - 2023-10-13
 
 ### Features
@@ -290,7 +373,8 @@ If `tool.delfino.plugins.delfino-core.dockerhub` exists in the `pyproject.toml`:
 
 - Initial source code
 
-[Unreleased]: https://github.com/radeklat/delfino-core/compare/6.1.0...HEAD
+[Unreleased]: https://github.com/radeklat/delfino-core/compare/7.0.0...HEAD
+[7.0.0]: https://github.com/radeklat/delfino-core/compare/6.0.0...7.0.0
 [6.1.0]: https://github.com/radeklat/delfino-core/compare/6.0.0...6.1.0
 [6.0.0]: https://github.com/radeklat/delfino-core/compare/5.2.2...6.0.0
 [5.2.2]: https://github.com/radeklat/delfino-core/compare/5.2.1...5.2.2

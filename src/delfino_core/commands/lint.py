@@ -16,14 +16,14 @@ from delfino.validation import assert_pip_package_installed, pip_package_install
 
 from delfino_core.backports import path_is_relative_to
 from delfino_core.config import CorePluginConfig, pass_plugin_app_context
-from delfino_core.utils import execute_commands_group
+from delfino_core.utils import commands_group_help, execute_commands_group
 
 
-@click.command()
+@click.command("pydocstyle")
 @pass_args
 @files_folders_option
 @pass_plugin_app_context
-def lint_pydocstyle(
+def run_pydocstyle(
     app_context: AppContext[CorePluginConfig],
     passed_args: Tuple[str, ...],
     files_folders: Tuple[str],
@@ -50,11 +50,11 @@ def lint_pydocstyle(
     print_no_issues_found()
 
 
-@click.command()
+@click.command("pycodestyle")
 @pass_args
 @files_folders_option
 @pass_plugin_app_context
-def lint_pycodestyle(
+def run_pycodestyle(
     app_context: AppContext[CorePluginConfig],
     passed_args: Tuple[str, ...],
     files_folders: Tuple[str],
@@ -101,32 +101,6 @@ def lint_pycodestyle(
     print_no_issues_found()
 
 
-def run_pylint(
-    sources_dir: Path,
-    checked_dirs: List[Path],
-    pylintrc_folder: Path,
-    passed_args: Tuple[str, ...],
-):
-    print_header(", ".join(map(str, checked_dirs)), level=3)
-
-    run(
-        [
-            "pylint",
-            "-j",
-            str(cpu_count()),
-            "--rcfile",
-            pylintrc_folder / ".pylintrc",
-            *passed_args,
-            *checked_dirs,
-        ],
-        stdout=PIPE,
-        on_error=OnError.ABORT,
-        env_update_path={"PYTHONPATH": sources_dir},
-    )
-
-    print_no_issues_found()
-
-
 @lru_cache(maxsize=1)
 def cpu_count():
     if getenv("CI", ""):
@@ -168,11 +142,11 @@ def build_target_paths(
     return target_paths
 
 
-@click.command()
+@click.command("pylint")
 @files_folders_option
 @pass_args
 @pass_plugin_app_context
-def lint_pylint(
+def run_pylint(
     app_context: AppContext[CorePluginConfig],
     passed_args: Tuple[str, ...],
     files_folders: Tuple[str],
@@ -195,22 +169,35 @@ def lint_pylint(
     target_paths = build_target_paths(app_context, files_folders)
     grouped_paths = groupby(target_paths, get_pylintrc_folder)
     for pylintrc_folder, paths in grouped_paths:
-        run_pylint(
-            app_context.plugin_config.sources_directory,
-            list(paths),
-            pylintrc_folder,
-            passed_args,
+        checked_dirs = list(paths)
+        print_header(", ".join(map(str, checked_dirs)), level=3)
+
+        run(
+            [
+                "pylint",
+                "-j",
+                str(cpu_count()),
+                "--rcfile",
+                pylintrc_folder / ".pylintrc",
+                *passed_args,
+                *checked_dirs,
+            ],
+            stdout=PIPE,
+            on_error=OnError.ABORT,
+            env_update_path={"PYTHONPATH": app_context.plugin_config.sources_directory},
         )
 
+        print_no_issues_found()
 
-@click.command(help="Runs all linting commands. Configured by the ``lint_commands`` setting.")
+
+@click.command("lint", help=commands_group_help("lint"))
 @files_folders_option
 @pass_plugin_app_context
 @click.pass_context
-def lint(
+def run_group_lint(
     click_context: click.Context,
     app_context: AppContext[CorePluginConfig],
     **kwargs,
 ):
     del kwargs  # passed to downstream commands
-    execute_commands_group("lint", click_context, app_context.plugin_config)
+    execute_commands_group(click_context, app_context.plugin_config)

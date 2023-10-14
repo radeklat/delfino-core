@@ -17,7 +17,7 @@ from delfino.terminal_output import print_header, run_command_example
 from delfino.validation import assert_pip_package_installed
 
 from delfino_core.config import CorePluginConfig, pass_plugin_app_context
-from delfino_core.utils import ensure_reports_dir
+from delfino_core.utils import commands_group_help, ensure_reports_dir, execute_commands_group
 
 
 def _delete_coverage_dat_files(reports_directory: Path, test_types: List[str]):
@@ -26,13 +26,13 @@ def _delete_coverage_dat_files(reports_directory: Path, test_types: List[str]):
             (reports_directory / f"coverage{test_type}.dat").unlink()
 
 
-def _run_tests(
+def _run_pytest(
     app_context: AppContext[CorePluginConfig],
     passed_args: Tuple[str, ...],
     files_folders: Tuple[str, ...],
     name: str = "",
 ) -> None:
-    """Execute the tests for a given test type."""
+    """Execute the tests for a given pytest type."""
     assert_pip_package_installed("pytest")
     assert_pip_package_installed("pytest-cov")
     assert_pip_package_installed("coverage")
@@ -78,25 +78,27 @@ def _run_tests(
     )
 
 
-@click.command(help="Run unit tests.")
+@click.command("pytest-unit", help="Run unit tests.")
 @files_folders_option
 @pass_args
 @pass_plugin_app_context
-def test_unit(app_context: AppContext[CorePluginConfig], passed_args: Tuple[str, ...], files_folders: Tuple[str, ...]):
+def run_pytest_unit(
+    app_context: AppContext[CorePluginConfig], passed_args: Tuple[str, ...], files_folders: Tuple[str, ...]
+):
     _delete_coverage_dat_files(app_context.plugin_config.reports_directory, app_context.plugin_config.test_types)
-    _run_tests(app_context, passed_args, files_folders, "unit")
+    _run_pytest(app_context, passed_args, files_folders, "unit")
 
 
-@click.command(help="Run integration tests.")
+@click.command("pytest-integration", help="Run integration tests.")
 @files_folders_option
 @pass_args
 @pass_plugin_app_context
-def test_integration(
+def run_pytest_integration(
     app_context: AppContext[CorePluginConfig], passed_args: Tuple[str, ...], files_folders: Tuple[str, ...]
 ):
     # TODO(Radek): Replace with alias?
     _delete_coverage_dat_files(app_context.plugin_config.reports_directory, app_context.plugin_config.test_types)
-    _run_tests(app_context, passed_args, files_folders, "integration")
+    _run_pytest(app_context, passed_args, files_folders, "integration")
 
 
 def _get_total_coverage(coverage_dat: Path) -> str:
@@ -145,9 +147,9 @@ def _combined_coverage_reports(reports_directory: Path, test_types: List[str]) -
     return coverage_dat_combined
 
 
-@click.command()
+@click.command("coverage-report")
 @pass_plugin_app_context
-def coverage_report(app_context: AppContext[CorePluginConfig], **kwargs):
+def run_coverage_report(app_context: AppContext[CorePluginConfig], **kwargs):
     """Analyse coverage and generate a term/HTML report.
 
     Combines all test types.
@@ -173,42 +175,55 @@ def coverage_report(app_context: AppContext[CorePluginConfig], **kwargs):
     print(
         f"Refer to coverage report for full analysis in '{coverage_html}/index.html'\n"
         f"Or open the report in your default browser with:\n"
-        f"  {run_command_example(coverage_open, app_context)}"
+        f"  {run_command_example(run_coverage_open, app_context)}"
     )
 
 
-@click.command(help="Run all tests.")
+@click.command("pytest")
 @files_folders_option
 @pass_plugin_app_context
 @pass_args
-def test(app_context: AppContext[CorePluginConfig], passed_args: Tuple[str, ...], files_folders: Tuple[str, ...]):
+def run_pytest(app_context: AppContext[CorePluginConfig], passed_args: Tuple[str, ...], files_folders: Tuple[str, ...]):
+    """Runs pytest for individual test suites.
+
+    Configration in the `pyproject.toml` file under `tool.delfino.plugins.delfino-core`:
+
+      - `tests_directory`: the location of your tests.
+
+      - `test_types`: the types of tests you have. This needs to match folders
+    nested under the `tests_directory`.
+
+      - `reports_directory`: test coverage information is gathered and stored here.
+    """
     _delete_coverage_dat_files(app_context.plugin_config.reports_directory, app_context.plugin_config.test_types)
     for name in [""] if files_folders else app_context.plugin_config.test_types:
-        _run_tests(app_context, passed_args, files_folders, name)
+        _run_pytest(app_context, passed_args, files_folders, name)
 
 
-@click.command(help="Run all tests, and generate coverage report.")
+@click.command("test", help=commands_group_help("test"))
 @files_folders_option
 @pass_plugin_app_context
-@pass_args
 @click.pass_context
-def test_all(click_context: click.Context, **kwargs):
-    del kwargs  # passed to `test`
-    click_context.forward(test)
-    click_context.forward(coverage_report)
+def run_group_test(
+    click_context: click.Context,
+    app_context: AppContext[CorePluginConfig],
+    files_folders: Tuple[Path, ...],
+):
+    execute_commands_group(click_context, app_context.plugin_config, files_folders=files_folders)
 
 
-@click.command(help="Open coverage results in default browser.")
+@click.command("coverage-open")
 @pass_plugin_app_context
-def coverage_open(app_context: AppContext[CorePluginConfig]):
+def run_coverage_open(app_context: AppContext[CorePluginConfig]):
+    """Open coverage results in default browser."""
     report_index = app_context.plugin_config.reports_directory / "coverage-report" / "index.html"
     if not report_index.exists():
         click.secho(
             f"Could not find coverage report '{report_index}'. Ensure that the report has been built.\n"
             "Try one of the following:\n"
-            f"  {run_command_example(coverage_report, app_context)}\n"
+            f"  {run_command_example(run_coverage_report, app_context)}\n"
             f"or\n"
-            f"  {run_command_example(test_all, app_context)}",
+            f"  {run_command_example(run_group_test, app_context)}",
             fg="red",
         )
 
