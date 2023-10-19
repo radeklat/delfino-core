@@ -1,6 +1,6 @@
 [tool.poetry]
 name="delfino-core"
-version="7.0.0"
+version="7.1.0"
 authors = ["Radek Lát <radek.lat@gmail.com>"]
 description="Delfino core plugin"
 license = "MIT License"
@@ -25,7 +25,7 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = "^3.8.1"
-delfino = ">=3.0.0"
+delfino = ">=3.0.2"
 
 black = {version = "*", optional = true}
 isort = {version = "*", optional = true}
@@ -42,6 +42,7 @@ gitpython = {version = "*", optional = true}
 shellingham = {version = "*", optional = true}
 psutil = {version = "*", optional = true}
 PyYAML = {version = "*", optional = true}
+ruff = {version = "*", optional = true}
 
 # https://python-poetry.org/docs/pyproject/#plugins
 [tool.poetry.plugins]
@@ -69,14 +70,15 @@ types-psutil = "^5.9"
 gitpython = "^3.1"
 pyupgrade = "^3.7"
 types-pyyaml = "^6.0.12.12"
+ruff = "^0.0.292"
 
 [tool.poetry.extras]
-all = ["black", "isort", "pyupgrade", "pre-commit", "pytest", "coverage", "pytest-cov", "mypy", "pylint", "pycodestyle", "pydocstyle", "psutil", "gitpython", "PyYAML"]
+all = ["black", "isort", "pyupgrade", "pre-commit", "pytest", "coverage", "pytest-cov", "mypy", "pylint", "pycodestyle", "pydocstyle", "psutil", "gitpython", "PyYAML", "ruff"]
 verify = ["black", "isort", "pyupgrade", "pre-commit", "pytest", "coverage", "pytest-cov", "mypy", "pylint", "pycodestyle", "pydocstyle", "psutil"]
 format = ["black", "isort", "pyupgrade", "pre-commit"]
 test = ["pytest", "coverage", "pytest-cov"]
 mypy = ["mypy"]
-lint = ["pylint", "pycodestyle", "pydocstyle", "psutil"]
+lint = ["pylint", "pycodestyle", "pydocstyle", "psutil", "ruff"]
 dependencies_update = ["gitpython"]
 pre_commit = ["PyYAML"]
 
@@ -149,3 +151,6 @@ add-ignore = [
     "D401",  # "First line should be in imperative mood"
     "D413",  # "Missing blank line after last section"
 ]
+
+[tool.ruff]
+line-length = 120

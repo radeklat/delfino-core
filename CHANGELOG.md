@@ -12,6 +12,20 @@ Types of changes are:
 
 ## [Unreleased]
 
+## [7.1.0] - 2023-10-14
+
+### Features
+
+- New command `ruff`. It has been also added to the `lint` command group.
+- New command `gh` with additional functionality on top of the `gh` CLI tool:
+  - `gh pr create` adds sensible defaults for a single developer per branch to ask for almost no input. It also accepts a title of the PR as free text after the commands, as long as it doesn't start with a `-`.
+  - `gh pr start` is a new command, which is like `gh pr create`, but also creates a new branch with a name matching the PR title, prefixed with current user's username. This branch is based off latest main and pushed to remote with an empty commit.
+  - `gh pr view` default to opening the PR in a web browser.
+
+### Fixes
+
+- Asking questions in `dependencies-updates` now correctly defaults to "Yes" if no answer provided.
+
 ## [7.0.0] - 2023-10-14
 
 This version renames several commands and command groups to be more consistent and predictable. The intention is to name commands using the same name as the underlying tool. Several commands were also turned into command groups of individual commands, to allow more flexibility in configuration.
@@ -373,7 +387,8 @@ If `tool.delfino.plugins.delfino-core.dockerhub` exists in the `pyproject.toml`:
 
 - Initial source code
 
-[Unreleased]: https://github.com/radeklat/delfino-core/compare/7.0.0...HEAD
+[Unreleased]: https://github.com/radeklat/delfino-core/compare/7.1.0...HEAD
+[7.1.0]: https://github.com/radeklat/delfino-core/compare/7.0.0...7.1.0
 [7.0.0]: https://github.com/radeklat/delfino-core/compare/6.0.0...7.0.0
 [6.1.0]: https://github.com/radeklat/delfino-core/compare/6.0.0...6.1.0
 [6.0.0]: https://github.com/radeklat/delfino-core/compare/5.2.2...6.0.0

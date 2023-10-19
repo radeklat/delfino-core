@@ -29,7 +29,7 @@ def _run(args: str) -> subprocess.CompletedProcess:
 
 
 def ask(question: str) -> bool:
-    return bool(input(f"\033[1;33m{question} [Y/n]: \033[0m").lower() == "y")
+    return not bool(input(f"\033[1;33m{question} [Y/n]: \033[0m").lower() == "n")
 
 
 class Updater:

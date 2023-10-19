@@ -17,7 +17,7 @@ class CorePluginConfig(PluginConfig):
     reports_directory: Path = Path("reports")
     test_types: List[str] = ["unit", "integration"]
     verify_commands: Tuple[str, ...] = ("format", "lint", "mypy", "test")
-    lint_commands: Tuple[str, ...] = ("pylint", "pycodestyle", "pydocstyle")
+    lint_commands: Tuple[str, ...] = ("ruff", "pylint", "pycodestyle", "pydocstyle")
     format_commands: Tuple[str, ...] = ("ensure-pre-commit", "pyupgrade", "isort", "black")
     test_commands: Tuple[str, ...] = ("pytest", "coverage-report")
     disable_pre_commit: bool = False
