@@ -79,3 +79,7 @@ def assert_executable_installed(name: str, *flags: str, required_by: str = "this
     assert executable_installed(
         name, *flags
     ), f"Optional executable '{name}' is required by {required_by} but not installed."
+
+
+def ask(question: str) -> bool:
+    return not bool(input(f"\033[1;33m{question} [Y/n]: \033[0m").lower() == "n")

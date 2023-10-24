@@ -7,8 +7,7 @@ import click
 from delfino.decorators import pass_args
 from delfino.execution import OnError, run
 
-from delfino_core.commands.dependencies_update import ask
-from delfino_core.utils import assert_executable_installed
+from delfino_core.utils import ask, assert_executable_installed
 
 _LOGGER = logging.getLogger(__name__)
 _INVALID_BRANCH_NAME_CHARS = re.compile(r"[^a-zA-Z0-9_-]+")

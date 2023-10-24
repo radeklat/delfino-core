@@ -1,9 +1,10 @@
+from __future__ import annotations
+
 import os
 import re
-import subprocess
 import webbrowser
 from datetime import datetime, timedelta
-from typing import Optional
+from subprocess import PIPE, CompletedProcess
 
 import click
 from click import secho
@@ -16,6 +17,8 @@ from delfino.validation import assert_package_manager_is_known, assert_pip_packa
 
 from delfino_core.commands.verify import run_group_verify
 from delfino_core.config import CorePluginConfig
+from delfino_core.spinner import Spinner
+from delfino_core.utils import ask
 
 try:
     from git import Repo
@@ -23,13 +26,14 @@ except ImportError:
     pass
 
 
-def _run(args: str) -> subprocess.CompletedProcess:
+def _run(args: str, spinner: Spinner | None = None) -> CompletedProcess:
     """Print the command before execution."""
-    return run(args, on_error=OnError.EXIT, capture_output=True)
+    if spinner is None:
+        return run(args, on_error=OnError.EXIT, capture_output=True)
 
-
-def ask(question: str) -> bool:
-    return not bool(input(f"\033[1;33m{question} [Y/n]: \033[0m").lower() == "n")
+    result = run(args, on_error=OnError.PASS, running_hook=spinner, stdout=PIPE, stderr=PIPE)
+    spinner.print_results(result, error_cls=click.exceptions.Exit)
+    return result
 
 
 class Updater:
@@ -77,7 +81,7 @@ class Updater:
                 else:
                     secho(f"\nOpen a new pull request by visiting:\n\n\t{url}\n", fg="green")
 
-    def _link_to_open_a_pull_request(self) -> Optional[str]:
+    def _link_to_open_a_pull_request(self) -> str | None:
         url = self._repo.remote().url
 
         if not (match := re.match("git@github.com:(.*)\\.git", url)):
@@ -170,11 +174,11 @@ class PipenvUpdater(Updater):
         _run("pipenv sync -d")
 
     def print_outdated_packages_and_lock_if_changed(self) -> bool:
-        secho("Updating packages based on version pinning. This will take a while ...", fg="yellow")
-        _run("pipenv update -d")
+        spinner = Spinner("pipenv", "updating packages based on version pinning")
+        _run("pipenv update -d", spinner)
 
-        secho("Checking outdated packages. This will take a while ...", fg="yellow")
-        result = _run("pipenv update --outdated")
+        spinner = Spinner("pipenv", "checking outdated packages")
+        result = _run("pipenv update --outdated", spinner)
 
         pipfile = self._read_dependency_file()
 
@@ -204,12 +208,11 @@ class PoetryUpdater(Updater):
     _FILENAME = "pyproject.toml"
 
     def print_outdated_packages_and_lock_if_changed(self) -> bool:
-        secho("Updating packages based on version pinning. This will take a while ...", fg="yellow")
-        _run("poetry update")
+        spinner = Spinner("poetry", "updating packages based on version pinning")
+        _run("poetry update", spinner)
 
-        secho("Checking outdated packages. This will take a while ...", fg="yellow")
-
-        if not (result := _run("poetry show --outdated --why --ansi")).stdout:
+        spinner = Spinner("poetry", "checking outdated packages")
+        if not (result := _run("poetry show --outdated --why --ansi", spinner)).stdout:
             return False
 
         pyproject_toml = self._read_dependency_file()

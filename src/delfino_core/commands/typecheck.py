@@ -2,17 +2,18 @@
 
 from itertools import groupby
 from pathlib import Path
+from subprocess import PIPE
 from typing import List, Tuple
 
 import click
 from delfino.decorators import files_folders_option, pass_args
 from delfino.execution import OnError, run
 from delfino.models import AppContext
-from delfino.terminal_output import print_header
 from delfino.utils import ArgsList
 from delfino.validation import assert_pip_package_installed
 
 from delfino_core.config import CorePluginConfig, pass_plugin_app_context
+from delfino_core.spinner import Spinner
 from delfino_core.utils import ensure_reports_dir
 
 
@@ -22,9 +23,10 @@ def _run_typecheck(
     reports_file: Path,
     summary_only: bool,
     mypypath: Path,
-    print_second_level_headers: bool,
     passed_args: Tuple[str, ...],
 ):
+    spinner = Spinner("mypy", f"checking {'strict' if strict else 'optional'} types")
+
     args: ArgsList = [
         "mypy",
         "--show-column-numbers",
@@ -49,14 +51,15 @@ def _run_typecheck(
     if summary_only:
         args.extend(["|", "tail", "-n", "1"])
 
-    if print_second_level_headers:
-        print_header(
-            f"{'Strict' if strict else 'Optional'} types",
-            level=2,
-            icon="⚠️" if strict else "ℹ️",
-        )
-
-    run(args, env_update_path={"MYPYPATH": mypypath}, on_error=OnError.ABORT)
+    results = run(
+        args,
+        env_update_path={"MYPYPATH": mypypath},
+        on_error=OnError.PASS,
+        running_hook=spinner,
+        stdout=PIPE,
+        stderr=PIPE,
+    )
+    spinner.print_results(results)
 
 
 def is_path_relative_to_paths(path: Path, paths: List[Path]) -> bool:
@@ -90,8 +93,6 @@ def run_mypy(
     """
     assert_pip_package_installed("mypy")
 
-    print_header("RUNNING TYPE CHECKER", icon="🔠")
-
     plugin_config = app_context.plugin_config
     ensure_reports_dir(plugin_config)
 
@@ -119,6 +120,5 @@ def run_mypy(
             report_filepath,
             summary_only,
             plugin_config.sources_directory,
-            bool(strict_paths),
             passed_args,
         )
