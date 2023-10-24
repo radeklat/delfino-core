@@ -37,7 +37,7 @@ def run_pydocstyle(
     """
     assert_pip_package_installed("pydocstyle")
 
-    print_header("documentation style", level=2)
+    print_header("documentation style")
     dirs = build_target_paths(app_context, files_folders, False, False)
 
     run(
@@ -46,6 +46,21 @@ def run_pydocstyle(
         on_error=OnError.ABORT,
         env_update_path={"PYTHONPATH": app_context.plugin_config.sources_directory},
     )
+
+    print_no_issues_found()
+
+
+@click.command("ruff")
+@pass_args
+@files_folders_option
+@pass_plugin_app_context
+def run_ruff(app_context: AppContext[CorePluginConfig], passed_args: Tuple[str, ...], files_folders: Tuple[str]):
+    """Run ruff."""
+    assert_pip_package_installed("ruff")
+
+    print_header("Ruff")
+    dirs = build_target_paths(app_context, files_folders)
+    run(["ruff", *passed_args, *dirs], stdout=PIPE, on_error=OnError.ABORT)
 
     print_no_issues_found()
 
@@ -68,7 +83,7 @@ def run_pycodestyle(
     """
     assert_pip_package_installed("pycodestyle")
 
-    print_header("code style (PEP8)", level=2)
+    print_header("code style (PEP8)")
 
     dirs = build_target_paths(app_context, files_folders)
 
@@ -158,7 +173,7 @@ def run_pylint(
     """
     assert_pip_package_installed("pylint")
 
-    print_header("pylint", level=2)
+    print_header("pylint")
     plugin_config = app_context.plugin_config
 
     def get_pylintrc_folder(path: Path) -> Path:
@@ -170,7 +185,7 @@ def run_pylint(
     grouped_paths = groupby(target_paths, get_pylintrc_folder)
     for pylintrc_folder, paths in grouped_paths:
         checked_dirs = list(paths)
-        print_header(", ".join(map(str, checked_dirs)), level=3)
+        print_header(", ".join(map(str, checked_dirs)), level=2)
 
         run(
             [

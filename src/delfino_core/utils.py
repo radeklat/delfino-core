@@ -1,5 +1,6 @@
 from collections import ChainMap
 from logging import getLogger
+from subprocess import PIPE, run
 from typing import Dict, cast
 
 import click
@@ -60,3 +61,21 @@ def execute_commands_group(click_context: click.Context, plugin_config: CorePlug
         )
 
         click_context.forward(command, **kwargs, **parameter_from_config)
+
+
+def executable_installed(name: str, *flags: str) -> bool:
+    """Returns True if the executable is installed."""
+    if not flags:
+        flags = ("--version",)
+
+    try:
+        run([name, *flags], stdout=PIPE, check=True)
+    except FileNotFoundError:
+        return False
+    return True
+
+
+def assert_executable_installed(name: str, *flags: str, required_by: str = "this command") -> None:
+    assert executable_installed(
+        name, *flags
+    ), f"Optional executable '{name}' is required by {required_by} but not installed."
