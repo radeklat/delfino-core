@@ -11,11 +11,11 @@ import click
 from delfino.decorators import files_folders_option, pass_args
 from delfino.execution import OnError, run
 from delfino.models import AppContext
-from delfino.terminal_output import print_header, print_no_issues_found
 from delfino.validation import assert_pip_package_installed, pip_package_installed
 
 from delfino_core.backports import path_is_relative_to
 from delfino_core.config import CorePluginConfig, pass_plugin_app_context
+from delfino_core.spinner import Spinner
 from delfino_core.utils import commands_group_help, execute_commands_group
 
 
@@ -37,17 +37,19 @@ def run_pydocstyle(
     """
     assert_pip_package_installed("pydocstyle")
 
-    print_header("documentation style")
+    spinner = Spinner("pydocstyle", "checking documentation style")
     dirs = build_target_paths(app_context, files_folders, False, False)
 
-    run(
+    results = run(
         ["pydocstyle", *passed_args, *dirs],
-        stdout=PIPE,
-        on_error=OnError.ABORT,
+        on_error=OnError.PASS,
         env_update_path={"PYTHONPATH": app_context.plugin_config.sources_directory},
+        stdout=PIPE,
+        stderr=PIPE,
+        running_hook=spinner,
     )
 
-    print_no_issues_found()
+    spinner.print_results(results)
 
 
 @click.command("ruff")
@@ -58,11 +60,10 @@ def run_ruff(app_context: AppContext[CorePluginConfig], passed_args: Tuple[str, 
     """Run ruff."""
     assert_pip_package_installed("ruff")
 
-    print_header("Ruff")
     dirs = build_target_paths(app_context, files_folders)
-    run(["ruff", *passed_args, *dirs], stdout=PIPE, on_error=OnError.ABORT)
-
-    print_no_issues_found()
+    spinner = Spinner("ruff", "checking code")
+    results = run(["ruff", *passed_args, *dirs], stdout=PIPE, stderr=PIPE, on_error=OnError.PASS, running_hook=spinner)
+    spinner.print_results(results)
 
 
 @click.command("pycodestyle")
@@ -83,8 +84,6 @@ def run_pycodestyle(
     """
     assert_pip_package_installed("pycodestyle")
 
-    print_header("code style (PEP8)")
-
     dirs = build_target_paths(app_context, files_folders)
 
     # TODO(Radek): Implement unofficial config support in pyproject.toml by parsing it
@@ -96,24 +95,26 @@ def run_pycodestyle(
         "pycodestyle",
         "--ignore",
         "E501,W503,E231,E203,E402",
+        # Ignores explained:
+        # - E501: Line length is checked by PyLint
+        # - W503: Disable checking of "Line break before binary operator". PEP8 recently (~2019) switched to
+        #         "line break before the operator" style, so we should permit this usage.
+        # - E231: "missing whitespace after ','" is a false positive. Handled by black formatter.
         "--exclude",
         ".svn,CVS,.bzr,.hg,.git,__pycache__,.tox,*_config_parser.py",
         *passed_args,
         *dirs,
     ]
-    run(
+    spinner = Spinner("pycodestyle", "checking code style")
+    result = run(
         args,
         stdout=PIPE,
-        on_error=OnError.ABORT,
+        stderr=PIPE,
+        on_error=OnError.PASS,
         env_update_path={"PYTHONPATH": app_context.plugin_config.sources_directory},
+        running_hook=spinner,
     )
-    # Ignores explained:
-    # - E501: Line length is checked by PyLint
-    # - W503: Disable checking of "Line break before binary operator". PEP8 recently (~2019) switched to
-    #         "line break before the operator" style, so we should permit this usage.
-    # - E231: "missing whitespace after ','" is a false positive. Handled by black formatter.
-
-    print_no_issues_found()
+    spinner.print_results(result)
 
 
 @lru_cache(maxsize=1)
@@ -173,7 +174,6 @@ def run_pylint(
     """
     assert_pip_package_installed("pylint")
 
-    print_header("pylint")
     plugin_config = app_context.plugin_config
 
     def get_pylintrc_folder(path: Path) -> Path:
@@ -185,9 +185,8 @@ def run_pylint(
     grouped_paths = groupby(target_paths, get_pylintrc_folder)
     for pylintrc_folder, paths in grouped_paths:
         checked_dirs = list(paths)
-        print_header(", ".join(map(str, checked_dirs)), level=2)
-
-        run(
+        spinner = Spinner("pylint", f"checking '{', '.join(map(str, checked_dirs))}'")
+        results = run(
             [
                 "pylint",
                 "-j",
@@ -198,11 +197,12 @@ def run_pylint(
                 *checked_dirs,
             ],
             stdout=PIPE,
-            on_error=OnError.ABORT,
+            stderr=PIPE,
+            on_error=OnError.PASS,  # spinner aborts on error
             env_update_path={"PYTHONPATH": app_context.plugin_config.sources_directory},
+            running_hook=spinner,
         )
-
-        print_no_issues_found()
+        spinner.print_results(results)
 
 
 @click.command("lint", help=commands_group_help("lint"))

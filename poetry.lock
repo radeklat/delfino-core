@@ -1079,4 +1079,4 @@ verify = ["black", "coverage", "isort", "mypy", "pre-commit", "psutil", "pycodes
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8.1"
-content-hash = "c3382c79e94baae3c7fb73b07377cedd4654637bb4b0300da6ebe4486475990c"
+content-hash = "fdb25490b355da91fbb3c239f8b99bb4f2d377cc1ae803e6136955ed26e4c96b"

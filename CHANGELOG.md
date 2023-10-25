@@ -12,6 +12,12 @@ Types of changes are:
 
 ## [Unreleased]
 
+## [7.2.0] - 2023-10-24
+
+### Features
+
+- Replace heading and wait messages in output of the `verify` and `dependencies-update` commands with spinners.
+
 ## [7.1.0] - 2023-10-14
 
 ### Features
@@ -387,7 +393,8 @@ If `tool.delfino.plugins.delfino-core.dockerhub` exists in the `pyproject.toml`:
 
 - Initial source code
 
-[Unreleased]: https://github.com/radeklat/delfino-core/compare/7.1.0...HEAD
+[Unreleased]: https://github.com/radeklat/delfino-core/compare/7.2.0...HEAD
+[7.2.0]: https://github.com/radeklat/delfino-core/compare/7.1.0...7.2.0
 [7.1.0]: https://github.com/radeklat/delfino-core/compare/7.0.0...7.1.0
 [7.0.0]: https://github.com/radeklat/delfino-core/compare/6.0.0...7.0.0
 [6.1.0]: https://github.com/radeklat/delfino-core/compare/6.0.0...6.1.0

@@ -6,41 +6,13 @@ import click
 from delfino.decorators import files_folders_option, pass_args
 from delfino.execution import OnError, run
 from delfino.models import AppContext
-from delfino.terminal_output import print_header, run_command_example
+from delfino.terminal_output import run_command_example
 from delfino.validation import assert_pip_package_installed
 from packaging.specifiers import SpecifierSet
 
 from delfino_core.config import CorePluginConfig, pass_plugin_app_context
+from delfino_core.spinner import Spinner
 from delfino_core.utils import commands_group_help, execute_commands_group
-
-
-def _check_result(
-    app_context: AppContext[CorePluginConfig],
-    result: CompletedProcess,
-    check: bool,
-    msg: str,
-):
-    if result.returncode == 1 and check:
-        msg_lines = [
-            f"{msg} before commit. Try following:",
-            f" * Run formatter manually with `{run_command_example(run_group_format, app_context)}` "
-            f"before committing code.",
-        ]
-        if not app_context.plugin_config.disable_pre_commit:
-            msg_lines.insert(
-                1,
-                " * Enable pre-commit hook by running `pre-commit install` in the repository.",
-            )
-
-        click.secho(
-            "\n".join(msg_lines),
-            fg="red",
-            err=True,
-        )
-        raise click.Abort()
-
-    if result.returncode > 1:
-        raise click.Abort()
 
 
 def _major_minor_only(version_number: str) -> str:
@@ -83,6 +55,53 @@ def _default_files_folders(app_context: AppContext[CorePluginConfig]) -> Tuple[P
     )
 
 
+class FormatSpinner(Spinner):
+    def print_results_with_help(
+        self,
+        result: CompletedProcess,
+        app_context: AppContext[CorePluginConfig],
+        check: bool,
+        msg: str,
+        error_msg_match: str = "",
+    ):
+        """Prints the result of a command run.
+
+        The command must be run with `stdout=PIPE` and `stderr=PIPE` to capture the output
+        and show it after the command has finished.
+
+        Args:
+            result: The result of the command.
+            error_msg_match: A string to match against the stdout and stderr. If any of the
+                streams contains this string, the command is considered to have failed.
+            app_context: The app context.
+            check: Whether the command was run in check mode.
+            msg: The message to show if the command failed.
+        """
+        if result.returncode > 0 or (
+            error_msg_match and (error_msg_match in result.stdout.decode() or error_msg_match in result.stderr.decode())
+        ):
+            if check:  # if checking, hard fail
+                msg_lines = [
+                    f"{msg} before commit. Try following:",
+                    f" * Run formatter manually with `{run_command_example(run_group_format, app_context)}` "
+                    f"before committing code.",
+                ]
+                if not app_context.plugin_config.disable_pre_commit:
+                    msg_lines.insert(
+                        1,
+                        " * Enable pre-commit hook by running `pre-commit install` in the repository.",
+                    )
+
+                self._print_failure(result)
+                raise click.Abort()
+
+            # if not checking, just print the error and continue
+            self._print_failure(result)
+            return
+
+        self._print_success()
+
+
 @click.command("pyupgrade")
 @files_folders_option
 @pass_args
@@ -105,23 +124,21 @@ def run_pyupgrade(
     min_python_version = _find_min_minor_version(python_version, 3, 6, 11)
     args.append(f"--py3{min_python_version}-plus")
 
-    print_header(
-        f"Upgrading code to Python 3{'.' + min_python_version if min_python_version else ''}",
-        icon="⬆️",
+    spinner = FormatSpinner(
+        "pyupgrade", f"upgrading code to Python 3{'.' + min_python_version if min_python_version else ''}"
     )
-
-    _check_result(
+    results = run(
+        ["pyupgrade", *_all_python_files(files_folders or _default_files_folders(app_context)), *args],
+        stdout=PIPE,
+        stderr=PIPE,
+        on_error=OnError.PASS,
+        running_hook=spinner,
+    )
+    spinner.print_results_with_help(
+        results,
         app_context,
-        run(
-            [
-                "pyupgrade",
-                *_all_python_files(files_folders or _default_files_folders(app_context)),
-                *args,
-            ],
-            on_error=OnError.PASS,
-        ),
         bool("--exit-zero-even-if-changed" in args),
-        "Code was not formatted",
+        f"Code was not upgraded to Python 3{'.' + min_python_version if min_python_version else ''}",
     )
 
 
@@ -136,26 +153,24 @@ def run_black(
     assert_pip_package_installed("black")
     args = list(passed_args)
 
-    print_header("Formatting code", icon="🖤")
-
     if kwargs.get("check", False):
         args.append("--check")
 
     if kwargs.get("quiet", False):
         args.append("--quiet")
 
-    _check_result(
-        app_context,
-        run(
-            [
-                "black",
-                *args,
-                *(files_folders or _default_files_folders(app_context)),
-            ],
-            on_error=OnError.PASS,
-        ),
-        bool("--check" in args),
-        "Code was not formatted",
+    spinner = FormatSpinner("black", "formatting code")
+
+    results = run(
+        ["black", *args, *(files_folders or _default_files_folders(app_context))],
+        stdout=PIPE,
+        stderr=PIPE,
+        on_error=OnError.PASS,
+        running_hook=spinner,
+    )
+
+    spinner.print_results_with_help(
+        results, app_context, bool("--check" in args), "Code was not formatted", "reformatted "
     )
 
 
@@ -170,27 +185,22 @@ def run_isort(
     assert_pip_package_installed("isort")
     args = list(passed_args)
 
-    print_header("Sorting imports", icon="ℹ")
-
     if kwargs.get("check", False):
         args.append("--check")
 
     if kwargs.get("quiet", False):
         args.append("--quiet")
 
-    _check_result(
-        app_context,
-        run(
-            [
-                "isort",
-                *args,
-                *(files_folders or _default_files_folders(app_context)),
-            ],
-            on_error=OnError.PASS,
-        ),
-        bool("--check" in args),
-        "Imports were not sorted",
+    spinner = FormatSpinner("isort", "sorting imports")
+    results = run(
+        ["isort", *args, *(files_folders or _default_files_folders(app_context))],
+        stdout=PIPE,
+        stderr=PIPE,
+        on_error=OnError.PASS,
+        running_hook=spinner,
     )
+
+    spinner.print_results_with_help(results, app_context, bool("--check" in args), "Imports were not sorted")
 
 
 @click.command("ensure-pre-commit")
