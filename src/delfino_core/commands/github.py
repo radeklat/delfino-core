@@ -20,6 +20,10 @@ def _consume_args_until_next_option(passed_args: List[str]) -> Tuple[str, List[s
     return " ".join(passed_args), []
 
 
+def _sanitize_branch_name(branch_name: str) -> str:
+    return _INVALID_BRANCH_NAME_CHARS.sub("_", branch_name.lower()).rstrip("_")
+
+
 def _get_sanitized_used_name() -> str:
     # Get the current username from git config
     username = run(["git", "config", "user.email"], stdout=PIPE, on_error=OnError.ABORT).stdout.decode().strip()
@@ -32,12 +36,12 @@ def _get_sanitized_used_name() -> str:
         username = username.split("@")[0]
 
     # Sanitize the username
-    return _INVALID_BRANCH_NAME_CHARS.sub("_", username.lower())
+    return _sanitize_branch_name(username)
 
 
 def _get_new_branch_name_or_switch_to_branch(title: str) -> Tuple[str, bool]:
     branch_prefix = f"{_get_sanitized_used_name()}/"
-    branch_name = branch_prefix + _INVALID_BRANCH_NAME_CHARS.sub("_", title.lower())
+    branch_name = branch_prefix + _sanitize_branch_name(title)
 
     # Check if not already on the branch
     branch_exists = (
@@ -54,7 +58,7 @@ def _get_new_branch_name_or_switch_to_branch(title: str) -> Tuple[str, bool]:
         # Ask user if they want to use the branch name or let them choose a different one
         while not ask(f"Use branch name '{branch_name}'?"):
             new_branch_name = input(f"Enter a branch name: {branch_prefix}")
-            sanitized_new_branch_name = _INVALID_BRANCH_NAME_CHARS.sub("_", new_branch_name.lower())
+            sanitized_new_branch_name = _sanitize_branch_name(new_branch_name)
             if sanitized_new_branch_name == new_branch_name:  # not sanitized, use it
                 branch_name = branch_prefix + new_branch_name
                 break
