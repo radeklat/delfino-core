@@ -12,13 +12,17 @@ Types of changes are:
 
 ## [Unreleased]
 
+## [7.2.2] - 2023-10-31
+
+### Fixes
+
+- A crash in `dependencies-update` introduced by update of `delfino`.
+
 ## [7.2.1] - 2023-10-31
 
 ### Fixes
 
-- `dependencies-update`:
-  - Strips final underscore from the branch name.
-  - Fixed a crash introduced in update of `delfino`.
+- `dependencies-update` strips final underscore from the branch name.
 
 ## [7.2.0] - 2023-10-24
 
@@ -401,7 +405,8 @@ If `tool.delfino.plugins.delfino-core.dockerhub` exists in the `pyproject.toml`:
 
 - Initial source code
 
-[Unreleased]: https://github.com/radeklat/delfino-core/compare/7.2.1...HEAD
+[Unreleased]: https://github.com/radeklat/delfino-core/compare/7.2.2...HEAD
+[7.2.2]: https://github.com/radeklat/delfino-core/compare/7.2.1...7.2.2
 [7.2.1]: https://github.com/radeklat/delfino-core/compare/7.2.0...7.2.1
 [7.2.0]: https://github.com/radeklat/delfino-core/compare/7.1.0...7.2.0
 [7.1.0]: https://github.com/radeklat/delfino-core/compare/7.0.0...7.1.0
