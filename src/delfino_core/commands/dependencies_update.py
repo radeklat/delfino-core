@@ -29,7 +29,7 @@ except ImportError:
 def _run(args: str, spinner: Spinner | None = None) -> CompletedProcess:
     """Print the command before execution."""
     if spinner is None:
-        return run(args, on_error=OnError.EXIT, stdin=PIPE, stderr=PIPE)
+        return run(args, on_error=OnError.EXIT, stdout=PIPE, stderr=PIPE)
 
     result = run(args, on_error=OnError.PASS, running_hook=spinner, stdout=PIPE, stderr=PIPE)
     spinner.print_results(result, error_cls=click.exceptions.Exit)
@@ -42,7 +42,7 @@ class Updater:
     @staticmethod
     def _git_root():
         return (
-            run(["git", "rev-parse", "--show-toplevel"], stdin=PIPE, stderr=PIPE, on_error=OnError.EXIT)
+            run(["git", "rev-parse", "--show-toplevel"], stdout=PIPE, stderr=PIPE, on_error=OnError.EXIT)
             .stdout.decode()
             .strip()
         )
