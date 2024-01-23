@@ -12,6 +12,12 @@ Types of changes are:
 
 ## [Unreleased]
 
+## [7.2.3] - 2024-01-23
+
+### Fixes
+
+- Missing `ruff` as an optional dependency in the `verify` group.
+
 ## [7.2.2] - 2023-10-31
 
 ### Fixes
@@ -405,7 +411,8 @@ If `tool.delfino.plugins.delfino-core.dockerhub` exists in the `pyproject.toml`:
 
 - Initial source code
 
-[Unreleased]: https://github.com/radeklat/delfino-core/compare/7.2.2...HEAD
+[Unreleased]: https://github.com/radeklat/delfino-core/compare/7.2.3...HEAD
+[7.2.3]: https://github.com/radeklat/delfino-core/compare/7.2.2...7.2.3
 [7.2.2]: https://github.com/radeklat/delfino-core/compare/7.2.1...7.2.2
 [7.2.1]: https://github.com/radeklat/delfino-core/compare/7.2.0...7.2.1
 [7.2.0]: https://github.com/radeklat/delfino-core/compare/7.1.0...7.2.0
