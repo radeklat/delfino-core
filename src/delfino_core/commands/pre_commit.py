@@ -2,11 +2,16 @@ from pathlib import Path
 from typing import Dict, List, Optional, Set, Tuple
 
 import click
-import yaml
 from click import Abort
 from delfino.decorators import files_folders_option, pass_args
 from delfino.execution import OnError, run
 from delfino.terminal_output import print_header
+from delfino.validation import assert_pip_package_installed
+
+try:
+    import yaml
+except ImportError:
+    pass
 
 
 def _selected_stages_and_hook(passed_args: List[str]) -> Tuple[List[str], Optional[str]]:
@@ -51,6 +56,8 @@ def run_pre_commit(stage_all_files: bool, files_folders: List[Path], passed_args
     To run a single hook, add the name of the hook at the end, as if you were running
     `pre-commit run <HOOK NAME>`.
     """
+    assert_pip_package_installed("PyYAML")
+
     if stage_all_files:
         run(["git", "add", "."], on_error=OnError.PASS)
 

@@ -4,6 +4,9 @@
     <option name="sdkName" value="Python 3.11 (delfino-core)" />
   </component>
   <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.11 (delfino-core)" project-jdk-type="Python SDK" />
+  <component name="PythonCompatibilityInspectionAdvertiser">
+    <option name="version" value="3" />
+  </component>
   <component name="ThriftCompiler">
     <compilers />
   </component>

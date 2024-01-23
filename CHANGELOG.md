@@ -12,6 +12,12 @@ Types of changes are:
 
 ## [Unreleased]
 
+## [7.2.4] - 2024-01-23
+
+### Fixes
+
+- Do not require `PyYAML` when the `pre-commit` command is not used.
+
 ## [7.2.3] - 2024-01-23
 
 ### Fixes
@@ -411,7 +417,8 @@ If `tool.delfino.plugins.delfino-core.dockerhub` exists in the `pyproject.toml`:
 
 - Initial source code
 
-[Unreleased]: https://github.com/radeklat/delfino-core/compare/7.2.3...HEAD
+[Unreleased]: https://github.com/radeklat/delfino-core/compare/7.2.4...HEAD
+[7.2.4]: https://github.com/radeklat/delfino-core/compare/7.2.3...7.2.4
 [7.2.3]: https://github.com/radeklat/delfino-core/compare/7.2.2...7.2.3
 [7.2.2]: https://github.com/radeklat/delfino-core/compare/7.2.1...7.2.2
 [7.2.1]: https://github.com/radeklat/delfino-core/compare/7.2.0...7.2.1
