@@ -11,7 +11,7 @@
     <a href="https://github.com/radeklat/delfino-core/tags">
         <img alt="GitHub tag (latest SemVer)" src="https://img.shields.io/github/tag/radeklat/delfino-core">
     </a>
-    <img alt="Maintenance" src="https://img.shields.io/maintenance/yes/2023">
+    <img alt="Maintenance" src="https://img.shields.io/maintenance/yes/2024">
     <a href="https://github.com/radeklat/delfino-core/commits/main">
         <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/radeklat/delfino-core">
     </a>

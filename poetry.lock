@@ -1075,9 +1075,9 @@ lint = ["psutil", "pycodestyle", "pydocstyle", "pylint", "ruff"]
 mypy = ["mypy"]
 pre-commit = ["PyYAML"]
 test = ["coverage", "pytest", "pytest-cov"]
-verify = ["black", "coverage", "isort", "mypy", "pre-commit", "psutil", "pycodestyle", "pydocstyle", "pylint", "pytest", "pytest-cov", "pyupgrade"]
+verify = ["black", "coverage", "isort", "mypy", "pre-commit", "psutil", "pycodestyle", "pydocstyle", "pylint", "pytest", "pytest-cov", "pyupgrade", "ruff"]
 
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8.1"
-content-hash = "a77fb6efd25cce995716820974bbf4a44f504d107bbe260518535a3b1556c8db"
+content-hash = "8e65da5a97584a0a9fd825b0ba47f0bb257be3b147fd35230d1f14b499429452"
