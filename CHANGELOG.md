@@ -12,6 +12,19 @@ Types of changes are:
 
 ## [Unreleased]
 
+## [7.3.0] - 2024-06-20
+
+### Features
+
+- New command `glab` that wraps the `glab` CLI tool. Similar to the existing `gh` command, it has the following subcommands:
+  - `glab mr create`
+  - `glab mr start`
+  - `glab mr view`
+- New command `vcs` that auto-selects the correct VCS CLI tool in the current directory based on git remote. Currently, `gh` and `glab` are supported. It has the following subcommands:
+  - `vcs pr/mr create`
+  - `vcs pr/mr start`
+  - `vcs pr/mr view`
+
 ## [7.2.4] - 2024-01-23
 
 ### Fixes
@@ -417,7 +430,8 @@ If `tool.delfino.plugins.delfino-core.dockerhub` exists in the `pyproject.toml`:
 
 - Initial source code
 
-[Unreleased]: https://github.com/radeklat/delfino-core/compare/7.2.4...HEAD
+[Unreleased]: https://github.com/radeklat/delfino-core/compare/7.3.0...HEAD
+[7.3.0]: https://github.com/radeklat/delfino-core/compare/7.2.4...7.3.0
 [7.2.4]: https://github.com/radeklat/delfino-core/compare/7.2.3...7.2.4
 [7.2.3]: https://github.com/radeklat/delfino-core/compare/7.2.2...7.2.3
 [7.2.2]: https://github.com/radeklat/delfino-core/compare/7.2.1...7.2.2

@@ -1,6 +1,6 @@
 [tool.poetry]
 name="delfino-core"
-version="7.2.4"
+version="7.3.0"
 authors = ["Radek Lát <radek.lat@gmail.com>"]
 description="Delfino core plugin"
 license = "MIT License"
@@ -25,7 +25,7 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = "^3.8.1"
-delfino = ">=3.1.0"
+delfino = ">=3.1.2"
 
 black = {version = "*", optional = true}
 isort = {version = "*", optional = true}
