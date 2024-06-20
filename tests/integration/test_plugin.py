@@ -6,7 +6,6 @@ from delfino.models.pyproject_toml import PluginConfig
 
 from delfino_core.commands.dependencies_update import run_dependencies_update
 from delfino_core.commands.format import run_black, run_ensure_pre_commit, run_group_format, run_isort, run_pyupgrade
-from delfino_core.commands.github import run_gh
 from delfino_core.commands.lint import run_group_lint, run_pycodestyle, run_pydocstyle, run_pylint, run_ruff
 from delfino_core.commands.pre_commit import run_pre_commit
 from delfino_core.commands.switch_python_version import run_switch_python_version
@@ -19,6 +18,7 @@ from delfino_core.commands.test import (
     run_pytest_unit,
 )
 from delfino_core.commands.typecheck import run_mypy
+from delfino_core.commands.vcs import run_gh, run_glab, run_vcs
 from delfino_core.commands.verify import run_group_verify
 
 
@@ -69,6 +69,8 @@ class TestPlugin:
             run_ruff,
             run_group_verify,
             run_gh,
+            run_glab,
+            run_vcs,
         ]
         command_registry = CommandRegistry(plugin_config, CommandRegistry._discover_command_packages(plugin_config))
         expected_command_names = {command.name for command in commands}
