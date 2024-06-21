@@ -1,8 +1,10 @@
+from __future__ import annotations
+
 import logging
 import re
 from functools import lru_cache
 from subprocess import PIPE
-from typing import List, Literal, Tuple
+from typing import Literal
 
 from delfino import run
 from delfino.execution import OnError
@@ -23,7 +25,7 @@ _LOGGER = logging.getLogger(__name__)
 _INVALID_BRANCH_NAME_CHARS = re.compile(r"[^a-zA-Z0-9_-]+")
 
 
-def consume_args_until_next_option(passed_args: List[str]) -> Tuple[str, List[str]]:
+def consume_args_until_next_option(passed_args: list[str]) -> tuple[str, list[str]]:
     for index, arg in enumerate(passed_args):
         if arg.startswith("-"):
             return " ".join(passed_args[:index]), passed_args[index:]
@@ -49,8 +51,9 @@ def _get_sanitized_used_name() -> str:
     return _sanitize_branch_name(username)
 
 
-def get_new_branch_name_or_switch_to_branch(title: str) -> Tuple[str, bool]:
-    branch_prefix = f"{_get_sanitized_used_name()}/"
+def get_new_branch_name_or_switch_to_branch(branch_prefix: str | None, title: str) -> tuple[str, bool]:
+    if branch_prefix is None:
+        branch_prefix = f"{_get_sanitized_used_name()}/"
     branch_name = branch_prefix + _sanitize_branch_name(title)
 
     # Check if not already on the branch

@@ -1,6 +1,6 @@
 [tool.poetry]
 name="delfino-core"
-version="7.3.0"
+version="7.4.0"
 authors = ["Radek Lát <radek.lat@gmail.com>"]
 description="Delfino core plugin"
 license = "MIT License"
@@ -154,3 +154,6 @@ add-ignore = [
 
 [tool.ruff]
 line-length = 120
+
+[tool.delfino.plugins.local]
+#branch_prefix = ""
