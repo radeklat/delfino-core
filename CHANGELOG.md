@@ -12,9 +12,15 @@ Types of changes are:
 
 ## [Unreleased]
 
+## [7.4.1] - 2024-06-21
+
+### Fixes
+
+- Allow `/` in branch name for `vcs`/`gh`/`glab` commands.
+
 ## [7.4.0] - 2024-06-21
 
-# Features
+### Features
 
 - New config option to allow specifying the branch name prefix for `vcs` commands. By default, it is set to the git username:
   ```toml
@@ -440,7 +446,8 @@ If `tool.delfino.plugins.delfino-core.dockerhub` exists in the `pyproject.toml`:
 
 - Initial source code
 
-[Unreleased]: https://github.com/radeklat/delfino-core/compare/7.4.0...HEAD
+[Unreleased]: https://github.com/radeklat/delfino-core/compare/7.4.1...HEAD
+[7.4.1]: https://github.com/radeklat/delfino-core/compare/7.4.0...7.4.1
 [7.4.0]: https://github.com/radeklat/delfino-core/compare/7.3.0...7.4.0
 [7.3.0]: https://github.com/radeklat/delfino-core/compare/7.2.4...7.3.0
 [7.2.4]: https://github.com/radeklat/delfino-core/compare/7.2.3...7.2.4

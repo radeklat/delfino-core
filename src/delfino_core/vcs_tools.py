@@ -22,7 +22,7 @@ def get_trunk_branch():
 
 
 _LOGGER = logging.getLogger(__name__)
-_INVALID_BRANCH_NAME_CHARS = re.compile(r"[^a-zA-Z0-9_-]+")
+_INVALID_BRANCH_NAME_CHARS = re.compile(r"[^a-zA-Z0-9_/-]+")
 
 
 def consume_args_until_next_option(passed_args: list[str]) -> tuple[str, list[str]]:
