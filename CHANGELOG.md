@@ -12,6 +12,12 @@ Types of changes are:
 
 ## [Unreleased]
 
+## [7.4.2] - 2024-06-21
+
+### Fixes
+
+- Fix trunk branch hardcoded to `main` in `vcs`/`gh`/`glab` `pr`/`mr` `start` command. 
+
 ## [7.4.1] - 2024-06-21
 
 ### Fixes
@@ -446,7 +452,8 @@ If `tool.delfino.plugins.delfino-core.dockerhub` exists in the `pyproject.toml`:
 
 - Initial source code
 
-[Unreleased]: https://github.com/radeklat/delfino-core/compare/7.4.1...HEAD
+[Unreleased]: https://github.com/radeklat/delfino-core/compare/7.4.2...HEAD
+[7.4.2]: https://github.com/radeklat/delfino-core/compare/7.4.1...7.4.2
 [7.4.1]: https://github.com/radeklat/delfino-core/compare/7.4.0...7.4.1
 [7.4.0]: https://github.com/radeklat/delfino-core/compare/7.3.0...7.4.0
 [7.3.0]: https://github.com/radeklat/delfino-core/compare/7.2.4...7.3.0

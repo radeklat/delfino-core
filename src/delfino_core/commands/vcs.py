@@ -255,7 +255,7 @@ def _run_vcs_start(
 
     if create_branch:
         run(["git", "stash"], on_error=OnError.ABORT)
-        run(["git", "checkout", "main"], on_error=OnError.ABORT)
+        run(["git", "checkout", get_trunk_branch()], on_error=OnError.ABORT)
         run(["git", "pull"], on_error=OnError.ABORT)
         run(["git", "checkout", "-b", branch_name], on_error=OnError.ABORT)
 
