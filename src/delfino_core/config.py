@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import List, Tuple
+from typing import List, Optional, Tuple
 
 from delfino.decorators import pass_app_context
 from delfino.models.pyproject_toml import PluginConfig
@@ -22,6 +22,9 @@ class CorePluginConfig(PluginConfig):
     test_commands: Tuple[str, ...] = ("pytest", "coverage-report")
     disable_pre_commit: bool = False
     typecheck: Typecheck = Field(default_factory=Typecheck)
+    branch_prefix: Optional[str] = Field(
+        None, description="Prefix for branch names. If not set, git username will be used."
+    )
 
 
 pass_plugin_app_context = pass_app_context(plugin_config_type=CorePluginConfig)

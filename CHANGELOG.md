@@ -12,6 +12,16 @@ Types of changes are:
 
 ## [Unreleased]
 
+## [7.4.0] - 2024-06-21
+
+# Features
+
+- New config option to allow specifying the branch name prefix for `vcs` commands. By default, it is set to the git username:
+  ```toml
+  [tool.delfino.plugins.delfino-core]
+  branch_prefix = "your_prefix/"
+  ```
+
 ## [7.3.0] - 2024-06-20
 
 ### Features
@@ -430,7 +440,8 @@ If `tool.delfino.plugins.delfino-core.dockerhub` exists in the `pyproject.toml`:
 
 - Initial source code
 
-[Unreleased]: https://github.com/radeklat/delfino-core/compare/7.3.0...HEAD
+[Unreleased]: https://github.com/radeklat/delfino-core/compare/7.4.0...HEAD
+[7.4.0]: https://github.com/radeklat/delfino-core/compare/7.3.0...7.4.0
 [7.3.0]: https://github.com/radeklat/delfino-core/compare/7.2.4...7.3.0
 [7.2.4]: https://github.com/radeklat/delfino-core/compare/7.2.3...7.2.4
 [7.2.3]: https://github.com/radeklat/delfino-core/compare/7.2.2...7.2.3

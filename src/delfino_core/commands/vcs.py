@@ -7,7 +7,9 @@ import click
 from delfino import run
 from delfino.decorators import pass_args
 from delfino.execution import OnError
+from delfino.models import AppContext
 
+from delfino_core.config import CorePluginConfig, pass_plugin_app_context
 from delfino_core.utils import assert_executable_installed
 from delfino_core.vcs_tools import (
     consume_args_until_next_option,
@@ -73,8 +75,13 @@ def run_gh_pr_create(passed_args: tuple[str, ...]):
 
 @run_gh_pr.command("start")
 @pass_args
+@pass_plugin_app_context
 @click.pass_context
-def run_gh_pr_start(click_context: click.Context, passed_args: tuple[str, ...]):
+def run_gh_pr_start(
+    click_context: click.Context,
+    app_context: AppContext[CorePluginConfig],
+    passed_args: tuple[str, ...],
+):
     """Like `gh pr create`, but with additional functionality.
 
     - Asks for a title if not provided.
@@ -85,7 +92,7 @@ def run_gh_pr_start(click_context: click.Context, passed_args: tuple[str, ...]):
     - Push the branch and the commit to remote.
     - Pops the stash.
     """
-    _run_vcs_start(click_context, passed_args, "gh")
+    _run_vcs_start(app_context, click_context, passed_args, "gh")
 
 
 @run_gh_pr.command("view")
@@ -163,8 +170,13 @@ def run_glab_mr_view(passed_args: tuple[str, ...]):
 
 @run_glab_mr.command("start")
 @pass_args
+@pass_plugin_app_context
 @click.pass_context
-def run_glab_mr_start(click_context: click.Context, passed_args: tuple[str, ...]):
+def run_glab_mr_start(
+    click_context: click.Context,
+    app_context: AppContext[CorePluginConfig],
+    passed_args: tuple[str, ...],
+):
     """Like `glab mr create`, but with additional functionality.
 
     - Asks for a title if not provided.
@@ -175,7 +187,7 @@ def run_glab_mr_start(click_context: click.Context, passed_args: tuple[str, ...]
     - Push the branch and the commit to remote.
     - Pops the stash.
     """
-    _run_vcs_start(click_context, passed_args, "glab")
+    _run_vcs_start(app_context, click_context, passed_args, "glab")
 
 
 @click.group("vcs")
@@ -202,22 +214,35 @@ def run_vcs_pr():
 
 @run_vcs_pr.command("start")
 @pass_args
+@pass_plugin_app_context
 @click.pass_context
-def run_vcs_pr_start(click_context: click.Context, passed_args: tuple[str, ...]):
+def run_vcs_pr_start(
+    click_context: click.Context,
+    app_context: AppContext[CorePluginConfig],
+    passed_args: tuple[str, ...],
+):
     """Alias for `gh pr start`."""
-    _run_vcs_start(click_context, passed_args)
+    _run_vcs_start(app_context, click_context, passed_args)
 
 
 @run_vcs_mr.command("start")
 @pass_args
+@pass_plugin_app_context
 @click.pass_context
-def run_vcs_mr_start(click_context: click.Context, passed_args: tuple[str, ...]):
+def run_vcs_mr_start(
+    click_context: click.Context,
+    app_context: AppContext[CorePluginConfig],
+    passed_args: tuple[str, ...],
+):
     """Alias for `glab mr start`."""
-    _run_vcs_start(click_context, passed_args)
+    _run_vcs_start(app_context, click_context, passed_args)
 
 
 def _run_vcs_start(
-    click_context: click.Context, passed_args: tuple[str, ...], vcs_cli_tool: Literal["gh", "glab"] | None = None
+    app_context: AppContext[CorePluginConfig],
+    click_context: click.Context,
+    passed_args: tuple[str, ...],
+    vcs_cli_tool: Literal["gh", "glab"] | None = None,
 ):
     args = list(passed_args)
     title, args = consume_args_until_next_option(args)
@@ -226,7 +251,7 @@ def _run_vcs_start(
     while not title:
         title = input(f"Enter a title for the {'PR' if vcs_cli_tool == 'gh' else 'MR'}: ")
 
-    branch_name, create_branch = get_new_branch_name_or_switch_to_branch(title)
+    branch_name, create_branch = get_new_branch_name_or_switch_to_branch(app_context.plugin_config.branch_prefix, title)
 
     if create_branch:
         run(["git", "stash"], on_error=OnError.ABORT)
