@@ -1,6 +1,6 @@
 [tool.poetry]
 name="delfino-core"
-version="7.4.3"
+version="7.4.4"
 authors = ["Radek Lát <radek.lat@gmail.com>"]
 description="Delfino core plugin"
 license = "MIT License"
@@ -42,7 +42,7 @@ gitpython = {version = "*", optional = true}
 shellingham = {version = "*", optional = true}
 psutil = {version = "*", optional = true}
 PyYAML = {version = "*", optional = true}
-ruff = {version = "*", optional = true}
+ruff = {version = ">=0.5.0", optional = true}
 
 # https://python-poetry.org/docs/pyproject/#plugins
 [tool.poetry.plugins]
@@ -51,26 +51,26 @@ ruff = {version = "*", optional = true}
 "delfino-core" = "delfino_core.commands"
 
 [tool.poetry.group.dev.dependencies]
-black = "^23.3"
+black = "^24.4"
 isort = "^5.9"
 coverage = "^7.0"
 pylint = "^3.0"
 mypy = "^1.4"
-pytest = "^7.1"
-pytest-cov = "^4.0"
+pytest = "^8.2"
+pytest-cov = "^5.0"
 pytest-mock = "^3.6"
 pre-commit = "^3.3"
 pycodestyle = "^2.8"
 pydocstyle = "^6.1"
 shellingham = "^1.4"
-psutil = "^5.9"
-types-termcolor = "*"
-types-toml = "^0.10.8.1"
-types-psutil = "^5.9"
+psutil = "^6.0"
 gitpython = "^3.1"
 pyupgrade = "^3.7"
-types-pyyaml = "^6.0.12.12"
-ruff = "^0.1.14"
+ruff = "^0.5.2"
+types-termcolor = "*"
+types-toml = "*"
+types-psutil = "*"
+types-pyyaml = "*"
 
 [tool.poetry.extras]
 all = ["black", "isort", "pyupgrade", "pre-commit", "pytest", "coverage", "pytest-cov", "mypy", "pylint", "pycodestyle", "pydocstyle", "psutil", "gitpython", "PyYAML", "ruff"]

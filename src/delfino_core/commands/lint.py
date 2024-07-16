@@ -1,4 +1,5 @@
 """Linting checks on source code."""
+
 import logging
 from functools import lru_cache
 from itertools import groupby
@@ -62,7 +63,12 @@ def run_ruff(app_context: AppContext[CorePluginConfig], passed_args: Tuple[str, 
 
     dirs = build_target_paths(app_context, files_folders)
     spinner = Spinner("ruff", "checking code")
-    results = run(["ruff", *passed_args, *dirs], stdout=PIPE, stderr=PIPE, on_error=OnError.PASS, running_hook=spinner)
+
+    action = "check" if passed_args and passed_args[0] == "check" else "format"
+
+    results = run(
+        ["ruff", action, *passed_args, *dirs], stdout=PIPE, stderr=PIPE, on_error=OnError.PASS, running_hook=spinner
+    )
     spinner.print_results(results)
 
 
