@@ -145,13 +145,14 @@ def run_glab_mr_create(passed_args: tuple[str, ...]):
             "glab",
             "mr",
             "create",
-            "--create-source-branch",
             "--assignee",
             "@me",
             "--target-branch",
             get_trunk_branch(),
             "--draft",
             *(["--title", title] if title else []),
+            "--fill",
+            "--yes",
             *args,
         ],
         on_error=OnError.ABORT,
@@ -268,8 +269,9 @@ def _run_vcs_start(
             run(["git", "commit", "--allow-empty", "-m", title], on_error=OnError.ABORT)
 
         run(["git", "push", "--set-upstream", "origin", branch_name], on_error=OnError.ABORT)
-        run(["git", "stash", "pop"], on_error=OnError.ABORT)
 
     # Create the PR using gh
     func = run_gh_pr_create if vcs_cli_tool == "gh" else run_glab_mr_create
     click_context.forward(func, passed_args=["--title", title, *args])
+
+    run(["git", "stash", "pop"], on_error=OnError.ABORT)

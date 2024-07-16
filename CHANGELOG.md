@@ -12,6 +12,10 @@ Types of changes are:
 
 ## [Unreleased]
 
+## [7.4.3] - 2024-07-16
+
+- Skip all prompts when creating a Gitlab MR using `vcs`/`glab` `pr`/`mr` `create`/`start` commands.
+
 ## [7.4.2] - 2024-06-21
 
 ### Fixes
@@ -452,7 +456,8 @@ If `tool.delfino.plugins.delfino-core.dockerhub` exists in the `pyproject.toml`:
 
 - Initial source code
 
-[Unreleased]: https://github.com/radeklat/delfino-core/compare/7.4.2...HEAD
+[Unreleased]: https://github.com/radeklat/delfino-core/compare/7.4.3...HEAD
+[7.4.3]: https://github.com/radeklat/delfino-core/compare/7.4.2...7.4.3
 [7.4.2]: https://github.com/radeklat/delfino-core/compare/7.4.1...7.4.2
 [7.4.1]: https://github.com/radeklat/delfino-core/compare/7.4.0...7.4.1
 [7.4.0]: https://github.com/radeklat/delfino-core/compare/7.3.0...7.4.0
