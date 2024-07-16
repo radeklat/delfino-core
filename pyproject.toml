@@ -1,6 +1,6 @@
 [tool.poetry]
 name="delfino-core"
-version="7.4.2"
+version="7.4.3"
 authors = ["Radek Lát <radek.lat@gmail.com>"]
 description="Delfino core plugin"
 license = "MIT License"
