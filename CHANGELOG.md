@@ -12,7 +12,16 @@ Types of changes are:
 
 ## [Unreleased]
 
+## [7.4.4] - 2024-07-16
+
+### Fixes
+
+- Dependencies update.
+- `ruff` in version `0.5.0` has removed support for `ruff <path>` syntax and requires `ruff check <path>` instead. The `ruff` command has been updated to reflect this change, however it will allow this to be overridden by supplying a different action as the extra argument after `--`.
+
 ## [7.4.3] - 2024-07-16
+
+### Fixes
 
 - Skip all prompts when creating a Gitlab MR using `vcs`/`glab` `pr`/`mr` `create`/`start` commands.
 
@@ -456,7 +465,8 @@ If `tool.delfino.plugins.delfino-core.dockerhub` exists in the `pyproject.toml`:
 
 - Initial source code
 
-[Unreleased]: https://github.com/radeklat/delfino-core/compare/7.4.3...HEAD
+[Unreleased]: https://github.com/radeklat/delfino-core/compare/7.4.4...HEAD
+[7.4.4]: https://github.com/radeklat/delfino-core/compare/7.4.3...7.4.4
 [7.4.3]: https://github.com/radeklat/delfino-core/compare/7.4.2...7.4.3
 [7.4.2]: https://github.com/radeklat/delfino-core/compare/7.4.1...7.4.2
 [7.4.1]: https://github.com/radeklat/delfino-core/compare/7.4.0...7.4.1
