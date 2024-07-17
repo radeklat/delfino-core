@@ -146,7 +146,7 @@ def run_glab_mr_create(passed_args: tuple[str, ...]):
             "mr",
             "create",
             "--assignee",
-            "me",
+            "@me",
             "--target-branch",
             get_trunk_branch(),
             "--draft",

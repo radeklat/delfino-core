@@ -12,6 +12,12 @@ Types of changes are:
 
 ## [Unreleased]
 
+## [7.4.6] - 2024-07-17
+
+### Fixes
+
+- Use `@me` instead of `me` as assignee when creating a Gitlab MR using `vcs`/`glab` `pr`/`mr` `create`/`start` commands.
+
 ## [7.4.5] - 2024-07-17
 
 ### Fixes
@@ -471,7 +477,8 @@ If `tool.delfino.plugins.delfino-core.dockerhub` exists in the `pyproject.toml`:
 
 - Initial source code
 
-[Unreleased]: https://github.com/radeklat/delfino-core/compare/7.4.5...HEAD
+[Unreleased]: https://github.com/radeklat/delfino-core/compare/7.4.6...HEAD
+[7.4.6]: https://github.com/radeklat/delfino-core/compare/7.4.5...7.4.6
 [7.4.5]: https://github.com/radeklat/delfino-core/compare/7.4.4...7.4.5
 [7.4.4]: https://github.com/radeklat/delfino-core/compare/7.4.3...7.4.4
 [7.4.3]: https://github.com/radeklat/delfino-core/compare/7.4.2...7.4.3
