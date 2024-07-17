@@ -12,6 +12,12 @@ Types of changes are:
 
 ## [Unreleased]
 
+## [7.4.5] - 2024-07-17
+
+### Fixes
+
+- Finish Merge requests on web when creating a Gitlab MR using `vcs`/`glab` `pr`/`mr` `create`/`start` commands.
+
 ## [7.4.4] - 2024-07-16
 
 ### Fixes
@@ -465,7 +471,8 @@ If `tool.delfino.plugins.delfino-core.dockerhub` exists in the `pyproject.toml`:
 
 - Initial source code
 
-[Unreleased]: https://github.com/radeklat/delfino-core/compare/7.4.4...HEAD
+[Unreleased]: https://github.com/radeklat/delfino-core/compare/7.4.5...HEAD
+[7.4.5]: https://github.com/radeklat/delfino-core/compare/7.4.4...7.4.5
 [7.4.4]: https://github.com/radeklat/delfino-core/compare/7.4.3...7.4.4
 [7.4.3]: https://github.com/radeklat/delfino-core/compare/7.4.2...7.4.3
 [7.4.2]: https://github.com/radeklat/delfino-core/compare/7.4.1...7.4.2
