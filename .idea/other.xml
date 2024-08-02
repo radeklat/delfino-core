@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PyTestImpService">
+    <option name="pytestIniPath" value="$PROJECT_DIR$/pyproject.toml" />
+  </component>
+</project>

@@ -33,7 +33,7 @@ def consume_args_until_next_option(passed_args: list[str]) -> tuple[str, list[st
 
 
 def _sanitize_branch_name(branch_name: str) -> str:
-    return _INVALID_BRANCH_NAME_CHARS.sub("_", branch_name.lower()).rstrip("_")
+    return "/".join(_INVALID_BRANCH_NAME_CHARS.sub("_", part).strip("_") for part in branch_name.lower().split("/"))
 
 
 def _get_sanitized_used_name() -> str:

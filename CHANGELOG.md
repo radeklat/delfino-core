@@ -12,6 +12,13 @@ Types of changes are:
 
 ## [Unreleased]
 
+## [7.5.0] - 2024-08-02
+
+### Features
+
+- Improve branch name character sanitization in `vcs`/`gh`/`glab` commands. Now not only trailing special characters are removed but also leading ones and ones around slashes. Example: `!breaking: feature / branch.` becomes `breaking_feature/branch`.
+
+
 ## [7.4.6] - 2024-07-17
 
 ### Fixes
@@ -477,7 +484,8 @@ If `tool.delfino.plugins.delfino-core.dockerhub` exists in the `pyproject.toml`:
 
 - Initial source code
 
-[Unreleased]: https://github.com/radeklat/delfino-core/compare/7.4.6...HEAD
+[Unreleased]: https://github.com/radeklat/delfino-core/compare/7.5.0...HEAD
+[7.5.0]: https://github.com/radeklat/delfino-core/compare/7.4.6...7.5.0
 [7.4.6]: https://github.com/radeklat/delfino-core/compare/7.4.5...7.4.6
 [7.4.5]: https://github.com/radeklat/delfino-core/compare/7.4.4...7.4.5
 [7.4.4]: https://github.com/radeklat/delfino-core/compare/7.4.3...7.4.4
