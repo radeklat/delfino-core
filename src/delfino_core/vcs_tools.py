@@ -8,7 +8,10 @@ from typing import Literal
 
 from delfino import run
 from delfino.execution import OnError
+from delfino.validation import assert_pip_package_installed
 
+from delfino_core.commands.issue_tracker import JiraClient
+from delfino_core.config import VCSConfig
 from delfino_core.utils import ask, assert_executable_installed
 
 
@@ -36,7 +39,7 @@ def _sanitize_branch_name(branch_name: str) -> str:
     return "/".join(_INVALID_BRANCH_NAME_CHARS.sub("_", part).strip("_") for part in branch_name.lower().split("/"))
 
 
-def _get_sanitized_used_name() -> str:
+def _get_user_name() -> str:
     # Get the current username from git config
     username = run(["git", "config", "user.email"], stdout=PIPE, on_error=OnError.ABORT).stdout.decode().strip()
 
@@ -47,13 +50,16 @@ def _get_sanitized_used_name() -> str:
     elif "@" in username:  # Strip the domain from the email address
         username = username.split("@")[0]
 
-    # Sanitize the username
-    return _sanitize_branch_name(username)
+    return username
 
 
 def get_new_branch_name_or_switch_to_branch(branch_prefix: str | None, title: str) -> tuple[str, bool]:
     if branch_prefix is None:
-        branch_prefix = f"{_get_sanitized_used_name()}/"
+        branch_prefix = _get_user_name()
+
+    if branch_prefix != "":  # allow for no prefix
+        branch_prefix = _sanitize_branch_name(branch_prefix) + "/"
+
     branch_name = branch_prefix + _sanitize_branch_name(title)
 
     # Check if not already on the branch
@@ -91,3 +97,32 @@ def get_vcs_cli_tool() -> Literal["gh", "glab"]:
         return "glab"
 
     raise RuntimeError("No supported VCS found in the git remote.")
+
+
+def title_and_branch_prefix_from_issue_tracker(
+    vcs_cli_tool: str, title: str, command_config: VCSConfig
+) -> tuple[str, str | None]:
+    branch_prefix = command_config.branch_prefix
+    prompt_part = ""
+
+    if command_config.issue_tracking.tracker_url:
+        assert_pip_package_installed("httpx")
+        prompt_part = " or issue number"
+
+    while not title:
+        title = input(f"Enter a title{prompt_part} for the {'PR' if vcs_cli_tool == 'gh' else 'MR'}: ").strip()
+
+    if not command_config.issue_tracking.tracker_url:
+        return title, branch_prefix
+
+    issue_number = None
+    try:
+        issue_number = int(title)
+    except ValueError:
+        pass
+
+    if issue_number is not None:
+        title = JiraClient(command_config.issue_tracking).get_issue_title(issue_number)
+        branch_prefix = f"{command_config.issue_tracking.issue_prefix}{issue_number}"
+
+    return title, branch_prefix
