@@ -69,6 +69,7 @@ Using `[all]` installs all the [optional dependencies](https://setuptools.pypa.i
   - `format`
   - `dependencies-update`
   - `pre-commit`
+  - `vsc`
 - For groups of commands:
   - `test` - for testing and coverage commands
   - `lint` - for all the linting commands
@@ -114,20 +115,42 @@ test_commands = ["pytest", "coverage-report"]
 
 # Do not install pre-commit if this is set to true.
 disable_pre_commit = false
-
-# Enable to manually specify the branch prefix. By default it is set to git username.
-# branch_prefix = ""
 ```
 
 ## Commands configuration
 
-Several commands have their own configuration as well:
+Several commands have their own configuration as well.
+
+### `mypy`
 
 ```toml
 [tool.delfino.plugins.delfino-core.mypy]
 # One or more directories where type hint will be required. By default they are optional.
 strict_directories = []  
 ```
+
+### `vcs`
+
+```toml
+[tool.delfino.plugins.delfino-core.vcs]
+# Enable to manually specify the branch prefix. By default it is set to git username.
+# branch_prefix = ""
+
+[tool.delfino.plugins.delfino-core.vcs.issue_tracker]
+# Prefix for issue numbers, including a trailing hyphen if used. If not set, just the issue numbers will be used.
+# issue_prefix = "ISSUE-"
+
+# URL for the issue tracker. If not set, issue tracker integration will be disabled.
+# Implemented trackers: Jira.
+# tracker_url = "https://<SUBDOMAIN>.atlassian.net"
+
+# Environment variable name for the issue tracking username. If not set, 'ISSUE_TRACKER_USERNAME' will be used by default.
+# username_env_var = ""
+
+# Environment variable name for the issue tracking API key. If not set, 'ISSUE_TRACKER_API_KEY' will be used by default.
+# api_key_env_var = ""
+```
+
 
 # Usage
 

@@ -16,6 +16,7 @@ from delfino_core.vcs_tools import (
     get_new_branch_name_or_switch_to_branch,
     get_trunk_branch,
     get_vcs_cli_tool,
+    title_and_branch_prefix_from_issue_tracker,
 )
 
 
@@ -248,10 +249,11 @@ def _run_vcs_start(
     title, args = consume_args_until_next_option(args)
     if not vcs_cli_tool:
         vcs_cli_tool = get_vcs_cli_tool()
-    while not title:
-        title = input(f"Enter a title for the {'PR' if vcs_cli_tool == 'gh' else 'MR'}: ")
 
-    branch_name, create_branch = get_new_branch_name_or_switch_to_branch(app_context.plugin_config.branch_prefix, title)
+    title, branch_prefix = title_and_branch_prefix_from_issue_tracker(
+        vcs_cli_tool, title, app_context.plugin_config.vcs
+    )
+    branch_name, create_branch = get_new_branch_name_or_switch_to_branch(branch_prefix, title)
 
     if create_branch:
         run(["git", "stash"], on_error=OnError.ABORT)

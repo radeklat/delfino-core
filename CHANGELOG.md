@@ -12,6 +12,29 @@ Types of changes are:
 
 ## [Unreleased]
 
+## [8.0.0] - 2024-09-15
+
+### Breaking changes
+
+- Configuration option `tool.delfino.plugins.delfino-core.branch_prefix` has been moved to `tool.delfino.plugins.delfino-core.vcs.branch_prefix`.
+- Configuration option `tool.delfino.plugins.delfino-core.typecheck` has been moved to `tool.delfino.plugins.delfino-core.mypy`.
+
+### Features
+
+#### Integration with Jira issue tracker
+
+In the `vcs`/`gh`/`glab` `pr`/`mr` `start` commands, the integration attempts to fetch issue title. The resulting branch name will be set to `<ISSUE_PREFIX>-<ISSUE_NUMBER>/<ISSUE_TITLE>` and the first commit message will be set to `<ISSUE_TITLE>`. Use the issue number in place of the title to trigger it. For example `delfino mr start 123`.
+
+##### New configuration options under `tool.delfino.plugins.delfino-core.issue_tracking`
+- `issue_prefix` - The issue prefix (including a trailing dash).
+- `tracker_url` - The issue tracker URL. If not set, the integration will be disabled.
+- `username_env_var` - The environment variable containing the username for the issue tracker. Defaults to `DELFINO_CORE_ISSUE_TRACKING_USERNAME`.
+- `api_key_env_var` - The environment variable containing the API key for the issue tracker. Defaults to `DELFINO_CORE_ISSUE_TRACKING_API_KEY`.
+
+##### New optional install dependencies
+
+- `vcs` - Installs `httpx` used for fetching issue title.
+
 ## [7.5.0] - 2024-08-02
 
 ### Features
@@ -484,7 +507,8 @@ If `tool.delfino.plugins.delfino-core.dockerhub` exists in the `pyproject.toml`:
 
 - Initial source code
 
-[Unreleased]: https://github.com/radeklat/delfino-core/compare/7.5.0...HEAD
+[Unreleased]: https://github.com/radeklat/delfino-core/compare/8.0.0...HEAD
+[8.0.0]: https://github.com/radeklat/delfino-core/compare/7.5.0...8.0.0
 [7.5.0]: https://github.com/radeklat/delfino-core/compare/7.4.6...7.5.0
 [7.4.6]: https://github.com/radeklat/delfino-core/compare/7.4.5...7.4.6
 [7.4.5]: https://github.com/radeklat/delfino-core/compare/7.4.4...7.4.5

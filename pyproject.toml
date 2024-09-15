@@ -1,6 +1,6 @@
 [tool.poetry]
 name="delfino-core"
-version="7.5.0"
+version="8.0.0"
 authors = ["Radek Lát <radek.lat@gmail.com>"]
 description="Delfino core plugin"
 license = "MIT License"
@@ -43,6 +43,7 @@ shellingham = {version = "*", optional = true}
 psutil = {version = "*", optional = true}
 PyYAML = {version = "*", optional = true}
 ruff = {version = ">=0.5.0", optional = true}
+httpx = {version = "*", optional = true}
 
 # https://python-poetry.org/docs/pyproject/#plugins
 [tool.poetry.plugins]
@@ -67,19 +68,21 @@ psutil = "^6.0"
 gitpython = "^3.1"
 pyupgrade = "^3.7"
 ruff = "^0.5.2"
+httpx = "^0.27.2"
 types-termcolor = "*"
 types-toml = "*"
 types-psutil = "*"
 types-pyyaml = "*"
 
 [tool.poetry.extras]
-all = ["black", "isort", "pyupgrade", "pre-commit", "pytest", "coverage", "pytest-cov", "mypy", "pylint", "pycodestyle", "pydocstyle", "psutil", "gitpython", "PyYAML", "ruff"]
+all = ["black", "isort", "pyupgrade", "pre-commit", "pytest", "coverage", "pytest-cov", "mypy", "pylint", "pycodestyle", "pydocstyle", "psutil", "gitpython", "PyYAML", "ruff", "httpx"]
 verify = ["black", "isort", "pyupgrade", "pre-commit", "pytest", "coverage", "pytest-cov", "mypy", "pylint", "pycodestyle", "pydocstyle", "psutil", "ruff"]
 format = ["black", "isort", "pyupgrade", "pre-commit"]
 test = ["pytest", "coverage", "pytest-cov"]
 mypy = ["mypy"]
 lint = ["pylint", "pycodestyle", "pydocstyle", "psutil", "ruff"]
 dependencies_update = ["gitpython"]
+vcs = ["httpx"]
 pre_commit = ["PyYAML"]
 
 [tool.isort]
@@ -155,5 +158,9 @@ add-ignore = [
 [tool.ruff]
 line-length = 120
 
-[tool.delfino.plugins.local]
+[tool.delfino.plugins.local.vcs]
 #branch_prefix = ""
+
+[tool.delfino.plugins.local.issue_tracking]
+issue_prefix = "PCAT-"
+tracker_url = "https://heurekagroup.atlassian.net"

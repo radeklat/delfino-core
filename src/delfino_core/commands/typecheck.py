@@ -104,7 +104,7 @@ def run_mypy(
             folder for folder in app_context.pyproject_toml.tool.delfino.local_command_folders if folder.exists()
         )
 
-    strict_paths = plugin_config.typecheck.strict_directories
+    strict_paths = plugin_config.mypy.strict_directories
     grouped_paths = groupby(
         target_paths,
         lambda current_path: is_path_relative_to_paths(current_path, strict_paths),
