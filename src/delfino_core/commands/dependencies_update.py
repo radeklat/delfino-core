@@ -4,6 +4,7 @@ import os
 import re
 import webbrowser
 from datetime import datetime, timedelta
+from pathlib import Path
 from subprocess import PIPE, CompletedProcess
 
 import click
@@ -25,6 +26,11 @@ try:
 except ImportError:
     pass
 
+try:
+    import yaml
+except ImportError:
+    pass
+
 
 def _run(args: str, spinner: Spinner | None = None) -> CompletedProcess:
     """Print the command before execution."""
@@ -34,6 +40,19 @@ def _run(args: str, spinner: Spinner | None = None) -> CompletedProcess:
     result = run(args, on_error=OnError.PASS, running_hook=spinner, stdout=PIPE, stderr=PIPE)
     spinner.print_results(result, error_cls=click.exceptions.Exit)
     return result
+
+
+class Changelogs:
+    _DATA_FILE = Path(__file__).parent.parent / "changelog_urls.yaml"
+
+    def __init__(self):
+        assert_pip_package_installed("PyYAML")
+
+        with open(self._DATA_FILE, encoding="utf-8") as file:
+            self._packages_to_urls: dict[str, str] = yaml.safe_load(file)["changelogs"]
+
+    def url_for_package(self, package: str) -> str:
+        return self._packages_to_urls.get(package, "")
 
 
 class Updater:
@@ -54,6 +73,7 @@ class Updater:
         self._stash = stash
         now = datetime.utcnow()
         self._start_of_week = now - timedelta(now.isoweekday() - 1)
+        self._changelog = Changelogs()
 
     def commit_and_push(self):
         commit_message = f"Dependencies rollup: {self._start_of_week.strftime('%Y-%m-%d')}"
@@ -143,9 +163,10 @@ class Updater:
             _run(f"git checkout -b {branch}")
             self._lock_and_sync()
 
-    def update(self, retry: bool):
-        branch_name = self.get_branch_name()
-        self.checkout_branch(branch_name)
+    def update(self, retry: bool, create_branch: bool):
+        if create_branch:
+            branch_name = self.get_branch_name()
+            self.checkout_branch(branch_name)
 
         if not retry:
             while True:
@@ -194,7 +215,9 @@ class PipenvUpdater(Updater):
 
             # Keep only packages defined in Pipfile with a different version available
             if installed != available and re.search(f'\n"?{package}"? ', pipfile):
-                available_updates.append(f"{package}: {installed} -> {available}")
+                if changelog_url := self._changelog.url_for_package(package):
+                    changelog_url = f" ({changelog_url})"
+                available_updates.append(f"{package}: {installed} -> {available}{changelog_url}")
 
         if not available_updates:
             return False
@@ -206,18 +229,33 @@ class PipenvUpdater(Updater):
 
 class PoetryUpdater(Updater):
     _FILENAME = "pyproject.toml"
+    _ANSI_ESCAPE = re.compile(r"\x1b\[[0-9;]*m")
+
+    def parse_package_name(self, line: str) -> str:
+        return self._ANSI_ESCAPE.sub("", line).split(" ", maxsplit=1)[0]
 
     def print_outdated_packages_and_lock_if_changed(self) -> bool:
         spinner = Spinner("poetry", "updating packages based on version pinning")
         _run("poetry update", spinner)
 
         spinner = Spinner("poetry", "checking outdated packages")
-        if not (result := _run("poetry show --outdated --why --ansi", spinner)).stdout:
+        if not (result := _run("poetry show --outdated --why --ansi", spinner).stdout.decode()):
             return False
 
         pyproject_toml = self._read_dependency_file()
+        updates = []
 
-        self._show_edit_prompt_and_wait(available_updates=result.stdout.decode())
+        for line in result.split(os.linesep):
+            if not line:
+                continue
+
+            package = self.parse_package_name(line)
+            if changelog_url := self._changelog.url_for_package(package):
+                changelog_url = f" ({changelog_url})"
+
+            updates.append(f"{line}{changelog_url}")
+
+        self._show_edit_prompt_and_wait(available_updates="\n".join(updates))
 
         return self._read_dependency_file() != pyproject_toml
 
@@ -233,9 +271,12 @@ class PoetryUpdater(Updater):
         "that should be also part of the upgrade."
     ),
 )
+@click.option("--no-branch", default=False, show_default=True, is_flag=True, help="Don't create a new branch.")
 @pass_app_context(CorePluginConfig)
 @click.pass_context
-def run_dependencies_update(click_context: click.Context, app_context: AppContext, retry: bool, stash: bool):
+def run_dependencies_update(
+    click_context: click.Context, app_context: AppContext, retry: bool, stash: bool, no_branch: bool
+):
     """Manages the process of updating dependencies."""
     print_header("Updating dependencies", icon="🔄")
 
@@ -251,7 +292,7 @@ def run_dependencies_update(click_context: click.Context, app_context: AppContex
             f"The '{app_context.package_manager.value}' package manager is not supported by this command."
         )
 
-    updater.update(retry)
+    updater.update(retry, create_branch=not no_branch)
 
     try:
         click_context.invoke(run_group_verify)

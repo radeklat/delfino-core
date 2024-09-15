@@ -1,0 +1,10 @@
+changelogs:
+  delfino-core: https://github.com/radeklat/delfino-core/blob/main/CHANGELOG.md
+  delfino: https://github.com/radeklat/delfino/blob/main/CHANGELOG.md
+  fastapi: https://fastapi.tiangolo.com/release-notes/
+  pydantic: https://docs.pydantic.dev/latest/changelog/
+  settings-doc: https://github.com/radeklat/settings-doc/blob/main/CHANGELOG.md
+  ruff: https://github.com/astral-sh/ruff/blob/main/CHANGELOG.md
+  pyupgrade: changelog not available
+  pre-commit: https://github.com/pre-commit/pre-commit/blob/main/CHANGELOG.md
+  astroid: https://pylint.pycqa.org/projects/astroid/en/latest/changelog.html

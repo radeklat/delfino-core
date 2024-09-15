@@ -12,6 +12,12 @@ Types of changes are:
 
 ## [Unreleased]
 
+## [8.1.0] - 2024-09-15
+
+### Features
+
+- Command `dependencies-update` will display link to a change log next to each dependency base on the [changelog_urls.yaml](src/delfino_core/changelog_urls.yaml) file distributed with the plugin.
+
 ## [8.0.0] - 2024-09-15
 
 ### Breaking changes
@@ -507,7 +513,8 @@ If `tool.delfino.plugins.delfino-core.dockerhub` exists in the `pyproject.toml`:
 
 - Initial source code
 
-[Unreleased]: https://github.com/radeklat/delfino-core/compare/8.0.0...HEAD
+[Unreleased]: https://github.com/radeklat/delfino-core/compare/8.1.0...HEAD
+[8.1.0]: https://github.com/radeklat/delfino-core/compare/8.0.0...8.1.0
 [8.0.0]: https://github.com/radeklat/delfino-core/compare/7.5.0...8.0.0
 [7.5.0]: https://github.com/radeklat/delfino-core/compare/7.4.6...7.5.0
 [7.4.6]: https://github.com/radeklat/delfino-core/compare/7.4.5...7.4.6
