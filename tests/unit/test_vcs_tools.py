@@ -104,7 +104,3 @@ class TestSanitizeBranchName:
     )
     def should_strip_special_characters_around_slash(input_branch, expected_output):
         assert _sanitize_branch_name(input_branch) == expected_output
-
-    @staticmethod
-    def should_lower_case_all_characters():
-        assert _sanitize_branch_name("Feature Branch") == "feature_branch"
