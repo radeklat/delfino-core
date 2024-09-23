@@ -36,7 +36,7 @@ def consume_args_until_next_option(passed_args: list[str]) -> tuple[str, list[st
 
 
 def _sanitize_branch_name(branch_name: str) -> str:
-    return "/".join(_INVALID_BRANCH_NAME_CHARS.sub("_", part).strip("_") for part in branch_name.lower().split("/"))
+    return "/".join(_INVALID_BRANCH_NAME_CHARS.sub("_", part).strip("_") for part in branch_name.split("/"))
 
 
 def _get_user_name() -> str:
@@ -113,7 +113,7 @@ def title_and_branch_prefix_from_issue_tracker(
         title = input(f"Enter a title{prompt_part} for the {'PR' if vcs_cli_tool == 'gh' else 'MR'}: ").strip()
 
     if not command_config.issue_tracking.tracker_url:
-        return title, branch_prefix
+        return title.lower(), branch_prefix
 
     issue_number = None
     try:
@@ -122,7 +122,8 @@ def title_and_branch_prefix_from_issue_tracker(
         pass
 
     if issue_number is not None:
-        title = JiraClient(command_config.issue_tracking).get_issue_title(issue_number)
-        branch_prefix = f"{command_config.issue_tracking.issue_prefix}{issue_number}"
+        issue_title = JiraClient(command_config.issue_tracking).get_issue_title(issue_number).lower()
+        title = f"{command_config.issue_tracking.issue_prefix}{issue_number}/{issue_title}"
+        branch_prefix = ""  # allow completely custom branch name
 
     return title, branch_prefix

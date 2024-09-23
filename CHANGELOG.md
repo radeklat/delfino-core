@@ -12,6 +12,12 @@ Types of changes are:
 
 ## [Unreleased]
 
+## [8.1.1] - 2024-09-23
+
+### Fixes
+
+- Don't lowercase branch prefix if coming from configuration or issue tracker.
+
 ## [8.1.0] - 2024-09-15
 
 ### Features
@@ -513,7 +519,8 @@ If `tool.delfino.plugins.delfino-core.dockerhub` exists in the `pyproject.toml`:
 
 - Initial source code
 
-[Unreleased]: https://github.com/radeklat/delfino-core/compare/8.1.0...HEAD
+[Unreleased]: https://github.com/radeklat/delfino-core/compare/8.1.1...HEAD
+[8.1.1]: https://github.com/radeklat/delfino-core/compare/8.1.0...8.1.1
 [8.1.0]: https://github.com/radeklat/delfino-core/compare/8.0.0...8.1.0
 [8.0.0]: https://github.com/radeklat/delfino-core/compare/7.5.0...8.0.0
 [7.5.0]: https://github.com/radeklat/delfino-core/compare/7.4.6...7.5.0
