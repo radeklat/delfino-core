@@ -136,7 +136,7 @@ strict_directories = []
 # Enable to manually specify the branch prefix. By default it is set to git username.
 # branch_prefix = ""
 
-[tool.delfino.plugins.delfino-core.vcs.issue_tracker]
+[tool.delfino.plugins.delfino-core.vcs.issue_tracking]
 # Prefix for issue numbers, including a trailing hyphen if used. If not set, just the issue numbers will be used.
 # issue_prefix = "ISSUE-"
 
