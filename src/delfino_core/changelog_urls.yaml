@@ -8,3 +8,9 @@ changelogs:
   pyupgrade: changelog not available
   pre-commit: https://github.com/pre-commit/pre-commit/blob/main/CHANGELOG.md
   astroid: https://pylint.pycqa.org/projects/astroid/en/latest/changelog.html
+  psuitl: https://github.com/giampaolo/psutil/blob/master/HISTORY.rst
+  settings-doc: https://github.com/radeklat/settings-doc/blob/main/CHANGELOG.md
+  typer: https://typer.tiangolo.com/release-notes/
+  packaging: https://packaging.pypa.io/en/stable/changelog.html
+  keyring: https://keyring.readthedocs.io/en/latest/history.html
+  dulwich: https://github.com/jelmer/dulwich/releases
