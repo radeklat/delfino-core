@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
 from base64 import b64encode
-from typing import Dict
 
 from click import Abort
 
@@ -23,7 +22,7 @@ class _BaseIssuerTrackerClient(ABC):
 
 
 class JiraClient(_BaseIssuerTrackerClient):
-    def _headers(self) -> Dict[str, str]:
+    def _headers(self) -> dict[str, str]:
         token = b64encode(f"{self._settings.username}:{self._settings.api_key}".encode()).decode()
         return {
             "Accept": "application/json",

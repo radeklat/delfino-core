@@ -3,6 +3,7 @@ from types import ModuleType
 import pytest
 from delfino.click_utils.command import CommandRegistry
 from delfino.models.pyproject_toml import PluginConfig
+
 from delfino_core.commands.dependencies_update import run_dependencies_update
 from delfino_core.commands.pre_commit import run_ensure_pre_commit, run_pre_commit
 from delfino_core.commands.ruff import run_ruff

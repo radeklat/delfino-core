@@ -1,7 +1,7 @@
 from collections import ChainMap
 from logging import getLogger
 from subprocess import PIPE, run
-from typing import Dict, cast
+from typing import cast
 
 import click
 from delfino.click_utils.command import get_root_command
@@ -20,7 +20,7 @@ def ensure_reports_dir(config: CorePluginConfig) -> None:
 
 def commands_group_help(name: str) -> str:
     command_names = ", ".join(CorePluginConfig.model_fields[f"{name}_commands"].default)
-    return f"Runs {command_names}.\n\n" f"Configured by the ``{name}_commands`` settings option."
+    return f"Runs {command_names}.\n\nConfigured by the ``{name}_commands`` settings option."
 
 
 def execute_commands_group(click_context: click.Context, plugin_config: CorePluginConfig, **kwargs):
@@ -35,7 +35,7 @@ def execute_commands_group(click_context: click.Context, plugin_config: CorePlug
 
     option_name = f"{name.replace('-', '_')}_commands"
 
-    commands: Dict[str, click.Command] = {
+    commands: dict[str, click.Command] = {
         command: cast(click.Command, root.get_command(click_context, command))
         for command in root.list_commands(click_context)
     }
@@ -76,9 +76,9 @@ def executable_installed(name: str, *flags: str) -> bool:
 
 
 def assert_executable_installed(name: str, *flags: str, required_by: str = "this command") -> None:
-    assert executable_installed(
-        name, *flags
-    ), f"Optional executable '{name}' is required by {required_by} but not installed."
+    assert executable_installed(name, *flags), (
+        f"Optional executable '{name}' is required by {required_by} but not installed."
+    )
 
 
 def ask(question: str) -> bool:

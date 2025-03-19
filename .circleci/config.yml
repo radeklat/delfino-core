@@ -5,8 +5,8 @@ orbs:
 
 constants:
   - &project_name "delfino-core"
-  - &minimum_python_version "3.8"
-  - &supported_python_versions [ *minimum_python_version, "3.9", "3.10", "3.11", "3.12", "3.13" ]
+  - &minimum_python_version "3.9"
+  - &supported_python_versions [ *minimum_python_version, "3.10", "3.11", "3.12", "3.13" ]
 
 parameters:
   project_name:

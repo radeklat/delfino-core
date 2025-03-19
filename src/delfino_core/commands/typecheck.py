@@ -3,7 +3,6 @@
 from itertools import groupby
 from pathlib import Path
 from subprocess import PIPE
-from typing import List, Tuple
 
 import click
 from delfino.decorators import files_folders_option, pass_args
@@ -18,12 +17,12 @@ from delfino_core.utils import ensure_reports_dir
 
 
 def _run_typecheck(
-    paths: List[Path],
+    paths: list[Path],
     strict: bool,
     reports_file: Path,
     summary_only: bool,
     mypypath: Path,
-    passed_args: Tuple[str, ...],
+    passed_args: tuple[str, ...],
 ):
     spinner = Spinner("mypy", f"checking {'strict' if strict else 'optional'} types")
 
@@ -62,7 +61,7 @@ def _run_typecheck(
     spinner.print_results(results)
 
 
-def is_path_relative_to_paths(path: Path, paths: List[Path]) -> bool:
+def is_path_relative_to_paths(path: Path, paths: list[Path]) -> bool:
     for _path in paths:
         try:
             path.relative_to(_path)
@@ -83,9 +82,9 @@ def is_path_relative_to_paths(path: Path, paths: List[Path]) -> bool:
 @pass_plugin_app_context
 def run_mypy(
     app_context: AppContext[CorePluginConfig],
-    passed_args: Tuple[str, ...],
+    passed_args: tuple[str, ...],
     summary_only: bool,
-    files_folders: Tuple[str, ...],
+    files_folders: tuple[str, ...],
 ):
     """Run type checking on source code.
 

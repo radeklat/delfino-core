@@ -7,7 +7,7 @@ from contextlib import suppress
 from itertools import chain
 from pathlib import Path
 from subprocess import PIPE
-from typing import List, Optional, Tuple
+from typing import Optional
 
 import click
 from delfino.decorators import files_folders_option, pass_args
@@ -20,7 +20,7 @@ from delfino_core.config import CorePluginConfig, pass_plugin_app_context
 from delfino_core.utils import commands_group_help, ensure_reports_dir, execute_commands_group
 
 
-def _delete_coverage_dat_files(reports_directory: Path, test_types: List[str]):
+def _delete_coverage_dat_files(reports_directory: Path, test_types: list[str]):
     for test_type in [f"-{_}" for _ in test_types] + [""]:
         with suppress(FileNotFoundError):  # Use `missing_ok=True` from Python 3.8
             (reports_directory / f"coverage{test_type}.dat").unlink()
@@ -28,8 +28,8 @@ def _delete_coverage_dat_files(reports_directory: Path, test_types: List[str]):
 
 def _run_pytest(
     app_context: AppContext[CorePluginConfig],
-    passed_args: Tuple[str, ...],
-    files_folders: Tuple[str, ...],
+    passed_args: tuple[str, ...],
+    files_folders: tuple[str, ...],
     name: str = "",
 ) -> None:
     """Execute the tests for a given pytest type."""
@@ -50,7 +50,7 @@ def _run_pytest(
     print_header(f"️Running {header_name}tests", icon="🔎🐛")
     ensure_reports_dir(plugin_config)
 
-    args: List[Optional[str]] = [
+    args: list[Optional[str]] = [
         "pytest",
         "--cov",
         plugin_config.sources_directory,
@@ -83,7 +83,7 @@ def _run_pytest(
 @pass_args
 @pass_plugin_app_context
 def run_pytest_unit(
-    app_context: AppContext[CorePluginConfig], passed_args: Tuple[str, ...], files_folders: Tuple[str, ...]
+    app_context: AppContext[CorePluginConfig], passed_args: tuple[str, ...], files_folders: tuple[str, ...]
 ):
     _delete_coverage_dat_files(app_context.plugin_config.reports_directory, app_context.plugin_config.test_types)
     _run_pytest(app_context, passed_args, files_folders, "unit")
@@ -94,7 +94,7 @@ def run_pytest_unit(
 @pass_args
 @pass_plugin_app_context
 def run_pytest_integration(
-    app_context: AppContext[CorePluginConfig], passed_args: Tuple[str, ...], files_folders: Tuple[str, ...]
+    app_context: AppContext[CorePluginConfig], passed_args: tuple[str, ...], files_folders: tuple[str, ...]
 ):
     # TODO(Radek): Replace with alias?
     _delete_coverage_dat_files(app_context.plugin_config.reports_directory, app_context.plugin_config.test_types)
@@ -112,7 +112,7 @@ def _get_total_coverage(coverage_dat: Path) -> str:
     return match.group(1)
 
 
-def _combined_coverage_reports(reports_directory: Path, test_types: List[str]) -> Path:
+def _combined_coverage_reports(reports_directory: Path, test_types: list[str]) -> Path:
     coverage_dat_combined = reports_directory / "coverage.dat"
 
     coverage_files = []  # we'll make a copy because `combine` will erase them
@@ -183,7 +183,7 @@ def run_coverage_report(app_context: AppContext[CorePluginConfig], **kwargs):
 @files_folders_option
 @pass_plugin_app_context
 @pass_args
-def run_pytest(app_context: AppContext[CorePluginConfig], passed_args: Tuple[str, ...], files_folders: Tuple[str, ...]):
+def run_pytest(app_context: AppContext[CorePluginConfig], passed_args: tuple[str, ...], files_folders: tuple[str, ...]):
     """Runs pytest for individual test suites.
 
     Configration in the `pyproject.toml` file under `tool.delfino.plugins.delfino-core`:
@@ -207,7 +207,7 @@ def run_pytest(app_context: AppContext[CorePluginConfig], passed_args: Tuple[str
 def run_group_test(
     click_context: click.Context,
     app_context: AppContext[CorePluginConfig],
-    files_folders: Tuple[Path, ...],
+    files_folders: tuple[Path, ...],
 ):
     execute_commands_group(click_context, app_context.plugin_config, files_folders=files_folders)
 

@@ -14,3 +14,6 @@ changelogs:
   packaging: https://packaging.pypa.io/en/stable/changelog.html
   keyring: https://keyring.readthedocs.io/en/latest/history.html
   dulwich: https://github.com/jelmer/dulwich/releases
+  pytest-cov: https://pytest-cov.readthedocs.io/en/latest/changelog.html
+  httpx: https://github.com/encode/httpx/blob/master/CHANGELOG.md
+  mypy: https://github.com/python/mypy/blob/master/CHANGELOG.md

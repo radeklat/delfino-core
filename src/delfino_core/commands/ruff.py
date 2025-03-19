@@ -2,7 +2,7 @@
 
 from pathlib import Path
 from subprocess import PIPE
-from typing import List, Optional, Tuple
+from typing import Optional
 
 import click
 from delfino.decorators import files_folders_option, pass_args
@@ -18,7 +18,7 @@ from delfino_core.spinner import Spinner
 @pass_args
 @files_folders_option
 @pass_plugin_app_context
-def run_ruff(app_context: AppContext[CorePluginConfig], passed_args: Tuple[str, ...], files_folders: Tuple[str]):
+def run_ruff(app_context: AppContext[CorePluginConfig], passed_args: tuple[str, ...], files_folders: tuple[str]):
     """Run ruff."""
     assert_pip_package_installed("ruff")
 
@@ -41,14 +41,14 @@ def run_ruff(app_context: AppContext[CorePluginConfig], passed_args: Tuple[str, 
 
 def build_target_paths(
     app_context: AppContext[CorePluginConfig],
-    files_folders: Optional[Tuple[str]] = None,
+    files_folders: Optional[tuple[str]] = None,
     include_tests: bool = True,
     include_commands: bool = True,
-) -> List[Path]:
+) -> list[Path]:
     if files_folders:
         return [Path(path) for path in files_folders]
     plugin_config = app_context.plugin_config
-    target_paths: List[Path] = [plugin_config.sources_directory]
+    target_paths: list[Path] = [plugin_config.sources_directory]
 
     if include_tests and plugin_config.tests_directory.exists():
         target_paths.append(plugin_config.tests_directory)

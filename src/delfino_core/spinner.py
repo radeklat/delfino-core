@@ -71,7 +71,7 @@ class Spinner:
 
     def _result_msg(self, color: str) -> str:
         return (
-            f" {Style.BOLD}{self.name}{Style.RESET}{color} ({next(self._timer)})" f"{self.description}{Style.RESET}"
+            f" {Style.BOLD}{self.name}{Style.RESET}{color} ({next(self._timer)}){self.description}{Style.RESET}"
         ).ljust(len(self._last_timer_msg), " ")
 
     def _print_failure(self, result: CompletedProcess):

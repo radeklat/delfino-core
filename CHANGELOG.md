@@ -16,6 +16,8 @@ Types of changes are:
 
 ### Breaking changes
 
+#### Drop support for Python 3.8
+
 #### Removed several tools in favour of `ruff` and it's plugins
 
 ##### `pydocstyle`

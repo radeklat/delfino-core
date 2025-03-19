@@ -58,6 +58,5 @@ class TestPyprojectTomlFile:
 
         missing_dependencies = other_extras - all_extras
         assert not missing_dependencies, (
-            f"Some extra dependencies not listed in 'tool.poetry.extras.all': "
-            f"{', '.join(sorted(missing_dependencies))}"
+            f"Some extra dependencies not listed in 'tool.poetry.extras.all': {', '.join(sorted(missing_dependencies))}"
         )

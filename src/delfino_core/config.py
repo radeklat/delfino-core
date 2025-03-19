@@ -1,18 +1,17 @@
 import logging
 import os
 from pathlib import Path
-from typing import List, Optional, Tuple
+from typing import Annotated, Optional
 
 from delfino.decorators import pass_app_context
 from delfino.models.pyproject_toml import PluginConfig
 from pydantic import BaseModel, Field
-from typing_extensions import Annotated
 
 _LOG = logging.getLogger(__name__)
 
 
 class MypyConfig(BaseModel):
-    strict_directories: List[Path] = []
+    strict_directories: list[Path] = []
 
 
 class IssueTrackingConfig(BaseModel):
@@ -66,11 +65,11 @@ class VCSConfig(BaseModel):
 class CorePluginConfig(PluginConfig):
     sources_directory: Path = Path("src")
     tests_directory: Path = Path("tests")
-    pytest_modules: List[str] = Field(default_factory=list)
+    pytest_modules: list[str] = Field(default_factory=list)
     reports_directory: Path = Path("reports")
-    test_types: List[str] = ["unit", "integration"]
-    verify_commands: Tuple[str, ...] = ("ensure-pre-commit", "ruff", "mypy", "test")
-    test_commands: Tuple[str, ...] = ("pytest", "coverage-report")
+    test_types: list[str] = ["unit", "integration"]
+    verify_commands: tuple[str, ...] = ("ensure-pre-commit", "ruff", "mypy", "test")
+    test_commands: tuple[str, ...] = ("pytest", "coverage-report")
     disable_pre_commit: bool = False
     mypy: Annotated[MypyConfig, Field(default_factory=MypyConfig)]
     vcs: Annotated[VCSConfig, Field(default_factory=VCSConfig)]
