@@ -20,39 +20,6 @@ from delfino_core.spinner import Spinner
 from delfino_core.utils import commands_group_help, execute_commands_group
 
 
-@click.command("pydocstyle")
-@pass_args
-@files_folders_option
-@pass_plugin_app_context
-def run_pydocstyle(
-    app_context: AppContext[CorePluginConfig],
-    passed_args: Tuple[str, ...],
-    files_folders: Tuple[str],
-):
-    """Run docstring linting on source code.
-
-    Docstring linting is done via pydocstyle. The pydocstyle config can be found in the
-    `pyproject.toml` file under `[tool.pydocstyle]`. This ensures compliance with PEP 257,
-    with a few exceptions. Note that pylint also carries out additional documentation
-    style checks.
-    """
-    assert_pip_package_installed("pydocstyle")
-
-    spinner = Spinner("pydocstyle", "checking documentation style")
-    dirs = build_target_paths(app_context, files_folders, False, False)
-
-    results = run(
-        ["pydocstyle", *passed_args, *dirs],
-        on_error=OnError.PASS,
-        env_update_path={"PYTHONPATH": app_context.plugin_config.sources_directory},
-        stdout=PIPE,
-        stderr=PIPE,
-        running_hook=spinner,
-    )
-
-    spinner.print_results(results)
-
-
 @click.command("ruff")
 @pass_args
 @files_folders_option
@@ -96,7 +63,6 @@ def run_pycodestyle(
     #  and outputting the result into a supported format?
     #  See:
     #    - https://github.com/PyCQA/pycodestyle/issues/813
-    #    - https://github.com/PyCQA/pydocstyle/issues/447
     args = [
         "pycodestyle",
         "--ignore",

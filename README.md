@@ -25,32 +25,31 @@
 
 # Commands
   
-| Command               | Description                                                            |
-|-----------------------|------------------------------------------------------------------------|
-| black                 | Runs black.                                                            |
-| coverage-open         | Open coverage results in default browser.                              |
-| coverage-report       | Analyse coverage and generate a term/HTML report.                      |
-| dependencies-update   | Manages the process of updating dependencies.                          |
-| ensure-pre-commit     | Ensures pre-commit is installed and enabled.                           |
-| format                | Runs ensure-pre-commit, pyupgrade, isort, black.                       |
-| gh                    | Extends `gh` or passes through.                                        |
-| glab                  | Extends `glab` or passes through.                                      |
-| isort                 | Runs isort.                                                            |
-| lint                  | Runs ruff, pylint, pycodestyle, pydocstyle.                            |
-| mypy                  | Run type checking on source code.                                      |
-| pre-commit            | Run all pre-commit stages in the current project...                    |
-| pycodestyle           | Run PEP8 checking on code.                                             |
-| pydocstyle            | Run docstring linting on source code.                                  |
-| pylint                | Run pylint on code.                                                    |
-| pytest                | Runs pytest for individual test suites.                                |
-| pytest-integration    | Run integration tests.                                                 |
-| pytest-unit           | Run unit tests.                                                        |
-| pyupgrade             | Runs pyupgrade with automatic version discovery.                       |
-| ruff                  | Run ruff.                                                              |
-| switch-python-version | Switches Python venv to a different Python version.                    |
-| test                  | Runs pytest, coverage-report.                                          |
-| vcs                   | Alias for `gh`/`glab` with auto-detection.                             |
-| verify                | Runs format, lint, mypy, test.                                         |
+| Command               | Description                                         |
+|-----------------------|-----------------------------------------------------|
+| black                 | Runs black.                                         |
+| coverage-open         | Open coverage results in default browser.           |
+| coverage-report       | Analyse coverage and generate a term/HTML report.   |
+| dependencies-update   | Manages the process of updating dependencies.       |
+| ensure-pre-commit     | Ensures pre-commit is installed and enabled.        |
+| format                | Runs ensure-pre-commit, pyupgrade, isort, black.    |
+| gh                    | Extends `gh` or passes through.                     |
+| glab                  | Extends `glab` or passes through.                   |
+| isort                 | Runs isort.                                         |
+| lint                  | Runs ruff, pylint, pycodestyle.                     |
+| mypy                  | Run type checking on source code.                   |
+| pre-commit            | Run all pre-commit stages in the current project... |
+| pycodestyle           | Run PEP8 checking on code.                          |
+| pylint                | Run pylint on code.                                 |
+| pytest                | Runs pytest for individual test suites.             |
+| pytest-integration    | Run integration tests.                              |
+| pytest-unit           | Run unit tests.                                     |
+| pyupgrade             | Runs pyupgrade with automatic version discovery.    |
+| ruff                  | Run ruff.                                           |
+| switch-python-version | Switches Python venv to a different Python version. |
+| test                  | Runs pytest, coverage-report.                       |
+| vcs                   | Alias for `gh`/`glab` with auto-detection.          |
+| verify                | Runs format, lint, mypy, test.                      |
 
 # Installation
 
@@ -110,7 +109,7 @@ pytest_modules = []
 # Coommand groups and commands to run as a quality gate in given order.
 verify_commands = ["format", "lint", "mypy", "test"]
 format_commands = ["ensure-pre-commit", "pyupgrade", "isort", "black"]
-lint_commands = ["ruff", "pylint", "pycodestyle", "pydocstyle"]
+lint_commands = ["ruff", "pylint", "pycodestyle"]
 test_commands = ["pytest", "coverage-report"]
 
 # Do not install pre-commit if this is set to true.

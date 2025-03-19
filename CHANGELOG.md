@@ -12,6 +12,10 @@ Types of changes are:
 
 ## [Unreleased]
 
+### Breaking changes
+
+- Removed `pydocstyle` in favour of `ruff` and it's `pydocstyle` plugin. See Ruff [plugin configuration](https://docs.astral.sh/ruff/settings/#lintpydocstyle) and [pydocstyle (D) rules](https://docs.astral.sh/ruff/rules/#pydocstyle-d).
+
 ## [8.1.1] - 2024-09-23
 
 ### Fixes
