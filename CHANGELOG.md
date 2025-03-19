@@ -130,6 +130,10 @@ format_commands = [...]
 
 If you used the `format` command in `pre-commit` hooks, you can replace `delfino format` with `delfino ruff` (`ruff check` is required to run `isort` and `ruff format` to run `black`).
 
+### Features
+
+- Add support for Python 3.13.
+
 ## [8.1.1] - 2024-09-23
 
 ### Fixes
