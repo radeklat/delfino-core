@@ -29,6 +29,12 @@ convention = "google"
 
 [plugin configuration](https://docs.astral.sh/ruff/settings/#lintpycodestyle), [pycodestyle (E, W) rules](https://docs.astral.sh/ruff/rules/#pycodestyle-e-w)
 
+##### `pyupgrade`
+
+[plugin configuration](https://docs.astral.sh/ruff/settings/#lintpyupgrade), [pyupgrade (UP) rules](https://docs.astral.sh/ruff/rules/#pyupgrade-up)
+
+```toml
+
 ##### `pylint`
 
 [plugin configuration](https://docs.astral.sh/ruff/settings/#lintpylint), [Pylint (PL) rules](https://docs.astral.sh/ruff/rules/#pylint-pl))

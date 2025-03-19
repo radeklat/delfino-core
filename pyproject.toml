@@ -29,7 +29,6 @@ delfino = ">=3.1.2"
 
 black = {version = "*", optional = true}
 isort = {version = "*", optional = true}
-pyupgrade = {version = "*", optional = true}
 pre-commit = {version = "*", optional = true}
 pytest = {version = "*", optional = true}
 coverage = {version = "*", optional = true}
@@ -59,7 +58,6 @@ pre-commit = "^3.3"
 shellingham = "^1.4"
 psutil = "^6.0"
 gitpython = "^3.1"
-pyupgrade = "^3.7"
 ruff = "^0.5.2"
 httpx = "^0.27.2"
 types-termcolor = "*"
@@ -67,9 +65,9 @@ types-toml = "*"
 types-pyyaml = "*"
 
 [tool.poetry.extras]
-all = ["black", "isort", "pyupgrade", "pre-commit", "pytest", "coverage", "pytest-cov", "mypy", "gitpython", "PyYAML", "ruff", "httpx"]
-verify = ["black", "isort", "pyupgrade", "pre-commit", "pytest", "coverage", "pytest-cov", "mypy", "ruff"]
-format = ["black", "isort", "pyupgrade", "pre-commit"]
+all = ["black", "isort", "pre-commit", "pytest", "coverage", "pytest-cov", "mypy", "gitpython", "PyYAML", "ruff", "httpx"]
+verify = ["black", "isort", "pre-commit", "pytest", "coverage", "pytest-cov", "mypy", "ruff"]
+format = ["black", "isort", "pre-commit"]
 test = ["pytest", "coverage", "pytest-cov"]
 mypy = ["mypy"]
 lint = ["ruff"]
@@ -147,7 +145,7 @@ select = [
 #    "I",   # isort
     "N",   # PEP8-naming
     "PL",  # Pylint
-#    "UP",  # pyupgrade
+    "UP",  # pyupgrade
     "W",   # pycodestyle, warning
 ]
 ignore = [

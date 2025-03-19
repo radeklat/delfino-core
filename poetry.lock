@@ -780,20 +780,6 @@ pytest = ">=6.2.5"
 dev = ["pre-commit", "pytest-asyncio", "tox"]
 
 [[package]]
-name = "pyupgrade"
-version = "3.16.0"
-description = "A tool to automatically upgrade syntax for newer versions."
-optional = false
-python-versions = ">=3.8.1"
-files = [
-    {file = "pyupgrade-3.16.0-py2.py3-none-any.whl", hash = "sha256:7a54ee28f3024d027048d49d101e5c702e88c85edc3a1d08b636c50ebef2a97d"},
-    {file = "pyupgrade-3.16.0.tar.gz", hash = "sha256:237893a05d5b117259b31b423f23cbae4bce0b7eae57ba9a52c06098c2ddd76f"},
-]
-
-[package.dependencies]
-tokenize-rt = ">=5.2.0"
-
-[[package]]
 name = "pyyaml"
 version = "6.0.1"
 description = "YAML parser and emitter for Python"
@@ -913,17 +899,6 @@ files = [
 ]
 
 [[package]]
-name = "tokenize-rt"
-version = "5.2.0"
-description = "A wrapper around the stdlib `tokenize` which roundtrips."
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "tokenize_rt-5.2.0-py2.py3-none-any.whl", hash = "sha256:b79d41a65cfec71285433511b50271b05da3584a1da144a0752e9c621a285289"},
-    {file = "tokenize_rt-5.2.0.tar.gz", hash = "sha256:9fe80f8a5c1edad2d3ede0f37481cc0cc1538a2f442c9c2f9e4feacd2792d054"},
-]
-
-[[package]]
 name = "toml"
 version = "0.10.2"
 description = "Python Library for Tom's Obvious, Minimal Language"
@@ -1025,17 +1000,17 @@ doc = ["furo", "jaraco.packaging (>=9.3)", "jaraco.tidelift (>=1.4)", "rst.linke
 test = ["big-O", "importlib-resources", "jaraco.functools", "jaraco.itertools", "jaraco.test", "more-itertools", "pytest (>=6,!=8.1.*)", "pytest-checkdocs (>=2.4)", "pytest-cov", "pytest-enabler (>=2.2)", "pytest-ignore-flaky", "pytest-mypy", "pytest-ruff (>=0.2.1)"]
 
 [extras]
-all = ["PyYAML", "black", "coverage", "gitpython", "httpx", "isort", "mypy", "pre-commit", "pytest", "pytest-cov", "pyupgrade", "ruff"]
+all = ["PyYAML", "black", "coverage", "gitpython", "httpx", "isort", "mypy", "pre-commit", "pytest", "pytest-cov", "ruff"]
 dependencies-update = ["gitpython"]
-format = ["black", "isort", "pre-commit", "pyupgrade"]
+format = ["black", "isort", "pre-commit"]
 lint = ["ruff"]
 mypy = ["mypy"]
 pre-commit = ["PyYAML"]
 test = ["coverage", "pytest", "pytest-cov"]
 vcs = ["httpx"]
-verify = ["black", "coverage", "isort", "mypy", "pre-commit", "pytest", "pytest-cov", "pyupgrade", "ruff"]
+verify = ["black", "coverage", "isort", "mypy", "pre-commit", "pytest", "pytest-cov", "ruff"]
 
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8.1"
-content-hash = "fb92ab2b6a1eb50b295b72c23a94d9dd5298e8d1b9b927643114769f6cc23fcf"
+content-hash = "0c359f718737d7c52dd8d3fe142a2fecc7d11cf944a0afcb2ac303c6fd054197"

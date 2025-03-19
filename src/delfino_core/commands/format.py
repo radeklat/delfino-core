@@ -102,46 +102,6 @@ class FormatSpinner(Spinner):
         self._print_success()
 
 
-@click.command("pyupgrade")
-@files_folders_option
-@pass_args
-@pass_plugin_app_context
-def run_pyupgrade(
-    app_context: AppContext[CorePluginConfig], passed_args: Tuple[str, ...], files_folders: Tuple[Path, ...], **kwargs
-):
-    """Runs pyupgrade with automatic version discovery.
-
-    The Python version comes from the `pyproject.toml` file.
-    """
-    assert_pip_package_installed("pyupgrade")
-    args = list(passed_args)
-
-    if kwargs.get("check", False):
-        args.append("--exit-zero-even-if-changed")
-
-    python_version = app_context.pyproject_toml.tool.poetry.dependencies.get("python", "3")
-    # see `pypgrade -h` for range of supported versions
-    min_python_version = _find_min_minor_version(python_version, 3, 6, 11)
-    args.append(f"--py3{min_python_version}-plus")
-
-    spinner = FormatSpinner(
-        "pyupgrade", f"upgrading code to Python 3{'.' + min_python_version if min_python_version else ''}"
-    )
-    results = run(
-        ["pyupgrade", *_all_python_files(files_folders or _default_files_folders(app_context)), *args],
-        stdout=PIPE,
-        stderr=PIPE,
-        on_error=OnError.PASS,
-        running_hook=spinner,
-    )
-    spinner.print_results_with_help(
-        results,
-        app_context,
-        bool("--exit-zero-even-if-changed" in args),
-        f"Code was not upgraded to Python 3{'.' + min_python_version if min_python_version else ''}",
-    )
-
-
 @click.command("black")
 @files_folders_option
 @pass_args
