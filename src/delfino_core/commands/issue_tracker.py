@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
 from base64 import b64encode
-from typing import Dict
 
 from click import Abort
 
@@ -8,6 +7,7 @@ from delfino_core.config import IssueTrackingConfig
 
 try:
     import httpx
+    from httpx import codes
 except ImportError:
     pass
 
@@ -22,7 +22,7 @@ class _BaseIssuerTrackerClient(ABC):
 
 
 class JiraClient(_BaseIssuerTrackerClient):
-    def _headers(self) -> Dict[str, str]:
+    def _headers(self) -> dict[str, str]:
         token = b64encode(f"{self._settings.username}:{self._settings.api_key}".encode()).decode()
         return {
             "Accept": "application/json",
@@ -35,7 +35,7 @@ class JiraClient(_BaseIssuerTrackerClient):
 
         response = httpx.get(url, headers=self._headers())
 
-        if response.status_code == 200:
+        if response.status_code == codes.OK:
             data = response.json()
             return data["fields"]["summary"]
 

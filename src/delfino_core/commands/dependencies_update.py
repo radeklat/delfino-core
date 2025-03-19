@@ -118,9 +118,9 @@ class Updater:
 
     def get_branch_name(self) -> str:
         email = self._repo.config_reader().get_value("user", "email")
-        assert (
-            email
-        ), "Git config has not a commit email set. Please set it with:\n\tgit config --global user.email 'YOUR_EMAIL'"
+        assert email, (
+            "Git config has not a commit email set. Please set it with:\n\tgit config --global user.email 'YOUR_EMAIL'"
+        )
         assert isinstance(email, str)
 
         user_name = re.sub("@.*", "", email)
@@ -144,7 +144,7 @@ class Updater:
     def checkout_branch(self, branch: str):
         if str(self._repo.active_branch) == branch:
             secho(f"Branch '{branch}' already exists and active.", fg="green")
-        elif branch in self._repo.branches:  # type: ignore[operator]
+        elif branch in self._repo.branches:
             secho(f"Branch '{branch}' already exists.", fg="yellow")
             _run(f"git checkout {branch}")
         else:

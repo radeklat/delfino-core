@@ -5,8 +5,8 @@ orbs:
 
 constants:
   - &project_name "delfino-core"
-  - &minimum_python_version "3.8"
-  - &supported_python_versions [ *minimum_python_version, "3.9", "3.10", "3.11", "3.12" ]
+  - &minimum_python_version "3.9"
+  - &supported_python_versions [ *minimum_python_version, "3.10", "3.11", "3.12", "3.13" ]
 
 parameters:
   project_name:
@@ -49,20 +49,8 @@ jobs: # A basic unit of work in a run
           paths:
             - ".venv"
       - run:
-          name: Format check
-          command: << pipeline.parameters.command_prefix >> format --check
-      - run:
-          name: Type check
-          command: << pipeline.parameters.command_prefix >> mypy
-      - run:
-          name: Linters
-          command: << pipeline.parameters.command_prefix >> lint
-      - run:
-          name: Unit tests
-          command: << pipeline.parameters.command_prefix >> pytest-unit
-      - run:
-          name: Integration tests
-          command: << pipeline.parameters.command_prefix >> pytest-integration
+          name: Verify checks
+          command: << pipeline.parameters.command_prefix >> verify
       - run:
           name: Build coverage report
           command: << pipeline.parameters.command_prefix >> coverage-report

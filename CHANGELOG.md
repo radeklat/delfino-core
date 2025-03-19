@@ -12,6 +12,132 @@ Types of changes are:
 
 ## [Unreleased]
 
+## [9.0.0] - 2025-03-19
+
+### Breaking changes
+
+#### Drop support for Python 3.8
+
+#### Removed several tools in favour of `ruff` and it's plugins
+
+##### `pydocstyle`
+
+[plugin configuration](https://docs.astral.sh/ruff/settings/#lintpydocstyle), [pydocstyle (D) rules](https://docs.astral.sh/ruff/rules/#pydocstyle-d)
+
+```toml
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+```
+
+##### `pycodestyle`
+
+[plugin configuration](https://docs.astral.sh/ruff/settings/#lintpycodestyle), [pycodestyle (E, W) rules](https://docs.astral.sh/ruff/rules/#pycodestyle-e-w)
+
+##### `pyupgrade`
+
+[plugin configuration](https://docs.astral.sh/ruff/settings/#lintpyupgrade), [pyupgrade (UP) rules](https://docs.astral.sh/ruff/rules/#pyupgrade-up)
+
+##### `isort`
+
+[plugin configuration](https://docs.astral.sh/ruff/settings/#lintisort), [isort (I) rules](https://docs.astral.sh/ruff/rules/#isort-i)
+
+Check which config options can be ported from `tool.isort` to `tool.ruff.lint.isort`.
+
+Consider adopting the [auto-fix](https://docs.astral.sh/ruff/settings/#fix) option:
+
+```toml
+[tool.ruff]
+fix = true
+```
+
+##### `black`
+
+Replaced by `ruff format` ([configuration](https://docs.astral.sh/ruff/settings/#format)). Notably:
+
+- The `line-length` option moves from `tool.black` to `tool.ruff`.
+
+##### `pylint`
+
+[plugin configuration](https://docs.astral.sh/ruff/settings/#lintpylint), [Pylint (PL) rules](https://docs.astral.sh/ruff/rules/#pylint-pl))
+
+All `.pylintrc` files can be removed once any common configuration has been moved to `pyproject.toml` file under the `tool.ruff.lint` and `tool.ruff.lint.pylint` sections.
+
+To mimic the presence of multiple `.pylintrc` files, use the [`per-file-ignores` option](https://docs.astral.sh/ruff/settings/#lint_per-file-ignores) in the `tool.ruff.lint` section, such as:
+
+```toml
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = [
+    "D102",  # missing-documentation-for-public-method
+]
+```
+
+If you don't want to use the ruff defaults, the following regexp will find all supported configuration options in the `.pylintrc` file that can be overridden:
+
+```regexp
+max-(args|bool-expr|branches|locals|nested-blocks|positional-args|public-methods|returns|statements)|allowed-(dunder-method-names|magic-value-types)
+```
+
+Additionally:
+
+- `max_complexity` can be set in the `tool.ruff.lint.mccabe` section.
+
+Consider turning on also checks provided by the following plugins as those overlap with some of the `pylint` checks that are no longer present under the pylint Ruff plugin:
+- [`pyflakes` (F)](https://docs.astral.sh/ruff/rules/#pyflakes-f)
+- [`mccabe` (C90)](https://docs.astral.sh/ruff/rules/#mccabe-c90)
+  ```toml
+  [tool.ruff.lint.mccabe]
+  max-complexity = 7
+  ```
+- [`pep8-naming` (N)](https://docs.astral.sh/ruff/rules/#pep8-naming-n), with the following config:
+  ```toml
+  [tool.ruff.lint.pep8-naming]
+  # Allow Pydantic's `@validator` decorator to trigger class method treatment.
+  classmethod-decorators = ["classmethod", "pydantic.field_validator"]
+  ```
+
+The above-mentioned plugins are not enabled by default. You can turn them on by updating your `pyproject.toml` file:
+
+```toml
+[tool.ruff.lint]
+select = [
+    "C90", # mccabe
+    "D",   # pydocstyle
+    "E",   # pycodestyle, errors
+    "F",   # Pyflakes
+    "I",   # isort
+    "N",   # PEP8-naming
+    "PL",  # Pylint
+    "UP",  # pyupgrade
+    "W",   # pycodestyle, warning
+]
+ignore = [
+   # Code of any previously disabled checks in the tool's configs
+]
+```
+
+#### `ruff` command
+
+- The `ruff` command runs both `ruff check` and `ruff format` in one go, as suggested by [the `ruff` documentation](https://docs.astral.sh/ruff/formatter/#sorting-imports). If extra arguments are provided after `--`, the `ruff` command will use them as the action to run instead of `check` and `format`.
+
+#### Removed command groups
+
+- `lint` - replaced by `ruff` of `ruff -- check`.
+- `format` - replaced by `ruff` of `ruff -- format`.
+
+The following configuration options can be removed:
+
+```toml
+[tool.delfino.plugins.delfino-core]
+lint_commands = [...]
+format_commands = [...]
+``` 
+
+If you used the `format` command in `pre-commit` hooks, you can replace `delfino format` with `delfino ruff` (`ruff check` is required to run `isort` and `ruff format` to run `black`).
+
+### Features
+
+- Add support for Python 3.13.
+
 ## [8.1.1] - 2024-09-23
 
 ### Fixes
@@ -519,7 +645,8 @@ If `tool.delfino.plugins.delfino-core.dockerhub` exists in the `pyproject.toml`:
 
 - Initial source code
 
-[Unreleased]: https://github.com/radeklat/delfino-core/compare/8.1.1...HEAD
+[Unreleased]: https://github.com/radeklat/delfino-core/compare/9.0.0...HEAD
+[9.0.0]: https://github.com/radeklat/delfino-core/compare/8.1.1...9.0.0
 [8.1.1]: https://github.com/radeklat/delfino-core/compare/8.1.0...8.1.1
 [8.1.0]: https://github.com/radeklat/delfino-core/compare/8.0.0...8.1.0
 [8.0.0]: https://github.com/radeklat/delfino-core/compare/7.5.0...8.0.0
