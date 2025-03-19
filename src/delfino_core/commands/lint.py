@@ -1,9 +1,5 @@
 """Linting checks on source code."""
 
-import logging
-from functools import lru_cache
-from itertools import groupby
-from os import getenv
 from pathlib import Path
 from subprocess import PIPE
 from typing import List, Optional, Tuple
@@ -12,9 +8,8 @@ import click
 from delfino.decorators import files_folders_option, pass_args
 from delfino.execution import OnError, run
 from delfino.models import AppContext
-from delfino.validation import assert_pip_package_installed, pip_package_installed
+from delfino.validation import assert_pip_package_installed
 
-from delfino_core.backports import path_is_relative_to
 from delfino_core.config import CorePluginConfig, pass_plugin_app_context
 from delfino_core.spinner import Spinner
 from delfino_core.utils import commands_group_help, execute_commands_group
@@ -29,35 +24,20 @@ def run_ruff(app_context: AppContext[CorePluginConfig], passed_args: Tuple[str, 
     assert_pip_package_installed("ruff")
 
     dirs = build_target_paths(app_context, files_folders)
-    spinner = Spinner("ruff", "checking code")
 
-    action = "check" if passed_args and passed_args[0] == "check" else "format"
-
-    results = run(
-        ["ruff", action, *passed_args, *dirs], stdout=PIPE, stderr=PIPE, on_error=OnError.PASS, running_hook=spinner
-    )
-    spinner.print_results(results)
-
-
-@lru_cache(maxsize=1)
-def cpu_count():
-    if getenv("CI", ""):
-        if (cpu_shares := Path("/sys/fs/cgroup/cpu/cpu.shares")).is_file():
-            return int(cpu_shares.read_text(encoding="utf-8").strip()) // 1024
-
-    log = logging.getLogger("cpu_count")
-    fallback_msg = "Number of CPUs could not be determined. Falling back to 1."
-
-    if pip_package_installed("psutil"):
-        import psutil  # pylint: disable=import-outside-toplevel
-
-        if not (count := psutil.cpu_count(logical=False)):
-            log.warning(fallback_msg)
-            return 1
-        return count
-
-    log.warning(f"`psutil` is not installed. {fallback_msg}")
-    return 1
+    if passed_args:
+        spinner = Spinner("ruff", f"{passed_args[0]}ing code")
+        results = run(
+            ["ruff", *passed_args, *dirs], stdout=PIPE, stderr=PIPE, on_error=OnError.PASS, running_hook=spinner
+        )
+        spinner.print_results(results)
+    else:
+        for action, spinner_action in ("check", "checking"), ("format", "formatting"):
+            spinner = Spinner("ruff", f"{spinner_action} code")
+            results = run(
+                ["ruff", action, *dirs], stdout=PIPE, stderr=PIPE, on_error=OnError.PASS, running_hook=spinner
+            )
+            spinner.print_results(results)
 
 
 def build_target_paths(
@@ -78,53 +58,6 @@ def build_target_paths(
             folder for folder in app_context.pyproject_toml.tool.delfino.local_command_folders if folder.exists()
         )
     return target_paths
-
-
-@click.command("pylint")
-@files_folders_option
-@pass_args
-@pass_plugin_app_context
-def run_pylint(
-    app_context: AppContext[CorePluginConfig],
-    passed_args: Tuple[str, ...],
-    files_folders: Tuple[str],
-):
-    """Run pylint on code.
-
-    The bulk of our code conventions are enforced via pylint. The pylint config can be
-    found in the `.pylintrc` file.
-    """
-    assert_pip_package_installed("pylint")
-
-    plugin_config = app_context.plugin_config
-
-    def get_pylintrc_folder(path: Path) -> Path:
-        if plugin_config.tests_directory.exists() and path_is_relative_to(path, plugin_config.tests_directory):
-            return plugin_config.tests_directory
-        return app_context.project_root
-
-    target_paths = build_target_paths(app_context, files_folders)
-    grouped_paths = groupby(target_paths, get_pylintrc_folder)
-    for pylintrc_folder, paths in grouped_paths:
-        checked_dirs = list(paths)
-        spinner = Spinner("pylint", f"checking '{', '.join(map(str, checked_dirs))}'")
-        results = run(
-            [
-                "pylint",
-                "-j",
-                str(cpu_count()),
-                "--rcfile",
-                pylintrc_folder / ".pylintrc",
-                *passed_args,
-                *checked_dirs,
-            ],
-            stdout=PIPE,
-            stderr=PIPE,
-            on_error=OnError.PASS,  # spinner aborts on error
-            env_update_path={"PYTHONPATH": app_context.plugin_config.sources_directory},
-            running_hook=spinner,
-        )
-        spinner.print_results(results)
 
 
 @click.command("lint", help=commands_group_help("lint"))

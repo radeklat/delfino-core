@@ -35,10 +35,8 @@ pytest = {version = "*", optional = true}
 coverage = {version = "*", optional = true}
 pytest-cov = {version = "*", optional = true}
 mypy = {version = "*", optional = true}
-pylint = {version = "*", optional = true}
 gitpython = {version = "*", optional = true}
 shellingham = {version = "*", optional = true}
-psutil = {version = "*", optional = true}
 PyYAML = {version = "*", optional = true}
 ruff = {version = ">=0.5.0", optional = true}
 httpx = {version = "*", optional = true}
@@ -53,7 +51,6 @@ httpx = {version = "*", optional = true}
 black = "^24.4"
 isort = "^5.9"
 coverage = "^7.0"
-pylint = "^3.0"
 mypy = "^1.4"
 pytest = "^8.2"
 pytest-cov = "^5.0"
@@ -67,16 +64,15 @@ ruff = "^0.5.2"
 httpx = "^0.27.2"
 types-termcolor = "*"
 types-toml = "*"
-types-psutil = "*"
 types-pyyaml = "*"
 
 [tool.poetry.extras]
-all = ["black", "isort", "pyupgrade", "pre-commit", "pytest", "coverage", "pytest-cov", "mypy", "pylint", "psutil", "gitpython", "PyYAML", "ruff", "httpx"]
-verify = ["black", "isort", "pyupgrade", "pre-commit", "pytest", "coverage", "pytest-cov", "mypy", "pylint", "psutil", "ruff"]
+all = ["black", "isort", "pyupgrade", "pre-commit", "pytest", "coverage", "pytest-cov", "mypy", "gitpython", "PyYAML", "ruff", "httpx"]
+verify = ["black", "isort", "pyupgrade", "pre-commit", "pytest", "coverage", "pytest-cov", "mypy", "ruff"]
 format = ["black", "isort", "pyupgrade", "pre-commit"]
 test = ["pytest", "coverage", "pytest-cov"]
 mypy = ["mypy"]
-lint = ["pylint", "psutil", "ruff"]
+lint = ["ruff"]
 dependencies_update = ["gitpython"]
 vcs = ["httpx"]
 pre_commit = ["PyYAML"]
@@ -144,13 +140,15 @@ line-length = 120
 
 [tool.ruff.lint]
 select = [
-    "E",   # flake8 / pycodestyle, errors
-    "W",   # flake8 / pycodestyle, warning
-    "C90", # McCabe
-    "I",   # isort
+    "C90", # mccabe
     "D",   # pydocstyle
-    "UP",  # pyupgrade
-    "RUF", # ruff specific
+    "E",   # pycodestyle, errors
+    "F",   # Pyflakes
+#    "I",   # isort
+    "N",   # PEP8-naming
+    "PL",  # Pylint
+#    "UP",  # pyupgrade
+    "W",   # pycodestyle, warning
 ]
 ignore = [
     # See https://docs.astral.sh/ruff/rules/#pydocstyle-d
@@ -161,8 +159,23 @@ ignore = [
     "D413",  # "Missing blank line after last section"
 ]
 
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = [
+    "D102",  # missing-documentation-for-public-method
+]
+
+[tool.ruff.lint.pylint]
+max-args = 6
+
 [tool.ruff.lint.pydocstyle]
 convention = "google"
+
+[tool.ruff.lint.pep8-naming]
+# Allow Pydantic's `@validator` decorator to trigger class method treatment.
+classmethod-decorators = ["classmethod", "pydantic.field_validator"]
+
+[tool.ruff.lint.mccabe]
+max-complexity = 10
 
 [tool.delfino.plugins.local.vcs]
 #branch_prefix = ""

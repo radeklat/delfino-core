@@ -14,26 +14,83 @@ Types of changes are:
 
 ### Breaking changes
 
-Removed several tools in favour of `ruff` and it's plugins:
+#### Removed several tools in favour of `ruff` and it's plugins
 
-- `pydocstyle` ([plugin configuration](https://docs.astral.sh/ruff/settings/#lintpydocstyle), [pydocstyle (D) rules](https://docs.astral.sh/ruff/rules/#pydocstyle-d))
-- `pycodestyle` ([plugin configuration](https://docs.astral.sh/ruff/settings/#lintpycodestyle), [pycodestyle (E, W) rules](https://docs.astral.sh/ruff/rules/#pycodestyle-e-w))
+##### `pydocstyle`
+
+[plugin configuration](https://docs.astral.sh/ruff/settings/#lintpydocstyle), [pydocstyle (D) rules](https://docs.astral.sh/ruff/rules/#pydocstyle-d)
+
+```toml
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+```
+
+##### `pycodestyle`
+
+[plugin configuration](https://docs.astral.sh/ruff/settings/#lintpycodestyle), [pycodestyle (E, W) rules](https://docs.astral.sh/ruff/rules/#pycodestyle-e-w)
+
+##### `pylint`
+
+[plugin configuration](https://docs.astral.sh/ruff/settings/#lintpylint), [Pylint (PL) rules](https://docs.astral.sh/ruff/rules/#pylint-pl))
+
+All `.pylintrc` files can be removed once any common configuration has been moved to `pyproject.toml` file under the `tool.ruff.lint` and `tool.ruff.lint.pylint` sections.
+
+To mimic the presence of multiple `.pylintrc` files, use the [`per-file-ignores` option](https://docs.astral.sh/ruff/settings/#lint_per-file-ignores) in the `tool.ruff.lint` section, such as:
+
+```toml
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = [
+    "D102",  # missing-documentation-for-public-method
+]
+```
+
+If you don't want to use the ruff defaults, the following regexp will find all supported configuration options in the `.pylintrc` file that can be overridden:
+
+```regexp
+max-(args|bool-expr|branches|locals|nested-blocks|positional-args|public-methods|returns|statements)|allowed-(dunder-method-names|magic-value-types)
+```
+
+Additionally:
+
+- `max_complexity` can be set in the `tool.ruff.lint.mccabe` section.
+
+Consider turning on also checks provided by the following plugins as those overlap with some of the `pylint` checks that are no longer present under the pylint Ruff plugin:
+- [`pyflakes` (F)](https://docs.astral.sh/ruff/rules/#pyflakes-f)
+- [`mccabe` (C90)](https://docs.astral.sh/ruff/rules/#mccabe-c90)
+  ```toml
+  [tool.ruff.lint.mccabe]
+  max-complexity = 7
+  ```
+- [`pep8-naming` (N)](https://docs.astral.sh/ruff/rules/#pep8-naming-n), with the following config:
+  ```toml
+  [tool.ruff.lint.pep8-naming]
+  # Allow Pydantic's `@validator` decorator to trigger class method treatment.
+  classmethod-decorators = ["classmethod", "pydantic.field_validator"]
+  ```
 
 The above-mentioned plugins are not enabled by default. You can turn them on by updating your `pyproject.toml` file:
 
 ```toml
 [tool.ruff.lint]
 select = [
-    "E",   # flake8 / pycodestyle, errors
-    "W",   # flake8 / pycodestyle, warning
-    "I",   # isort
+    "C90", # mccabe
     "D",   # pydocstyle
+    "E",   # pycodestyle, errors
+    "F",   # Pyflakes
+    "I",   # isort
+    "N",   # PEP8-naming
+    "PL",  # Pylint
     "UP",  # pyupgrade
+    "W",   # pycodestyle, warning
 ]
 ignore = [
    # Code of any previously disabled checks in the tool's configs
 ]
 ```
+
+#### `ruff` command
+
+- The `ruff` command runs both `ruff check` and `ruff format` in one go, as suggested by [the `ruff` documentation](https://docs.astral.sh/ruff/formatter/#sorting-imports). If extra arguments are provided after `--`, the `ruff` command will use them as the action to run instead of `check` and `format`.
 
 ## [8.1.1] - 2024-09-23
 

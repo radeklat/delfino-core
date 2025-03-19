@@ -8,6 +8,7 @@ from delfino_core.config import IssueTrackingConfig
 
 try:
     import httpx
+    from httpx import codes
 except ImportError:
     pass
 
@@ -35,7 +36,7 @@ class JiraClient(_BaseIssuerTrackerClient):
 
         response = httpx.get(url, headers=self._headers())
 
-        if response.status_code == 200:
+        if response.status_code == codes.OK:
             data = response.json()
             return data["fields"]["summary"]
 
