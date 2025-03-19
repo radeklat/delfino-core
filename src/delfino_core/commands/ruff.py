@@ -9,9 +9,9 @@ from delfino.decorators import files_folders_option, pass_args
 from delfino.execution import OnError, run
 from delfino.models import AppContext
 from delfino.validation import assert_pip_package_installed
+
 from delfino_core.config import CorePluginConfig, pass_plugin_app_context
 from delfino_core.spinner import Spinner
-from delfino_core.utils import commands_group_help, execute_commands_group
 
 
 @click.command("ruff")
@@ -57,16 +57,3 @@ def build_target_paths(
             folder for folder in app_context.pyproject_toml.tool.delfino.local_command_folders if folder.exists()
         )
     return target_paths
-
-
-@click.command("lint", help=commands_group_help("lint"))
-@files_folders_option
-@pass_plugin_app_context
-@click.pass_context
-def run_group_lint(
-    click_context: click.Context,
-    app_context: AppContext[CorePluginConfig],
-    **kwargs,
-):
-    del kwargs  # passed to downstream commands
-    execute_commands_group(click_context, app_context.plugin_config)

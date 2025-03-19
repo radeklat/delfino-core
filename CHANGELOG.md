@@ -115,6 +115,21 @@ ignore = [
 
 - The `ruff` command runs both `ruff check` and `ruff format` in one go, as suggested by [the `ruff` documentation](https://docs.astral.sh/ruff/formatter/#sorting-imports). If extra arguments are provided after `--`, the `ruff` command will use them as the action to run instead of `check` and `format`.
 
+#### Removed command groups
+
+- `lint` - replaced by `ruff` of `ruff -- check`.
+- `format` - replaced by `ruff` of `ruff -- format`.
+
+The following configuration options can be removed:
+
+```toml
+[tool.delfino.plugins.delfino-core]
+lint_commands = [...]
+format_commands = [...]
+``` 
+
+If you used the `format` command in `pre-commit` hooks, you can replace `delfino format` with `delfino ruff` (`ruff check` is required to run `isort` and `ruff format` to run `black`).
+
 ## [8.1.1] - 2024-09-23
 
 ### Fixes

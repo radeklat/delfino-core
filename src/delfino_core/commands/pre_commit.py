@@ -1,12 +1,16 @@
 from pathlib import Path
+from subprocess import PIPE
 from typing import Dict, List, Optional, Set, Tuple
 
 import click
 from click import Abort
 from delfino.decorators import files_folders_option, pass_args
 from delfino.execution import OnError, run
+from delfino.models import AppContext
 from delfino.terminal_output import print_header
 from delfino.validation import assert_pip_package_installed
+
+from delfino_core.config import CorePluginConfig, pass_plugin_app_context
 
 try:
     import yaml
@@ -85,3 +89,14 @@ def run_pre_commit(stage_all_files: bool, files_folders: List[Path], passed_args
             ],
             on_error=OnError.PASS,
         )
+
+
+@click.command("ensure-pre-commit")
+@pass_plugin_app_context
+def run_ensure_pre_commit(app_context: AppContext[CorePluginConfig], **kwargs):
+    """Ensures pre-commit is installed and enabled."""
+    del kwargs  # not used, needed for extra kwargs from the command group
+    if not app_context.plugin_config.disable_pre_commit:
+        assert_pip_package_installed("pre-commit")
+        # ensure pre-commit is installed
+        run("pre-commit install", stdout=PIPE, on_error=OnError.EXIT)

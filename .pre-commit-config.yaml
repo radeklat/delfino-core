@@ -1,12 +1,19 @@
 # See https://pre-commit.com/ for usage and config
 default_language_version:
-  python: python3.7
+  python: python3.8
 repos:
 - repo: local
   hooks:
-  - id: formatting
-    name: formatting
+  # Specify folders explicitly to avoid running on `commands`, which is a symlink to `src/commands`
+  - id: linting
+    name: linting
     stages: [commit]
     language: system
-    entry: bash -c "export PYTHONPATH=src; poetry run delfino format"
+    entry: bash -c "export PYTHONPATH=src; poetry run delfino ruff -f src -f tests"
+    pass_filenames: false
+  - id: formatting
+    name: formatting
+    stages: [ commit ]
+    language: system
+    entry: bash -c "export PYTHONPATH=src; poetry run delfino ruff -f src -f tests"
     pass_filenames: false

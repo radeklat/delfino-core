@@ -931,10 +931,9 @@ test = ["big-O", "importlib-resources", "jaraco.functools", "jaraco.itertools", 
 [extras]
 all = ["PyYAML", "coverage", "gitpython", "httpx", "mypy", "pre-commit", "pytest", "pytest-cov", "ruff"]
 dependencies-update = ["gitpython"]
-format = ["pre-commit"]
-lint = ["ruff"]
 mypy = ["mypy"]
 pre-commit = ["PyYAML"]
+ruff = ["ruff"]
 test = ["coverage", "pytest", "pytest-cov"]
 vcs = ["httpx"]
 verify = ["coverage", "mypy", "pre-commit", "pytest", "pytest-cov", "ruff"]
@@ -942,4 +941,4 @@ verify = ["coverage", "mypy", "pre-commit", "pytest", "pytest-cov", "ruff"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8.1"
-content-hash = "865143d28e310cbffb01b9f03808ae5cdded1fe7f3763f461dbb070a3aa7f5a5"
+content-hash = "73587061ef5cb4e1a03a51075c143c9ef8873f948554d0653922be7abd0ea366"

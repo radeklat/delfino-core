@@ -1,13 +1,14 @@
 import click
 from delfino.models import AppContext
-from delfino_core.commands.format import run_group_format
-from delfino_core.commands.lint import run_group_lint
+
+from delfino_core.commands.pre_commit import run_ensure_pre_commit
+from delfino_core.commands.ruff import run_ruff
 from delfino_core.commands.test import run_group_test
 from delfino_core.commands.typecheck import run_mypy
 from delfino_core.config import CorePluginConfig, pass_plugin_app_context
 from delfino_core.utils import commands_group_help, execute_commands_group
 
-_COMMANDS = [run_group_format, run_group_lint, run_mypy, run_group_test]
+_COMMANDS = [run_ensure_pre_commit, run_ruff, run_mypy, run_group_test]
 
 
 @click.command("verify", help=commands_group_help("verify"))

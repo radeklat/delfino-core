@@ -4,9 +4,8 @@ import pytest
 from delfino.click_utils.command import CommandRegistry
 from delfino.models.pyproject_toml import PluginConfig
 from delfino_core.commands.dependencies_update import run_dependencies_update
-from delfino_core.commands.format import run_ensure_pre_commit, run_group_format
-from delfino_core.commands.lint import run_group_lint, run_ruff
-from delfino_core.commands.pre_commit import run_pre_commit
+from delfino_core.commands.pre_commit import run_ensure_pre_commit, run_pre_commit
+from delfino_core.commands.ruff import run_ruff
 from delfino_core.commands.switch_python_version import run_switch_python_version
 from delfino_core.commands.test import (
     run_coverage_open,
@@ -50,8 +49,6 @@ class TestPlugin:
             run_coverage_report,
             run_dependencies_update,
             run_ensure_pre_commit,
-            run_group_format,
-            run_group_lint,
             run_mypy,
             run_pre_commit,
             run_switch_python_version,
