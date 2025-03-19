@@ -5,15 +5,9 @@ repos:
 - repo: local
   hooks:
   # Specify folders explicitly to avoid running on `commands`, which is a symlink to `src/commands`
-  - id: linting
-    name: linting
+  - id: lint_format
+    name: Linting and formatting
     stages: [commit]
-    language: system
-    entry: bash -c "export PYTHONPATH=src; poetry run delfino ruff -f src -f tests"
-    pass_filenames: false
-  - id: formatting
-    name: formatting
-    stages: [ commit ]
     language: system
     entry: bash -c "export PYTHONPATH=src; poetry run delfino ruff -f src -f tests"
     pass_filenames: false

@@ -12,6 +12,8 @@ Types of changes are:
 
 ## [Unreleased]
 
+## [9.0.0] - 2025-03-19
+
 ### Breaking changes
 
 #### Removed several tools in favour of `ruff` and it's plugins
@@ -641,7 +643,8 @@ If `tool.delfino.plugins.delfino-core.dockerhub` exists in the `pyproject.toml`:
 
 - Initial source code
 
-[Unreleased]: https://github.com/radeklat/delfino-core/compare/8.1.1...HEAD
+[Unreleased]: https://github.com/radeklat/delfino-core/compare/9.0.0...HEAD
+[9.0.0]: https://github.com/radeklat/delfino-core/compare/8.1.1...9.0.0
 [8.1.1]: https://github.com/radeklat/delfino-core/compare/8.1.0...8.1.1
 [8.1.0]: https://github.com/radeklat/delfino-core/compare/8.0.0...8.1.0
 [8.0.0]: https://github.com/radeklat/delfino-core/compare/7.5.0...8.0.0
