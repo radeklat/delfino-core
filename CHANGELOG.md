@@ -33,7 +33,18 @@ convention = "google"
 
 [plugin configuration](https://docs.astral.sh/ruff/settings/#lintpyupgrade), [pyupgrade (UP) rules](https://docs.astral.sh/ruff/rules/#pyupgrade-up)
 
+##### `isort`
+
+[plugin configuration](https://docs.astral.sh/ruff/settings/#lintisort), [isort (I) rules](https://docs.astral.sh/ruff/rules/#isort-i)
+
+Check which config options can be ported from `tool.isort` to `tool.ruff.lint.isort`.
+
+Consider adopting the [auto-fix](https://docs.astral.sh/ruff/settings/#fix) option:
+
 ```toml
+[tool.ruff]
+fix = true
+```
 
 ##### `pylint`
 

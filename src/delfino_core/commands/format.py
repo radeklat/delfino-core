@@ -134,35 +134,6 @@ def run_black(
     )
 
 
-@click.command("isort")
-@files_folders_option
-@pass_args
-@pass_plugin_app_context
-def run_isort(
-    app_context: AppContext[CorePluginConfig], passed_args: Tuple[str, ...], files_folders: Tuple[Path, ...], **kwargs
-):
-    """Runs isort."""
-    assert_pip_package_installed("isort")
-    args = list(passed_args)
-
-    if kwargs.get("check", False):
-        args.append("--check")
-
-    if kwargs.get("quiet", False):
-        args.append("--quiet")
-
-    spinner = FormatSpinner("isort", "sorting imports")
-    results = run(
-        ["isort", *args, *(files_folders or _default_files_folders(app_context))],
-        stdout=PIPE,
-        stderr=PIPE,
-        on_error=OnError.PASS,
-        running_hook=spinner,
-    )
-
-    spinner.print_results_with_help(results, app_context, bool("--check" in args), "Imports were not sorted")
-
-
 @click.command("ensure-pre-commit")
 @pass_plugin_app_context
 def run_ensure_pre_commit(app_context: AppContext[CorePluginConfig], **kwargs):

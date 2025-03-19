@@ -32,10 +32,9 @@
 | coverage-report       | Analyse coverage and generate a term/HTML report.   |
 | dependencies-update   | Manages the process of updating dependencies.       |
 | ensure-pre-commit     | Ensures pre-commit is installed and enabled.        |
-| format                | Runs ensure-pre-commit, isort, black.    |
+| format                | Runs ensure-pre-commit, black.                      |
 | gh                    | Extends `gh` or passes through.                     |
 | glab                  | Extends `glab` or passes through.                   |
-| isort                 | Runs isort.                                         |
 | lint                  | Runs ruff.                                          |
 | mypy                  | Run type checking on source code.                   |
 | pre-commit            | Run all pre-commit stages in the current project... |
@@ -105,7 +104,7 @@ pytest_modules = []
 
 # Coommand groups and commands to run as a quality gate in given order.
 verify_commands = ["format", "lint", "mypy", "test"]
-format_commands = ["ensure-pre-commit", "isort", "black"]
+format_commands = ["ensure-pre-commit", "black"]
 lint_commands = ["ruff"]
 test_commands = ["pytest", "coverage-report"]
 

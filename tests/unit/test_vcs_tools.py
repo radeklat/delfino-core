@@ -1,5 +1,4 @@
 import pytest
-
 from delfino_core.vcs_tools import _sanitize_branch_name
 
 

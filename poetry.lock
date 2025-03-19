@@ -417,20 +417,6 @@ files = [
 ]
 
 [[package]]
-name = "isort"
-version = "5.13.2"
-description = "A Python utility / library to sort Python imports."
-optional = false
-python-versions = ">=3.8.0"
-files = [
-    {file = "isort-5.13.2-py3-none-any.whl", hash = "sha256:8ca5e72a8d85860d5a3fa69b8745237f2939afe12dbf656afbcb47fe72d947a6"},
-    {file = "isort-5.13.2.tar.gz", hash = "sha256:48fdfcb9face5d58a4f6dde2e72a1fb8dcaf8ab26f95ab49fab84c2ddefb0109"},
-]
-
-[package.extras]
-colors = ["colorama (>=0.4.6)"]
-
-[[package]]
 name = "mypy"
 version = "1.10.1"
 description = "Optional static typing for Python"
@@ -1000,17 +986,17 @@ doc = ["furo", "jaraco.packaging (>=9.3)", "jaraco.tidelift (>=1.4)", "rst.linke
 test = ["big-O", "importlib-resources", "jaraco.functools", "jaraco.itertools", "jaraco.test", "more-itertools", "pytest (>=6,!=8.1.*)", "pytest-checkdocs (>=2.4)", "pytest-cov", "pytest-enabler (>=2.2)", "pytest-ignore-flaky", "pytest-mypy", "pytest-ruff (>=0.2.1)"]
 
 [extras]
-all = ["PyYAML", "black", "coverage", "gitpython", "httpx", "isort", "mypy", "pre-commit", "pytest", "pytest-cov", "ruff"]
+all = ["PyYAML", "black", "coverage", "gitpython", "httpx", "mypy", "pre-commit", "pytest", "pytest-cov", "ruff"]
 dependencies-update = ["gitpython"]
-format = ["black", "isort", "pre-commit"]
+format = ["black", "pre-commit"]
 lint = ["ruff"]
 mypy = ["mypy"]
 pre-commit = ["PyYAML"]
 test = ["coverage", "pytest", "pytest-cov"]
 vcs = ["httpx"]
-verify = ["black", "coverage", "isort", "mypy", "pre-commit", "pytest", "pytest-cov", "ruff"]
+verify = ["black", "coverage", "mypy", "pre-commit", "pytest", "pytest-cov", "ruff"]
 
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8.1"
-content-hash = "0c359f718737d7c52dd8d3fe142a2fecc7d11cf944a0afcb2ac303c6fd054197"
+content-hash = "3702a76900abd474be63076789c78712f11f05f2609c13d6704e778e4857692c"
