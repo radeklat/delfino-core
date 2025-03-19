@@ -8,7 +8,6 @@ from delfino import run
 from delfino.decorators import pass_args
 from delfino.execution import OnError
 from delfino.models import AppContext
-
 from delfino_core.config import CorePluginConfig, pass_plugin_app_context
 from delfino_core.utils import assert_executable_installed
 from delfino_core.vcs_tools import (

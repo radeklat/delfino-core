@@ -27,7 +27,6 @@ classifiers = [
 python = "^3.8.1"
 delfino = ">=3.1.2"
 
-black = {version = "*", optional = true}
 pre-commit = {version = "*", optional = true}
 pytest = {version = "*", optional = true}
 coverage = {version = "*", optional = true}
@@ -46,7 +45,6 @@ httpx = {version = "*", optional = true}
 "delfino-core" = "delfino_core.commands"
 
 [tool.poetry.group.dev.dependencies]
-black = "^24.4"
 coverage = "^7.0"
 mypy = "^1.4"
 pytest = "^8.2"
@@ -63,33 +61,15 @@ types-toml = "*"
 types-pyyaml = "*"
 
 [tool.poetry.extras]
-all = ["black", "pre-commit", "pytest", "coverage", "pytest-cov", "mypy", "gitpython", "PyYAML", "ruff", "httpx"]
-verify = ["black", "pre-commit", "pytest", "coverage", "pytest-cov", "mypy", "ruff"]
-format = ["black", "pre-commit"]
+all = ["pre-commit", "pytest", "coverage", "pytest-cov", "mypy", "gitpython", "PyYAML", "ruff", "httpx"]
+verify = ["pre-commit", "pytest", "coverage", "pytest-cov", "mypy", "ruff"]
+format = ["pre-commit"]
 test = ["pytest", "coverage", "pytest-cov"]
 mypy = ["mypy"]
 lint = ["ruff"]
 dependencies_update = ["gitpython"]
 vcs = ["httpx"]
 pre_commit = ["PyYAML"]
-
-[tool.black]
-line-length = 120
-target-version = ['py38']
-exclude = '''
-/(
-    \.eggs
-  | \.git
-  | \.hg
-  | \.mypy_cache
-  | \.tox
-  | \.venv
-  | _build
-  | buck-out
-  | build
-  | dist
-)/
-'''
 
 [tool.pytest.ini_options]
 testpaths = "tests/unit tests/integration"
@@ -141,10 +121,7 @@ select = [
 ignore = [
     # See https://docs.astral.sh/ruff/rules/#pydocstyle-d
     "D1",  # Missing docstrings. We rely on code reviews. Names are often descriptive enough and don't need additional docstring.
-    "D202",  # "No blank lines allowed after function docstring" is false positive caused by black formatter.
-    "D204",  # "1 blank line required after class docstring"
     "D401",  # "First line should be in imperative mood"
-    "D413",  # "Missing blank line after last section"
 ]
 
 [tool.ruff.lint.per-file-ignores]

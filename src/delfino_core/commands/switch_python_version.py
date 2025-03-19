@@ -7,7 +7,6 @@ from delfino.execution import OnError, run
 from delfino.models import AppContext
 from delfino.terminal_output import print_header
 from delfino.validation import assert_package_manager_is_known, pip_package_installed
-
 from delfino_core.config import CorePluginConfig, pass_plugin_app_context
 
 

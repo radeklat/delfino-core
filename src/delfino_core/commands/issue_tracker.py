@@ -3,7 +3,6 @@ from base64 import b64encode
 from typing import Dict
 
 from click import Abort
-
 from delfino_core.config import IssueTrackingConfig
 
 try:

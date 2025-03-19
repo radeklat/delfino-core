@@ -46,6 +46,12 @@ Consider adopting the [auto-fix](https://docs.astral.sh/ruff/settings/#fix) opti
 fix = true
 ```
 
+##### `black`
+
+Replaced by `ruff format` ([configuration](https://docs.astral.sh/ruff/settings/#format)). Notably:
+
+- The `line-length` option moves from `tool.black` to `tool.ruff`.
+
 ##### `pylint`
 
 [plugin configuration](https://docs.astral.sh/ruff/settings/#lintpylint), [Pylint (PL) rules](https://docs.astral.sh/ruff/rules/#pylint-pl))

@@ -3,16 +3,15 @@ from subprocess import PIPE, CompletedProcess
 from typing import List, Optional, Tuple
 
 import click
-from delfino.decorators import files_folders_option, pass_args
+from delfino.decorators import files_folders_option
 from delfino.execution import OnError, run
 from delfino.models import AppContext
 from delfino.terminal_output import run_command_example
 from delfino.validation import assert_pip_package_installed
-from packaging.specifiers import SpecifierSet
-
 from delfino_core.config import CorePluginConfig, pass_plugin_app_context
 from delfino_core.spinner import Spinner
 from delfino_core.utils import commands_group_help, execute_commands_group
+from packaging.specifiers import SpecifierSet
 
 
 def _major_minor_only(version_number: str) -> str:
@@ -100,38 +99,6 @@ class FormatSpinner(Spinner):
             return
 
         self._print_success()
-
-
-@click.command("black")
-@files_folders_option
-@pass_args
-@pass_plugin_app_context
-def run_black(
-    app_context: AppContext[CorePluginConfig], passed_args: Tuple[str, ...], files_folders: Tuple[Path, ...], **kwargs
-):
-    """Runs black."""
-    assert_pip_package_installed("black")
-    args = list(passed_args)
-
-    if kwargs.get("check", False):
-        args.append("--check")
-
-    if kwargs.get("quiet", False):
-        args.append("--quiet")
-
-    spinner = FormatSpinner("black", "formatting code")
-
-    results = run(
-        ["black", *args, *(files_folders or _default_files_folders(app_context))],
-        stdout=PIPE,
-        stderr=PIPE,
-        on_error=OnError.PASS,
-        running_hook=spinner,
-    )
-
-    spinner.print_results_with_help(
-        results, app_context, bool("--check" in args), "Code was not formatted", "reformatted "
-    )
 
 
 @click.command("ensure-pre-commit")

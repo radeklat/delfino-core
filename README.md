@@ -27,12 +27,11 @@
   
 | Command               | Description                                         |
 |-----------------------|-----------------------------------------------------|
-| black                 | Runs black.                                         |
 | coverage-open         | Open coverage results in default browser.           |
 | coverage-report       | Analyse coverage and generate a term/HTML report.   |
 | dependencies-update   | Manages the process of updating dependencies.       |
 | ensure-pre-commit     | Ensures pre-commit is installed and enabled.        |
-| format                | Runs ensure-pre-commit, black.                      |
+| format                | Runs ensure-pre-commit.                             |
 | gh                    | Extends `gh` or passes through.                     |
 | glab                  | Extends `glab` or passes through.                   |
 | lint                  | Runs ruff.                                          |
@@ -104,7 +103,7 @@ pytest_modules = []
 
 # Coommand groups and commands to run as a quality gate in given order.
 verify_commands = ["format", "lint", "mypy", "test"]
-format_commands = ["ensure-pre-commit", "black"]
+format_commands = ["ensure-pre-commit"]
 lint_commands = ["ruff"]
 test_commands = ["pytest", "coverage-report"]
 

@@ -1,6 +1,5 @@
 import click
 from delfino.models import AppContext
-
 from delfino_core.commands.format import run_group_format
 from delfino_core.commands.lint import run_group_lint
 from delfino_core.commands.test import run_group_test

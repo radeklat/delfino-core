@@ -15,7 +15,6 @@ from delfino.execution import OnError, run
 from delfino.models import AppContext
 from delfino.terminal_output import print_header
 from delfino.validation import assert_package_manager_is_known, assert_pip_package_installed
-
 from delfino_core.commands.verify import run_group_verify
 from delfino_core.config import CorePluginConfig
 from delfino_core.spinner import Spinner

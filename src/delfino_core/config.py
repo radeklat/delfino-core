@@ -71,7 +71,7 @@ class CorePluginConfig(PluginConfig):
     test_types: List[str] = ["unit", "integration"]
     verify_commands: Tuple[str, ...] = ("format", "lint", "mypy", "test")
     lint_commands: Tuple[str, ...] = ("ruff",)
-    format_commands: Tuple[str, ...] = ("ensure-pre-commit", "black")
+    format_commands: Tuple[str, ...] = ("ensure-pre-commit",)
     test_commands: Tuple[str, ...] = ("pytest", "coverage-report")
     disable_pre_commit: bool = False
     mypy: Annotated[MypyConfig, Field(default_factory=MypyConfig)]
