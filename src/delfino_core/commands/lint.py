@@ -39,56 +39,6 @@ def run_ruff(app_context: AppContext[CorePluginConfig], passed_args: Tuple[str, 
     spinner.print_results(results)
 
 
-@click.command("pycodestyle")
-@pass_args
-@files_folders_option
-@pass_plugin_app_context
-def run_pycodestyle(
-    app_context: AppContext[CorePluginConfig],
-    passed_args: Tuple[str, ...],
-    files_folders: Tuple[str],
-):
-    """Run PEP8 checking on code.
-
-    PEP8 checking is done via pycodestyle.
-
-    Why pycodestyle and pylint? So far, pylint does not check against every convention in PEP8. As pylint's
-    functionality grows, we should move all PEP8 checking to pylint and remove pycodestyle.
-    """
-    assert_pip_package_installed("pycodestyle")
-
-    dirs = build_target_paths(app_context, files_folders)
-
-    # TODO(Radek): Implement unofficial config support in pyproject.toml by parsing it
-    #  and outputting the result into a supported format?
-    #  See:
-    #    - https://github.com/PyCQA/pycodestyle/issues/813
-    args = [
-        "pycodestyle",
-        "--ignore",
-        "E501,W503,E231,E203,E402",
-        # Ignores explained:
-        # - E501: Line length is checked by PyLint
-        # - W503: Disable checking of "Line break before binary operator". PEP8 recently (~2019) switched to
-        #         "line break before the operator" style, so we should permit this usage.
-        # - E231: "missing whitespace after ','" is a false positive. Handled by black formatter.
-        "--exclude",
-        ".svn,CVS,.bzr,.hg,.git,__pycache__,.tox,*_config_parser.py",
-        *passed_args,
-        *dirs,
-    ]
-    spinner = Spinner("pycodestyle", "checking code style")
-    result = run(
-        args,
-        stdout=PIPE,
-        stderr=PIPE,
-        on_error=OnError.PASS,
-        env_update_path={"PYTHONPATH": app_context.plugin_config.sources_directory},
-        running_hook=spinner,
-    )
-    spinner.print_results(result)
-
-
 @lru_cache(maxsize=1)
 def cpu_count():
     if getenv("CI", ""):

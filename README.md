@@ -36,10 +36,9 @@
 | gh                    | Extends `gh` or passes through.                     |
 | glab                  | Extends `glab` or passes through.                   |
 | isort                 | Runs isort.                                         |
-| lint                  | Runs ruff, pylint, pycodestyle.                     |
+| lint                  | Runs ruff, pylint.                                  |
 | mypy                  | Run type checking on source code.                   |
 | pre-commit            | Run all pre-commit stages in the current project... |
-| pycodestyle           | Run PEP8 checking on code.                          |
 | pylint                | Run pylint on code.                                 |
 | pytest                | Runs pytest for individual test suites.             |
 | pytest-integration    | Run integration tests.                              |
@@ -109,7 +108,7 @@ pytest_modules = []
 # Coommand groups and commands to run as a quality gate in given order.
 verify_commands = ["format", "lint", "mypy", "test"]
 format_commands = ["ensure-pre-commit", "pyupgrade", "isort", "black"]
-lint_commands = ["ruff", "pylint", "pycodestyle"]
+lint_commands = ["ruff", "pylint"]
 test_commands = ["pytest", "coverage-report"]
 
 # Do not install pre-commit if this is set to true.

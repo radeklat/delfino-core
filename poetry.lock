@@ -640,17 +640,6 @@ files = [
 test = ["enum34", "ipaddress", "mock", "pywin32", "wmi"]
 
 [[package]]
-name = "pycodestyle"
-version = "2.12.0"
-description = "Python style guide checker"
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "pycodestyle-2.12.0-py2.py3-none-any.whl", hash = "sha256:949a39f6b86c3e1515ba1787c2022131d165a8ad271b11370a8819aa070269e4"},
-    {file = "pycodestyle-2.12.0.tar.gz", hash = "sha256:442f950141b4f43df752dd303511ffded3a04c2b6fb7f65980574f0c31e6e79c"},
-]
-
-[[package]]
 name = "pydantic"
 version = "2.8.2"
 description = "Data validation using Python type hints"
@@ -772,23 +761,6 @@ files = [
 
 [package.dependencies]
 typing-extensions = ">=4.6.0,<4.7.0 || >4.7.0"
-
-[[package]]
-name = "pydocstyle"
-version = "6.3.0"
-description = "Python docstring style checker"
-optional = false
-python-versions = ">=3.6"
-files = [
-    {file = "pydocstyle-6.3.0-py3-none-any.whl", hash = "sha256:118762d452a49d6b05e194ef344a55822987a462831ade91ec5c06fd2169d019"},
-    {file = "pydocstyle-6.3.0.tar.gz", hash = "sha256:7ce43f0c0ac87b07494eb9c0b462c0b73e6ff276807f204d6b53edc72b7e44e1"},
-]
-
-[package.dependencies]
-snowballstemmer = ">=2.2.0"
-
-[package.extras]
-toml = ["tomli (>=1.2.3)"]
 
 [[package]]
 name = "pylint"
@@ -1011,17 +983,6 @@ files = [
 ]
 
 [[package]]
-name = "snowballstemmer"
-version = "2.2.0"
-description = "This package provides 29 stemmers for 28 languages generated from Snowball algorithms."
-optional = false
-python-versions = "*"
-files = [
-    {file = "snowballstemmer-2.2.0-py2.py3-none-any.whl", hash = "sha256:c8e1716e83cc398ae16824e5572ae04e0d9fc2c6b985fb0f900f5f0c96ecba1a"},
-    {file = "snowballstemmer-2.2.0.tar.gz", hash = "sha256:09b16deb8547d3412ad7b590689584cd0fe25ec8db3be37788be3810cbf19cb1"},
-]
-
-[[package]]
 name = "tokenize-rt"
 version = "5.2.0"
 description = "A wrapper around the stdlib `tokenize` which roundtrips."
@@ -1156,17 +1117,17 @@ doc = ["furo", "jaraco.packaging (>=9.3)", "jaraco.tidelift (>=1.4)", "rst.linke
 test = ["big-O", "importlib-resources", "jaraco.functools", "jaraco.itertools", "jaraco.test", "more-itertools", "pytest (>=6,!=8.1.*)", "pytest-checkdocs (>=2.4)", "pytest-cov", "pytest-enabler (>=2.2)", "pytest-ignore-flaky", "pytest-mypy", "pytest-ruff (>=0.2.1)"]
 
 [extras]
-all = ["PyYAML", "black", "coverage", "gitpython", "httpx", "isort", "mypy", "pre-commit", "psutil", "pycodestyle", "pydocstyle", "pylint", "pytest", "pytest-cov", "pyupgrade", "ruff"]
+all = ["PyYAML", "black", "coverage", "gitpython", "httpx", "isort", "mypy", "pre-commit", "psutil", "pylint", "pytest", "pytest-cov", "pyupgrade", "ruff"]
 dependencies-update = ["gitpython"]
 format = ["black", "isort", "pre-commit", "pyupgrade"]
-lint = ["psutil", "pycodestyle", "pydocstyle", "pylint", "ruff"]
+lint = ["psutil", "pylint", "ruff"]
 mypy = ["mypy"]
 pre-commit = ["PyYAML"]
 test = ["coverage", "pytest", "pytest-cov"]
 vcs = ["httpx"]
-verify = ["black", "coverage", "isort", "mypy", "pre-commit", "psutil", "pycodestyle", "pydocstyle", "pylint", "pytest", "pytest-cov", "pyupgrade", "ruff"]
+verify = ["black", "coverage", "isort", "mypy", "pre-commit", "psutil", "pylint", "pytest", "pytest-cov", "pyupgrade", "ruff"]
 
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8.1"
-content-hash = "843bf637d4b0ff169fc4b7685dd0549aa1e34065038c021ae8c3d36ca7586d52"
+content-hash = "ced40d73463d2a2bd20a78527aeb8ff2806b48fa7b8b6020a5ad12280c776038"

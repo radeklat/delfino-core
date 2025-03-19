@@ -14,7 +14,26 @@ Types of changes are:
 
 ### Breaking changes
 
-- Removed `pydocstyle` in favour of `ruff` and it's `pydocstyle` plugin. See Ruff [plugin configuration](https://docs.astral.sh/ruff/settings/#lintpydocstyle) and [pydocstyle (D) rules](https://docs.astral.sh/ruff/rules/#pydocstyle-d).
+Removed several tools in favour of `ruff` and it's plugins:
+
+- `pydocstyle` ([plugin configuration](https://docs.astral.sh/ruff/settings/#lintpydocstyle), [pydocstyle (D) rules](https://docs.astral.sh/ruff/rules/#pydocstyle-d))
+- `pycodestyle` ([plugin configuration](https://docs.astral.sh/ruff/settings/#lintpycodestyle), [pycodestyle (E, W) rules](https://docs.astral.sh/ruff/rules/#pycodestyle-e-w))
+
+The above-mentioned plugins are not enabled by default. You can turn them on by updating your `pyproject.toml` file:
+
+```toml
+[tool.ruff.lint]
+select = [
+    "E",   # flake8 / pycodestyle, errors
+    "W",   # flake8 / pycodestyle, warning
+    "I",   # isort
+    "D",   # pydocstyle
+    "UP",  # pyupgrade
+]
+ignore = [
+   # Code of any previously disabled checks in the tool's configs
+]
+```
 
 ## [8.1.1] - 2024-09-23
 
