@@ -7,7 +7,6 @@ from contextlib import suppress
 from itertools import chain
 from pathlib import Path
 from subprocess import PIPE
-from typing import Optional
 
 import click
 from delfino.decorators import files_folders_option, pass_args
@@ -50,7 +49,7 @@ def _run_pytest(
     print_header(f"️Running {header_name}tests", icon="🔎🐛")
     ensure_reports_dir(plugin_config)
 
-    args: list[Optional[str]] = [
+    args: list[str | None] = [
         "pytest",
         "--cov",
         plugin_config.sources_directory,

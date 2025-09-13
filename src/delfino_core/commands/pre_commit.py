@@ -1,6 +1,5 @@
 from pathlib import Path
 from subprocess import PIPE
-from typing import Optional
 
 import click
 from click import Abort
@@ -18,7 +17,7 @@ except ImportError:
     pass
 
 
-def _selected_stages_and_hook(passed_args: list[str]) -> tuple[list[str], Optional[str]]:
+def _selected_stages_and_hook(passed_args: list[str]) -> tuple[list[str], str | None]:
     pre_commit_file = Path(".pre-commit-config.yaml")
     if not pre_commit_file.is_file():
         raise Abort(f"Pre-commit config file '{pre_commit_file}' not found.")

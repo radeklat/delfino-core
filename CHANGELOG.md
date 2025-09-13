@@ -12,6 +12,13 @@ Types of changes are:
 
 ## [Unreleased]
 
+## [10.0.0] - 2025-09-13
+
+### Breaking changes
+
+- Drop support for Python 3.9.
+- Drop support for `delfino<5.0`.
+
 ## [9.0.0] - 2025-03-19
 
 ### Breaking changes
@@ -645,7 +652,8 @@ If `tool.delfino.plugins.delfino-core.dockerhub` exists in the `pyproject.toml`:
 
 - Initial source code
 
-[Unreleased]: https://github.com/radeklat/delfino-core/compare/9.0.0...HEAD
+[Unreleased]: https://github.com/radeklat/delfino-core/compare/10.0.0...HEAD
+[10.0.0]: https://github.com/radeklat/delfino-core/compare/9.0.0...10.0.0
 [9.0.0]: https://github.com/radeklat/delfino-core/compare/8.1.1...9.0.0
 [8.1.1]: https://github.com/radeklat/delfino-core/compare/8.1.0...8.1.1
 [8.1.0]: https://github.com/radeklat/delfino-core/compare/8.0.0...8.1.0

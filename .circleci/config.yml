@@ -5,8 +5,8 @@ orbs:
 
 constants:
   - &project_name "delfino-core"
-  - &minimum_python_version "3.9"
-  - &supported_python_versions [ *minimum_python_version, "3.10", "3.11", "3.12", "3.13" ]
+  - &minimum_python_version "3.10"
+  - &supported_python_versions [ *minimum_python_version, "3.11", "3.12", "3.13" ]
 
 parameters:
   project_name:
@@ -17,13 +17,13 @@ parameters:
     default: *minimum_python_version
   cache_version:
     type: string
-    default: "4"
+    default: "5"
   git_trunk_branch:
     type: string
     default: "main"
   command_prefix:
     type: string
-    default: "poetry run delfino"
+    default: "uv run delfino"
 
 jobs: # A basic unit of work in a run
   test:
@@ -40,12 +40,15 @@ jobs: # A basic unit of work in a run
     steps:
       - checkout
       - restore_cache:
-          key: << pipeline.parameters.cache_version >>-<< pipeline.parameters.project_name >>-<< parameters.python_version >>-{{ checksum "poetry.lock" }}
+          key: << pipeline.parameters.cache_version >>-<< pipeline.parameters.project_name >>-<< parameters.python_version >>-{{ checksum "uv.lock" }}
       - run:
           name: Install dev libraries
-          command: pip install --upgrade pip poetry && poetry install --no-ansi --no-root
+          command: |
+            pip install uv
+            uv venv --allow-existing
+            uv sync --dev
       - save_cache:
-          key: << pipeline.parameters.cache_version >>-<< pipeline.parameters.project_name >>-<< parameters.python_version >>-{{ checksum "poetry.lock" }}
+          key: << pipeline.parameters.cache_version >>-<< pipeline.parameters.project_name >>-<< parameters.python_version >>-{{ checksum "uv.lock" }}
           paths:
             - ".venv"
       - run:
@@ -74,11 +77,11 @@ jobs: # A basic unit of work in a run
     steps:
       - checkout
       - restore_cache:
-          key: << pipeline.parameters.cache_version >>-<< pipeline.parameters.project_name >>-<< pipeline.parameters.minimum_python_version >>-{{ checksum "poetry.lock" }}
+          key: << pipeline.parameters.cache_version >>-<< pipeline.parameters.project_name >>-<< pipeline.parameters.minimum_python_version >>-{{ checksum "uv.lock" }}
       - run:
           name: Build library
           command: |
-            poetry build
+            uv build
       - persist_to_workspace:
           root: ~/<< pipeline.parameters.project_name >>
           paths:
@@ -94,14 +97,14 @@ jobs: # A basic unit of work in a run
       - run:
           name: Upload to pypi
           command: |
-            VERSION=$(poetry version -s)
+            VERSION=$(uv version --short)
             VERSION_EXISTS=$( \
               curl -Ls https://pypi.org/pypi/<< pipeline.parameters.project_name >>/json | \
                 jq -r '.releases | keys_unsorted' | \
                 grep -q "\"$VERSION\"" ; echo $? \
             )
             if [[ $VERSION_EXISTS -ne 0 ]]; then
-              poetry publish --username "__token__" --password $PYPI_API_TOKEN
+              uv publish
             else
               echo "Package with this version has been already release. Skipping."
             fi
@@ -113,19 +116,19 @@ jobs: # A basic unit of work in a run
     steps:
       - checkout
       - restore_cache:
-          key: << pipeline.parameters.cache_version >>-<< pipeline.parameters.project_name >>-<< pipeline.parameters.minimum_python_version >>-{{ checksum "poetry.lock" }}
+          key: << pipeline.parameters.cache_version >>-<< pipeline.parameters.project_name >>-<< pipeline.parameters.minimum_python_version >>-{{ checksum "uv.lock" }}
       - gh/setup
       - run:
           name: Check if current version has been released
           command: |
-            VERSION=$(poetry version -s)
+            VERSION=$(uv version --short)
             if [[ $(gh release view $VERSION >/dev/null 2>&1; echo $?) -eq 0 ]]; then
               echo "Tag '$VERSION' already exists. Skipping."
               circleci-agent step halt
             fi
       - run:
           name: Create a release
-          command: gh release create $(poetry version -s) -F CHANGELOG.md
+          command: gh release create $(uv version --short) -F CHANGELOG.md
 
 workflows:
   version: 2

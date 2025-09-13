@@ -5,7 +5,7 @@ from delfino_core.vcs_tools import _sanitize_branch_name
 
 class TestSanitizeBranchName:
     @staticmethod
-    def should_keep_slash_character():
+    def test_should_keep_slash_character():
         assert _sanitize_branch_name("feature/branch") == "feature/branch"
 
     @staticmethod
@@ -37,7 +37,7 @@ class TestSanitizeBranchName:
             pytest.param("feature`branch", "feature_branch", id="single backtick"),
         ],
     )
-    def should_replace_single_special_character_with_underscore(input_branch, expected_output):
+    def test_should_replace_single_special_character_with_underscore(input_branch, expected_output):
         assert _sanitize_branch_name(input_branch) == expected_output
 
     @staticmethod
@@ -55,7 +55,7 @@ class TestSanitizeBranchName:
             pytest.param("feature~`branch", "feature_branch", id="multiple tilde backtick"),
         ],
     )
-    def should_replace_multiple_special_characters_with_underscore(input_branch, expected_output):
+    def test_should_replace_multiple_special_characters_with_underscore(input_branch, expected_output):
         assert _sanitize_branch_name(input_branch) == expected_output
 
     @staticmethod
@@ -68,7 +68,7 @@ class TestSanitizeBranchName:
             pytest.param('("name"): feature branch', "name_feature_branch", id="with multiple characters"),
         ],
     )
-    def should_strip_special_characters_from_the_start(input_branch, expected_output):
+    def test_should_strip_special_characters_from_the_start(input_branch, expected_output):
         assert _sanitize_branch_name(input_branch) == expected_output
 
     @staticmethod
@@ -79,7 +79,7 @@ class TestSanitizeBranchName:
             pytest.param("(feature branch).", "feature_branch", id="with multiple characters"),
         ],
     )
-    def should_strip_special_characters_from_the_end(input_branch, expected_output):
+    def test_should_strip_special_characters_from_the_end(input_branch, expected_output):
         assert _sanitize_branch_name(input_branch) == expected_output
 
     @staticmethod
@@ -102,5 +102,5 @@ class TestSanitizeBranchName:
             ),
         ],
     )
-    def should_strip_special_characters_around_slash(input_branch, expected_output):
+    def test_should_strip_special_characters_around_slash(input_branch, expected_output):
         assert _sanitize_branch_name(input_branch) == expected_output

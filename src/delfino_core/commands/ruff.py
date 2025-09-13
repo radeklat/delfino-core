@@ -2,7 +2,6 @@
 
 from pathlib import Path
 from subprocess import PIPE
-from typing import Optional
 
 import click
 from delfino.decorators import files_folders_option, pass_args
@@ -41,7 +40,7 @@ def run_ruff(app_context: AppContext[CorePluginConfig], passed_args: tuple[str, 
 
 def build_target_paths(
     app_context: AppContext[CorePluginConfig],
-    files_folders: Optional[tuple[str]] = None,
+    files_folders: tuple[str] | None = None,
     include_tests: bool = True,
     include_commands: bool = True,
 ) -> list[Path]:

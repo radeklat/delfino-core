@@ -45,12 +45,16 @@ def context_obj(project_root, pyproject_toml):
 
 
 @pytest.fixture(scope="session")
-def build_and_install_plugin(poetry, project_root):
+def build_and_install_plugin(pyproject_toml, project_root):
     with tempfile.TemporaryDirectory() as tmpdir:
         sys.path.append(tmpdir)
         try:
-            wheel_path = project_root / "dist" / f"{poetry.name.replace('-', '_')}-{poetry.version}-py3-none-any.whl"
-            subprocess.run(f"cd {project_root} && poetry build -q", shell=True, check=True)
+            wheel_path = (
+                project_root
+                / "dist"
+                / f"{pyproject_toml.project_name.replace('-', '_')}-{pyproject_toml.project_version}-py3-none-any.whl"
+            )
+            subprocess.run(f"cd {project_root} && uv build -q", shell=True, check=True)
             subprocess.run(f"pip install {wheel_path} -q --target {tmpdir}", shell=True, check=True)
             shutil.rmtree(project_root / "dist")
             yield
