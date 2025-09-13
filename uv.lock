@@ -157,7 +157,7 @@ toml = [
 
 [[package]]
 name = "delfino"
-version = "5.0.0"
+version = "5.1.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "click" },
@@ -165,14 +165,14 @@ dependencies = [
     { name = "pydantic" },
     { name = "toml" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/69/10/e6e070e97b9ee008f40a533aa6f58db9d4d2d589bcd9bf5f8c37bc03a59b/delfino-5.0.0.tar.gz", hash = "sha256:7277f8d59d50b60f47805e5b512fa142072f93532239e5dc88bb3d37adcc3eca", size = 81127, upload-time = "2025-09-13T15:40:58.923Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/2a/5c/ed16d4be98784287a64921c87ffa857948092a5586be38e0124a3ca23071/delfino-5.1.0.tar.gz", hash = "sha256:58a4a634e0504718f5933db512275d151a26f9b3199496c99a79d1860b1ba1cc", size = 21111, upload-time = "2025-09-13T19:38:19.204Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/51/11/8a4cf22063a86fe74a183bdf75f0e3a686115360af9e757b74bd06446299/delfino-5.0.0-py3-none-any.whl", hash = "sha256:2521d7686d10120ef32a69abcfbdaab3b8681b4277032265ad9016684fe62b0c", size = 28722, upload-time = "2025-09-13T15:40:57.988Z" },
+    { url = "https://files.pythonhosted.org/packages/de/c4/0542cc1976ca53eb15de6658c2f5252e0b816b14b133e9db42421314ce89/delfino-5.1.0-py3-none-any.whl", hash = "sha256:68359d468010fe6673bad2047b12280bd96d013dba7c38941192cc689f6bb71e", size = 28560, upload-time = "2025-09-13T19:38:17.982Z" },
 ]
 
 [[package]]
 name = "delfino-core"
-version = "10.0.0"
+version = "10.0.1"
 source = { editable = "." }
 dependencies = [
     { name = "delfino" },
@@ -241,7 +241,7 @@ requires-dist = [
     { name = "coverage", marker = "extra == 'all'" },
     { name = "coverage", marker = "extra == 'test'" },
     { name = "coverage", marker = "extra == 'verify'" },
-    { name = "delfino", specifier = ">=5.0" },
+    { name = "delfino", specifier = ">=5.0.1" },
     { name = "gitpython", marker = "extra == 'all'" },
     { name = "gitpython", marker = "extra == 'dependencies-update'" },
     { name = "httpx", marker = "extra == 'all'" },
