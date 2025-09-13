@@ -7,5 +7,5 @@ repos:
     name: Linting and formatting
     stages: [pre-commit]
     language: system
-    entry: bash -c "export PYTHONPATH=src; poetry run delfino ruff -f src -f tests"
+    entry: bash -c "export PYTHONPATH=src; uv run delfino ruff -f src -f tests"
     pass_filenames: false

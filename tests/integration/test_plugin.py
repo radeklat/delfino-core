@@ -22,29 +22,32 @@ from delfino_core.commands.verify import run_group_verify
 
 
 @pytest.fixture(scope="session")
-def plugin_config(poetry):
-    return {poetry.name: PluginConfig.empty()}
+def plugin_config(pyproject_toml):
+    return {pyproject_toml.project_name: PluginConfig.empty()}
 
 
 @pytest.mark.usefixtures("build_and_install_plugin")
 class TestPlugin:
     @staticmethod
-    def should_be_discoverable_by_delfino(poetry, plugin_config):
+    def test_should_be_discoverable_by_delfino(pyproject_toml, plugin_config):
         command_packages = CommandRegistry._discover_command_packages(plugin_config)
         assert len(command_packages) == 1
         plugin_names = {command_package.plugin_name for command_package in command_packages}
-        assert poetry.name in plugin_names
+        assert pyproject_toml.project_name in plugin_names
 
         plugin_package = next(
-            filter(lambda command_package: command_package.plugin_name == poetry.name, command_packages), None
+            filter(
+                lambda command_package: command_package.plugin_name == pyproject_toml.project_name, command_packages
+            ),
+            None,
         )
         assert plugin_package
         assert isinstance(plugin_package.package, ModuleType)
         assert isinstance(plugin_package.package.__package__, str)
-        assert poetry.name.replace("-", "_") in plugin_package.package.__package__
+        assert pyproject_toml.project_name.replace("-", "_") in plugin_package.package.__package__
 
     @staticmethod
-    def should_be_visible_in_delfino(plugin_config):
+    def test_should_be_visible_in_delfino(plugin_config):
         commands = [
             run_coverage_open,
             run_coverage_report,

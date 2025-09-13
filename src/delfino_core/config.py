@@ -1,7 +1,7 @@
 import logging
 import os
 from pathlib import Path
-from typing import Annotated, Optional
+from typing import Annotated
 
 from delfino.decorators import pass_app_context
 from delfino.models.pyproject_toml import PluginConfig
@@ -40,23 +40,23 @@ class IssueTrackingConfig(BaseModel):
     )
 
     @staticmethod
-    def _get_env_var(name: str, purpose: str) -> Optional[str]:
+    def _get_env_var(name: str, purpose: str) -> str | None:
         if (value := os.getenv(name)) is None:
             _LOG.warning(f"{purpose} environment variable '{name}' is not set.")
 
         return value
 
     @property
-    def api_key(self) -> Optional[str]:
+    def api_key(self) -> str | None:
         return self._get_env_var(self.api_key_env_var, "Issue tracking API key")
 
     @property
-    def username(self) -> Optional[str]:
+    def username(self) -> str | None:
         return self._get_env_var(self.username_env_var, "Issue tracking username")
 
 
 class VCSConfig(BaseModel):
-    branch_prefix: Optional[str] = Field(
+    branch_prefix: str | None = Field(
         None, description="Prefix for branch names. If not set, git username will be used."
     )
     issue_tracking: Annotated[IssueTrackingConfig, Field(default_factory=IssueTrackingConfig)]
