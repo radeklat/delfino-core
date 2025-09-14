@@ -81,7 +81,7 @@ jobs: # A basic unit of work in a run
       - run:
           name: Build library
           command: |
-            uv build
+            uv build --wheel
       - persist_to_workspace:
           root: ~/<< pipeline.parameters.project_name >>
           paths:
