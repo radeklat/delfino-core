@@ -3,8 +3,8 @@ repos:
 - repo: local
   hooks:
   # Specify folders explicitly to avoid running on `commands`, which is a symlink to `src/commands`
-  - id: lint_format
-    name: Linting and formatting
+  - id: Ruff
+    name: Ruff
     stages: [pre-commit]
     language: system
     entry: bash -lc "uv run delfino ruff"
